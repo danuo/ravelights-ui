@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mt-lg">
+  <div class="q-mt-xl">
     <q-slider
       @change="setBpm"
       v-model="bpm"
