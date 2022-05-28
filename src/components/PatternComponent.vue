@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
+  <div class="q-gutter-sm">
     <div class="row q-gutter-sm">
       <q-btn
         @click="setActivePattern(0)"

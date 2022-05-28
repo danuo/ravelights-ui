@@ -1,7 +1,9 @@
 <template>
   <q-page padding>
-    <BpmComponent/>
-    <PatternComponent/>
+    <h5 class="text-center q-mt-md">BPM Slider</h5>
+    <BpmComponent />
+    <h5 class="text-center">Pattern Selector</h5>
+    <PatternComponent />
   </q-page>
 </template>
 
