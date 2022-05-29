@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md row" v-if="active_generators !== null">
+  <div class="q-pa-md row" v-if="activeGenerators !== null">
     <div class="col-3" v-for="gen_type in 4" :key="gen_type">
       <q-list bordered separator>
         <q-item v-for="gen_index in 3" :key="gen_index">
