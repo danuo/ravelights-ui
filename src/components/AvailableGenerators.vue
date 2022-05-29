@@ -1,25 +1,18 @@
 <template>
-  <div class="q-pa-lg">
+  <div class="q-mb-lg">
     <q-option-group
       v-model="activeFilters"
       :options="parseFilters()"
       type="checkbox"
       inline
+      dense
     />
-    {{ availableGenerators[0] }}
   </div>
 
-  <div class="q-pa-md row">
-    <q-list bordered separator>
-      <template v-for="gen in availableGenerators[1]" :key="gen">
-        <q-item v-if="checkIfSelected(gen[1])">
-          <q-item-section>
-            <q-item-label> {{ gen[0] }} </q-item-label>
-            <q-item-label caption> {{ gen[1] }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-list>
+  <div class="row q-col-gutter-md">
+    <div class="col-3" v-for="gen in filteredGenerators" :key="gen">
+      <q-btn :label="gen[0]" style="width: 100%" class="q-pa-lg" />
+    </div>
   </div>
 </template>
 
@@ -29,6 +22,17 @@ export default {
   name: 'AvailableGenerators',
   setup() {
     return {
+      /*
+    this.availableGenerators = [
+      ['ambient', 'techno', 'breakbeat', 'disco'], // categories
+      [
+        ['Strobe', ['techno']],
+        ['Meteor', ['disco', 'techno']],
+        ['MovingStrobe', ['breakbeat', 'techno']],
+        ['Lavalamp', ['ambient']],
+      ],
+    ];
+    */
       availableGenerators: ref([]),
       activeFilters: ref([]),
     };
@@ -36,8 +40,21 @@ export default {
   mounted() {
     this.getAvailableGenerators();
   },
+  computed: {
+    filteredGenerators() {
+      if (
+        this.availableGenerators === undefined ||
+        this.availableGenerators.length == 0
+      ) {
+        return [];
+      }
+      return this.availableGenerators[1].filter((generator) => {
+        return this.checkIfSelected(generator[1]);
+      });
+    },
+  },
   methods: {
-    checkIfSelected(generator_keywords) {
+    checkIfSelected(generator_keywords: string[]) {
       return this.activeFilters.every((filter) => {
         return generator_keywords.includes(filter);
       });
