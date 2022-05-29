@@ -4,10 +4,10 @@
       <q-list bordered separator>
         <q-item v-for="gen_index in 3" :key="gen_index">
           <q-item-section>
-            <q-item-label caption
-              >{{ ['pattern', 'vfilter', 'thinner', 'dimmer'][gen_type - 1] }}
-              {{ gen_index }}</q-item-label
-            >
+            <q-item-label caption>
+              {{ ['pattern', 'vfilter', 'thinner', 'dimmer'][gen_type - 1] }}
+              {{ gen_index }}
+            </q-item-label>
             <q-item-label>
               {{ activeGenerators[gen_type - 1][gen_index - 1] }}
             </q-item-label>
