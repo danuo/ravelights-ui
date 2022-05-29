@@ -1,11 +1,13 @@
 <template>
-  <div class="q-pa-md row">
-    <div class="col-3" v-for="k in 4" :key="MediaKeySession">
+  <div class="q-pa-md row" v-if="active_generators !== null">
+    <div class="col-3" v-for="gen_type in 4" :key="gen_type">
       <q-list bordered separator>
-        <q-item v-for="i in 3" :key="i">
+        <q-item v-for="gen_index in 3" :key="gen_index">
           <q-item-section>
-            <q-item-label caption>Pattern {{ i }}</q-item-label>
-            <q-item-label>{{ activeGenerators[k][i] }}</q-item-label>
+            <q-item-label caption>Pattern {{ gen_index - 1 }}</q-item-label>
+            <q-item-label>
+              {{ activeGenerators[gen_type - 1][gen_index - 1] }}
+            </q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -19,7 +21,7 @@ export default {
   name: 'ActiveGenerators',
   setup() {
     return {
-      activeGenerators: ref([[]]),
+      activeGenerators: ref(null),
     };
   },
   mounted() {
