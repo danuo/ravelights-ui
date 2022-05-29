@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-lg">
     <q-option-group
-      v-model="patternFilter"
+      v-model="activeFilters"
       :options="parseFilters()"
       type="checkbox"
       inline
@@ -11,12 +11,14 @@
 
   <div class="q-pa-md row">
     <q-list bordered separator>
-      <q-item v-for="gen in availableGenerators[1]" :key="gen">
-        <q-item-section>
-          <q-item-label> {{ gen[0] }} </q-item-label>
-          <q-item-label caption> {{ gen[1] }}</q-item-label>
-        </q-item-section>
-      </q-item>
+      <template v-for="gen in availableGenerators[1]" :key="gen">
+        <q-item v-if="checkIfSelected(gen[1])">
+          <q-item-section>
+            <q-item-label> {{ gen[0] }} </q-item-label>
+            <q-item-label caption> {{ gen[1] }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
     </q-list>
   </div>
 </template>
@@ -28,13 +30,18 @@ export default {
   setup() {
     return {
       availableGenerators: ref([]),
-      patternFilter: ref([]),
+      activeFilters: ref([]),
     };
   },
   mounted() {
     this.getAvailableGenerators();
   },
   methods: {
+    checkIfSelected(generator_keywords) {
+      return this.activeFilters.every((filter) => {
+        return generator_keywords.includes(filter);
+      });
+    },
     parseFilters() {
       let filters = [];
       for (var index in this.availableGenerators[0]) {
