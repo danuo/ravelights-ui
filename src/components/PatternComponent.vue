@@ -1,13 +1,13 @@
 <template>
   <div class="row q-col-gutter-md">
-    <div class="col-3" v-for="n in 5" :key="`xs-${n}`">
+    <div class="col-3" v-for="n in 16" :key="`xs-${n}`">
       <q-btn
         @click="setActivePattern(0)"
         class="col-3"
         label="Pattern 0"
         :color="getColor(0)"
         :text-color="getColor(0) == 'white' ? 'black' : 'white'"
-        style="aspect-ratio: 4 / 1; width: 100%"
+        style="width: 100%"
       />
     </div>
   </div>
