@@ -2,7 +2,7 @@
   <div class="q-mb-lg">
     <q-option-group
       v-model="activeFilters"
-      :options="parseFilters()"
+      :options="filterOptions"
       type="checkbox"
       inline
       dense
@@ -11,10 +11,25 @@
 
   <div class="row q-col-gutter-md">
     <div class="col-3" v-for="gen in filteredGenerators" :key="gen">
-      <q-btn :label="gen[0]" style="width: 100%" class="q-pa-lg" />
+      <q-btn
+        :label="gen[0]"
+        style="width: 100%"
+        class="q-pa-lg"
+        @click="selectedGenerator = gen[0]"
+        :color="gen[0] == selectedGenerator ? 'primary' : 'white'"
+        :text-color="gen[0] == selectedGenerator ? 'white' : 'black'"
+      />
     </div>
   </div>
 </template>
+
+<style scoped>
+/* TODO: Maybe use css class to set button colors? */
+.btn-active {
+}
+.btn-inactive {
+}
+</style>
 
 <script lang="ts">
 import { ref } from 'vue';
@@ -35,6 +50,7 @@ export default {
     */
       availableGenerators: ref([]),
       activeFilters: ref([]),
+      selectedGenerator: ref(null),
     };
   },
   mounted() {
@@ -49,25 +65,25 @@ export default {
         return [];
       }
       return this.availableGenerators[1].filter((generator) => {
-        return this.checkIfSelected(generator[1]);
+        return this.isIncludedInFilter(generator[1]);
       });
     },
-  },
-  methods: {
-    checkIfSelected(generator_keywords: string[]) {
-      return this.activeFilters.every((filter) => {
-        return generator_keywords.includes(filter);
-      });
-    },
-    parseFilters() {
-      let filters = [];
+    filterOptions() {
+      let filterOptions = [];
       for (var index in this.availableGenerators[0]) {
-        filters.push({
+        filterOptions.push({
           label: this.availableGenerators[0][index],
           value: this.availableGenerators[0][index],
         });
       }
-      return filters;
+      return filterOptions;
+    },
+  },
+  methods: {
+    isIncludedInFilter(generatorCategories: string[]) {
+      return this.activeFilters.every((filter) => {
+        return generatorCategories.includes(filter);
+      });
     },
     getAvailableGenerators() {
       fetch('/api/available_generators')
