@@ -4,6 +4,7 @@
       <q-tabs align="left">
         <q-route-tab to="/perform" label="Perform" />
         <q-route-tab to="/settings" label="Settings" />
+        <q-route-tab to="/autopilot" label="Autopilot" />
       </q-tabs>
     </q-header>
 
