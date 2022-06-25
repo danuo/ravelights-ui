@@ -1,6 +1,7 @@
 <template>
   <q-page padding>
     <GeneratorsComponent />
+    <TimelineComponent />
     <h5 class="text-center q-ma-md">BPM Slider</h5>
     <BpmComponent />
     <h5 class="text-center q-ma-md">Global Brigthness Slider</h5>
@@ -18,6 +19,7 @@ import GeneratorsComponent from 'src/components/GeneratorsComponent.vue';
 import SliderGlobalBrightness from 'src/components/SliderGlobalBrightness.vue';
 import SliderGlobalThinningRatio from 'src/components/SliderGlobalThinningRatio.vue';
 import SliderGlobalEnergy from 'src/components/SliderGlobalEnergy.vue';
+import TimelineComponent from 'src/components/TimelineComponent.vue';
 export default {
   name: 'PerformPage',
   components: {
@@ -26,6 +28,7 @@ export default {
     SliderGlobalBrightness,
     SliderGlobalThinningRatio,
     SliderGlobalEnergy,
+    TimelineComponent,
   },
 };
 </script>

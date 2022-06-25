@@ -138,7 +138,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      // TODO:_Update ActiveGenerator component
     },
     isIncludedInFilter(generatorCategories: string[]) {
       return this.activeFilters.every((filter) => {
