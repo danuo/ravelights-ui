@@ -20,7 +20,7 @@ data = {
   <div class="q-mb-lg">
     <q-option-group
       v-model="activeFilters"
-      :options="filterOptions"
+      :options="selectableKeywords"
       type="checkbox"
       inline
       dense
@@ -34,7 +34,7 @@ data = {
         style="width: 100%"
         class="q-pa-lg"
         @click="selectedGenerator = gen['generator_name']"
-        :color="gen[0] == selectedGenerator ? 'primary' : 'white'"
+        :color="gen.generator_name == selectedGenerator ? 'primary' : 'white'"
         :text-color="
           gen['generator_name'] == selectedGenerator ? 'white' : 'black'
         "
@@ -57,34 +57,34 @@ export default {
   name: 'AvailableGenerators',
   setup() {
     return {
-      availableGenerators: ref([]),
+      generatorMetadata: ref({}),
       activeFilters: ref([]),
       selectedGenerator: ref(null),
     };
   },
   mounted() {
-    this.getAvailableGenerators();
+    this.getGeneratorMetadata();
   },
   computed: {
     filteredGenerators() {
       if (
-        this.availableGenerators === undefined ||
-        this.availableGenerators.length == 0
+        this.generatorMetadata === undefined ||
+        Object.keys(this.generatorMetadata).length === 0
       ) {
         return [];
       }
-      return this.availableGenerators['available_generators'].filter(
+      return this.generatorMetadata['available_generators'].filter(
         (generator) => {
           return this.isIncludedInFilter(generator['generator_keywords']);
         }
       );
     },
-    filterOptions() {
+    selectableKeywords() {
       let filterOptions = [];
-      for (var index in this.availableGenerators['available_keywords']) {
+      for (var index in this.generatorMetadata['available_keywords']) {
         filterOptions.push({
-          label: this.availableGenerators['available_keywords'][index],
-          value: this.availableGenerators['available_keywords'][index],
+          label: this.generatorMetadata['available_keywords'][index],
+          value: this.generatorMetadata['available_keywords'][index],
         });
       }
       return filterOptions;
@@ -96,12 +96,12 @@ export default {
         return generatorCategories.includes(filter);
       });
     },
-    getAvailableGenerators() {
-      fetch('/api/available_generators')
+    getGeneratorMetadata() {
+      fetch('/api/generator_metadata')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          this.availableGenerators = response.available_generators;
-          console.log(this.availableGenerators);
+          this.generatorMetadata = response;
+          console.log(this.generatorMetadata);
         })
         .catch((err) => {
           console.log(err);
