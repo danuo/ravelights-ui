@@ -1,3 +1,21 @@
+<!-- 
+example data input:
+
+data = {
+  "available_keywords": ["keyword 1", "keyword 2"...]
+  "available_generators": [
+    {
+      "generator_name": "name1",
+      "generator_keywords": ["keyword 3", "keyword 4"...],
+    },
+    {
+      "generator_name": "name2",
+      "generator_keywords": ["keyword 2", "keyword 4"...],
+    }
+  ]
+}
+-->
+
 <template>
   <div class="q-mb-lg">
     <q-option-group
@@ -12,12 +30,14 @@
   <div class="row q-col-gutter-md">
     <div class="col-3" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
-        :label="gen[0]"
+        :label="gen['generator_name']"
         style="width: 100%"
         class="q-pa-lg"
-        @click="selectedGenerator = gen[0]"
+        @click="selectedGenerator = gen['generator_name']"
         :color="gen[0] == selectedGenerator ? 'primary' : 'white'"
-        :text-color="gen[0] == selectedGenerator ? 'white' : 'black'"
+        :text-color="
+          gen['generator_name'] == selectedGenerator ? 'white' : 'black'
+        "
       />
     </div>
   </div>
@@ -37,17 +57,6 @@ export default {
   name: 'AvailableGenerators',
   setup() {
     return {
-      /*
-    this.availableGenerators = [
-      ['ambient', 'techno', 'breakbeat', 'disco'], // categories
-      [
-        ['Strobe', ['techno']],
-        ['Meteor', ['disco', 'techno']],
-        ['MovingStrobe', ['breakbeat', 'techno']],
-        ['Lavalamp', ['ambient']],
-      ],
-    ];
-    */
       availableGenerators: ref([]),
       activeFilters: ref([]),
       selectedGenerator: ref(null),
@@ -64,16 +73,18 @@ export default {
       ) {
         return [];
       }
-      return this.availableGenerators[1].filter((generator) => {
-        return this.isIncludedInFilter(generator[1]);
-      });
+      return this.availableGenerators['available_generators'].filter(
+        (generator) => {
+          return this.isIncludedInFilter(generator['generator_keywords']);
+        }
+      );
     },
     filterOptions() {
       let filterOptions = [];
-      for (var index in this.availableGenerators[0]) {
+      for (var index in this.availableGenerators['available_keywords']) {
         filterOptions.push({
-          label: this.availableGenerators[0][index],
-          value: this.availableGenerators[0][index],
+          label: this.availableGenerators['available_keywords'][index],
+          value: this.availableGenerators['available_keywords'][index],
         });
       }
       return filterOptions;
