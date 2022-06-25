@@ -18,6 +18,18 @@ data = {
 
 <template>
   <div class="q-mb-lg">
+    <q-btn-toggle
+      v-model="selectedTargetLevel"
+      toggle-color="primary"
+      :options="[
+        { label: 'Primary', value: 0 },
+        { label: 'Seconday', value: 1 },
+        { label: 'Tertiary', value: 2 },
+      ]"
+    />
+  </div>
+
+  <div class="q-mb-lg">
     <q-option-group
       v-model="activeFilters"
       :options="selectableKeywords"
@@ -33,10 +45,16 @@ data = {
         :label="gen['generator_name']"
         style="width: 100%"
         class="q-pa-lg"
-        @click="selectedGenerator = gen['generator_name']"
-        :color="gen.generator_name == selectedGenerator ? 'primary' : 'white'"
+        @click="onSelectGenerator(gen.generator_name)"
+        :color="
+          gen.generator_name == selectedGenerators[selectedTargetLevel]
+            ? 'primary'
+            : 'white'
+        "
         :text-color="
-          gen['generator_name'] == selectedGenerator ? 'white' : 'black'
+          gen['generator_name'] == selectedGenerators[selectedTargetLevel]
+            ? 'white'
+            : 'black'
         "
       />
     </div>
@@ -59,7 +77,8 @@ export default {
     return {
       generatorMetadata: ref({}),
       activeFilters: ref([]),
-      selectedGenerator: ref(null),
+      selectedTargetLevel: ref(0),
+      selectedGenerators: ref([null, null, null]),
     };
   },
   mounted() {
@@ -91,6 +110,27 @@ export default {
     },
   },
   methods: {
+    onSelectGenerator(generatorName: string) {
+      this.selectedGenerators[this.selectedTargetLevel] = generatorName;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type_name: 'pattern',
+          level_index: this.selectedTargetLevel + 1,
+          generator_name: generatorName,
+        }),
+      };
+      fetch('/api/set_generators', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // TODO:_Update ActiveGenerator component
+    },
     isIncludedInFilter(generatorCategories: string[]) {
       return this.activeFilters.every((filter) => {
         return generatorCategories.includes(filter);
