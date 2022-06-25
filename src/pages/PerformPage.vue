@@ -1,9 +1,6 @@
 <template>
   <q-page padding>
-    <h5 class="text-center q-ma-md">Active Generators</h5>
-    <ActiveGenerators />
-    <h5 class="text-center q-ma-md">Available Generators</h5>
-    <AvailableGenerators />
+    <GeneratorsComponent />
     <h5 class="text-center q-ma-md">BPM Slider</h5>
     <BpmComponent />
     <h5 class="text-center q-ma-md">Global Brigthness Slider</h5>
@@ -17,16 +14,14 @@
 
 <script lang="ts">
 import BpmComponent from 'components/BpmComponent.vue';
-import ActiveGenerators from 'components/ActiveGenerators.vue';
-import AvailableGenerators from 'src/components/AvailableGenerators.vue';
+import GeneratorsComponent from 'src/components/GeneratorsComponent.vue';
 import SliderGlobalBrightness from 'src/components/SliderGlobalBrightness.vue';
 import SliderGlobalThinningRatio from 'src/components/SliderGlobalThinningRatio.vue';
 import SliderGlobalEnergy from 'src/components/SliderGlobalEnergy.vue';
 export default {
   name: 'PerformPage',
   components: {
-    ActiveGenerators,
-    AvailableGenerators,
+    GeneratorsComponent,
     BpmComponent,
     SliderGlobalBrightness,
     SliderGlobalThinningRatio,

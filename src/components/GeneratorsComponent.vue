@@ -1,0 +1,161 @@
+<template>
+  <h5 class="text-center q-ma-md">Active Generators</h5>
+  <div class="q-pa-md row" v-if="activeGenerators !== null">
+    <div class="col-3" v-for="gen_type in 4" :key="gen_type">
+      <q-list bordered separator>
+        <q-item v-for="gen_index in 3" :key="gen_index">
+          <q-item-section>
+            <q-item-label caption>
+              {{ ['pattern', 'vfilter', 'thinner', 'dimmer'][gen_type - 1] }}
+              {{ gen_index }}
+            </q-item-label>
+            <q-item-label>
+              {{ activeGenerators[gen_type - 1][gen_index - 1] }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
+  </div>
+
+  <h5 class="text-center q-ma-md">Generator Selector</h5>
+  <div class="q-mb-lg">
+    <q-btn-toggle
+      v-model="selectedTargetLevel"
+      toggle-color="primary"
+      :options="[
+        { label: 'Primary', value: 0 },
+        { label: 'Seconday', value: 1 },
+        { label: 'Tertiary', value: 2 },
+      ]"
+    />
+  </div>
+
+  <div class="q-mb-lg">
+    <q-option-group
+      v-model="activeFilters"
+      :options="selectableKeywords"
+      type="checkbox"
+      inline
+      dense
+    />
+  </div>
+
+  <div class="row q-col-gutter-md">
+    <div class="col-3" v-for="gen in filteredGenerators" :key="gen">
+      <q-btn
+        :label="gen['generator_name']"
+        style="width: 100%"
+        class="q-pa-lg"
+        @click="onSelectGenerator(gen.generator_name)"
+        :color="
+          gen.generator_name == selectedPatterns[selectedTargetLevel]
+            ? 'primary'
+            : 'white'
+        "
+        :text-color="
+          gen['generator_name'] == selectedPatterns[selectedTargetLevel]
+            ? 'white'
+            : 'black'
+        "
+      />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { ref } from 'vue';
+export default {
+  name: 'ActiveGenerators',
+  setup() {
+    return {
+      activeGenerators: ref(null),
+      generatorMetadata: ref({}),
+      activeFilters: ref([]),
+      selectedTargetLevel: ref(0),
+      selectedPatterns: ref([null, null, null]),
+    };
+  },
+  mounted() {
+    this.getGeneratorMetadata();
+    this.getActiveGenerators();
+  },
+  computed: {
+    filteredGenerators() {
+      if (
+        this.generatorMetadata === undefined ||
+        Object.keys(this.generatorMetadata).length === 0
+      ) {
+        return [];
+      }
+      return this.generatorMetadata['available_generators'].filter(
+        (generator) => {
+          return this.isIncludedInFilter(generator['generator_keywords']);
+        }
+      );
+    },
+    selectableKeywords() {
+      let filterOptions = [];
+      for (var index in this.generatorMetadata['available_keywords']) {
+        filterOptions.push({
+          label: this.generatorMetadata['available_keywords'][index],
+          value: this.generatorMetadata['available_keywords'][index],
+        });
+      }
+      return filterOptions;
+    },
+  },
+  methods: {
+    getActiveGenerators() {
+      fetch('/api/active_generators')
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.activeGenerators = response.active_generators;
+          this.selectedPatterns = this.activeGenerators[0];
+          console.log(this.activeGenerators);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    onSelectGenerator(generatorName: string) {
+      this.selectedPatterns[this.selectedTargetLevel] = generatorName;
+      this.activeGenerators[0] = this.selectedPatterns;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type_name: 'pattern',
+          level_index: this.selectedTargetLevel + 1,
+          generator_name: generatorName,
+        }),
+      };
+      fetch('/api/set_generators', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // TODO:_Update ActiveGenerator component
+    },
+    isIncludedInFilter(generatorCategories: string[]) {
+      return this.activeFilters.every((filter) => {
+        return generatorCategories.includes(filter);
+      });
+    },
+    getGeneratorMetadata() {
+      fetch('/api/generator_metadata')
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.generatorMetadata = response;
+          console.log(this.generatorMetadata);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
+</script>
