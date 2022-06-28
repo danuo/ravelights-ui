@@ -42,7 +42,7 @@
   </div>
 
   <div class="row q-col-gutter-md">
-    <div class="col-3" v-for="gen in filteredGenerators" :key="gen">
+    <div class="col-3" v-for="gen in filteredGeneratorsPattern" :key="gen">
       <q-btn
         :label="gen['generator_name']"
         style="width: 100%"
@@ -61,6 +61,21 @@
       />
     </div>
   </div>
+
+  <h5 class="text-center q-ma-md">Effect Selector</h5>
+  <b>put length selector here</b>
+  <div class="row q-col-gutter-md">
+    <div class="col-3" v-for="gen in filteredGeneratorsEffect" :key="gen">
+      <q-btn
+        :label="gen['effect_name']"
+        style="width: 100%"
+        class="q-pa-lg"
+        @click="onSelectGenerator(gen.generator_name)"
+        :color="white"
+        :text-color="black"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -71,6 +86,7 @@ export default {
     return {
       activeGenerators: ref(null),
       generatorMetadata: ref({}),
+      effectMetadata: ref({}),
       activeFilters: ref([]),
       selectedTargetLevel: ref(0),
       selectedPatterns: ref([null, null, null]),
@@ -81,14 +97,14 @@ export default {
     this.getActiveGenerators();
   },
   computed: {
-    filteredGenerators() {
+    filteredGeneratorsPattern() {
       if (
         this.generatorMetadata === undefined ||
         Object.keys(this.generatorMetadata).length === 0
       ) {
         return [];
       }
-      return this.generatorMetadata['available_generators'].filter(
+      return this.generatorMetadata['available_generators']['pattern'].filter(
         (generator) => {
           return this.isIncludedInFilter(generator['generator_keywords']);
         }
@@ -103,6 +119,19 @@ export default {
         });
       }
       return filterOptions;
+    },
+    filteredGeneratorsEffect() {
+      if (
+        this.generatorMetadata === undefined ||
+        Object.keys(this.generatorMetadata).length === 0
+      ) {
+        return [];
+      }
+      return this.generatorMetadata['available_generators']['effect'].filter(
+        (generator) => {
+          return this.isIncludedInFilter(generator['generator_keywords']);
+        }
+      );
     },
   },
   methods: {
