@@ -67,10 +67,10 @@
   <div class="row q-col-gutter-md">
     <div class="col-3" v-for="gen in filteredGeneratorsEffect" :key="gen">
       <q-btn
-        :label="gen['effect_name']"
+        :label="gen['generator_name']"
         style="width: 100%"
         class="q-pa-lg"
-        @click="onSelectEffect(gen.effect_name)"
+        @click="onSelectEffect(gen.generator_name)"
         :color="white"
         :text-color="black"
       />
