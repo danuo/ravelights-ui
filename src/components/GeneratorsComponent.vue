@@ -70,7 +70,7 @@
         :label="gen['effect_name']"
         style="width: 100%"
         class="q-pa-lg"
-        @click="onSelectGenerator(gen.generator_name)"
+        @click="onSelectEffect(gen.effect_name)"
         :color="white"
         :text-color="black"
       />
@@ -160,6 +160,24 @@ export default {
         }),
       };
       fetch('/api/set_generators', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    onSelectEffect(effectName: string) {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          effect_name: effectName,
+          length_frames: 8,
+        }),
+      };
+      fetch('/api/set_effects', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
