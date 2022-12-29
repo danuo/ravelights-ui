@@ -6,7 +6,7 @@
         <q-item v-for="gen_index in 3" :key="gen_index">
           <q-item-section>
             <q-item-label caption>
-              {{ ['pattern', 'vfilter', 'thinner', 'dimmer'][gen_type - 1] }}
+              {{ generatorClasses[gen_type - 1] }}
               {{ gen_index }}
             </q-item-label>
             <q-item-label>
@@ -89,17 +89,29 @@
 
 <script lang="ts">
 import { ref } from 'vue';
+
+interface GeneratorMetadata {
+  active_timeline_index: number; // int
+  available_timelines: string[]; // list of strings
+  available_keywords: string[];
+  available_generators: string;
+  generator_class_names: string[];
+}
+
 export default {
   name: 'ActiveGenerators',
   setup() {
     return {
       activeGenerators: ref(null),
-      generatorMetadata: ref({}),
-      generatorClasses: ref([]),
+      generatorMetadata: ref<GeneratorMetadata>(),
+      //   generatorMetadata: ref(null),
+      //   generatorClasses: ref({}),
+      //   generatorClasses: ref<string>(),
+      generatorClasses: ref(['test']),
       effectMetadata: ref({}),
       activeFilters: ref([]),
       selectedTargetLevel: ref(0),
-      selectedTargetType: ref('placeholder'),
+      selectedTargetType: ref<string>(),
       selectedPatterns: ref([null, null, null]),
     };
   },
@@ -123,11 +135,13 @@ export default {
     },
     selectableKeywords() {
       let filterOptions = [];
-      for (var index in this.generatorMetadata['available_keywords']) {
-        filterOptions.push({
-          label: this.generatorMetadata['available_keywords'][index],
-          value: this.generatorMetadata['available_keywords'][index],
-        });
+      if (this.generatorMetadata !== undefined) {
+        for (var index in this.generatorMetadata['available_keywords']) {
+          filterOptions.push({
+            label: this.generatorMetadata['available_keywords'][index],
+            value: this.generatorMetadata['available_keywords'][index],
+          });
+        }
       }
       return filterOptions;
     },
@@ -222,7 +236,7 @@ export default {
           this.generatorMetadata = response;
           this.generatorClasses = response['generator_class_names'];
           this.selectedTargetType = this.generatorClasses[0];
-          console.log(this.generatorMetadata);
+          console.log(response);
         })
         .catch((err) => {
           console.log(err);
