@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     getAvailableTimelines() {
-      fetch('/api/timelines')
+      fetch('/api/meta')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log('Logging timeline response...');

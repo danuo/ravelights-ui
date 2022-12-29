@@ -192,7 +192,7 @@ export default {
       });
     },
     getGeneratorMetadata() {
-      fetch('/api/generator_metadata')
+      fetch('/api/meta')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.generatorMetadata = response;
