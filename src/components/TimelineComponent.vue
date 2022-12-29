@@ -14,13 +14,17 @@
 
 <script lang="ts">
 import { ref } from 'vue';
+type TimelineOption = {
+  label: string;
+  value: number;
+};
 export default {
   name: 'TimelineComponent',
   setup() {
     return {
       selectedTimelineIndex: ref(0),
       availableTimelines: ref([]),
-      timelineOptions: ref([]),
+      timelineOptions: ref<TimelineOption[]>([]),
     };
   },
   mounted() {
@@ -28,13 +32,13 @@ export default {
   },
   methods: {
     getAvailableTimelines() {
-      fetch('/api/meta')
+      fetch('/api/patternscheduler')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log('Logging timeline response...');
           console.log(response);
-          this.availableTimelines = response.available_timelines;
           this.selectedTimelineIndex = response.active_timeline_index;
+          this.availableTimelines = response.available_timelines;
           this.timelineOptions = [];
           for (const [index, name] of this.availableTimelines.entries()) {
             this.timelineOptions.push({
@@ -57,7 +61,7 @@ export default {
           timeline_index: this.selectedTimelineIndex,
         }),
       };
-      fetch('/api/timelines', requestOptions)
+      fetch('/api/patternscheduler', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
