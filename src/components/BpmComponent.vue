@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getBpm() {
-      fetch('/api/bpm')
+      fetch('/api/settings')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.bpm = response.bpm;
@@ -42,8 +42,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bpm: this.bpm }),
       };
-
-      fetch('/api/bpm', requestOptions)
+      fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
