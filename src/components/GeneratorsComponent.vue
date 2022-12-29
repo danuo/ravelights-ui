@@ -104,10 +104,7 @@ export default {
     return {
       activeGenerators: ref(null),
       generatorMetadata: ref<GeneratorMetadata>(),
-      //   generatorMetadata: ref(null),
-      //   generatorClasses: ref({}),
-      //   generatorClasses: ref<string>(),
-      generatorClasses: ref(['test']),
+      generatorClasses: ref(['']),
       effectMetadata: ref({}),
       activeFilters: ref([]),
       selectedTargetLevel: ref(0),
