@@ -19,6 +19,15 @@
   </div>
 
   <h5 class="text-center q-ma-md">Generator Selector</h5>
+
+  <div class="q-mb-lg">
+    <q-btn-toggle
+      v-model="selectedTargetType"
+      toggle-color="primary"
+      :options="generateGenTypeOptions()"
+    />
+  </div>
+
   <div class="q-mb-lg">
     <q-btn-toggle
       v-model="selectedTargetLevel"
@@ -71,8 +80,8 @@
         style="width: 100%"
         class="q-pa-lg"
         @click="onSelectEffect(gen.generator_name)"
-        :color="white"
-        :text-color="black"
+        color="#fff"
+        text-color="#000"
       />
     </div>
   </div>
@@ -86,9 +95,11 @@ export default {
     return {
       activeGenerators: ref(null),
       generatorMetadata: ref({}),
+      generatorClasses: ref([]),
       effectMetadata: ref({}),
       activeFilters: ref([]),
       selectedTargetLevel: ref(0),
+      selectedTargetType: ref('placeholder'),
       selectedPatterns: ref([null, null, null]),
     };
   },
@@ -104,11 +115,11 @@ export default {
       ) {
         return [];
       }
-      return this.generatorMetadata['available_generators']['pattern'].filter(
-        (generator) => {
-          return this.isIncludedInFilter(generator['generator_keywords']);
-        }
-      );
+      return this.generatorMetadata['available_generators'][
+        this.selectedTargetType
+      ].filter((generator) => {
+        return this.isIncludedInFilter(generator['generator_keywords']);
+      });
     },
     selectableKeywords() {
       let filterOptions = [];
@@ -135,13 +146,26 @@ export default {
     },
   },
   methods: {
+    generateGenTypeOptions() {
+      return this.generatorClasses.map((level) => ({
+        label: level.toUpperCase(),
+        value: level,
+      }));
+    },
     getActiveGenerators() {
+      fetch('/api/settings')
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          console.log(response.selected);
+          console.log(response.selected['pattern']);
+          console.log(Object.keys(response.selected));
+        });
       fetch('/api/active_generators')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
+          console.log(response.active_generators);
           this.activeGenerators = response.active_generators;
           this.selectedPatterns = this.activeGenerators[0];
-          console.log(this.activeGenerators);
         })
         .catch((err) => {
           console.log(err);
@@ -192,10 +216,12 @@ export default {
       });
     },
     getGeneratorMetadata() {
-      fetch('/api/meta')
+      fetch('/api/patternscheduler')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.generatorMetadata = response;
+          this.generatorClasses = response['generator_class_names'];
+          this.selectedTargetType = this.generatorClasses[0];
           console.log(this.generatorMetadata);
         })
         .catch((err) => {
