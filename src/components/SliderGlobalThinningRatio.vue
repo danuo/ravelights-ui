@@ -18,7 +18,7 @@ export default {
   name: 'SliderGlobalThinningRatio',
   setup() {
     return {
-      global_thinning_ratio: ref(0.7),
+      global_thinning_ratio: ref(0.5),
     };
   },
   mounted() {
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalThinningRatio() {
-      fetch('/api/global_thinning_ratio')
+      fetch('/api/settings')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_thinning_ratio = response.global_thinning_ratio;
@@ -44,8 +44,7 @@ export default {
           global_thinning_ratio: this.global_thinning_ratio,
         }),
       };
-
-      fetch('/api/global_thinning_ratio', requestOptions)
+      fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

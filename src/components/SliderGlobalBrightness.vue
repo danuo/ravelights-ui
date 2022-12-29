@@ -18,7 +18,7 @@ export default {
   name: 'SliderGlobalBrightness',
   setup() {
     return {
-      global_brightness: ref(0.7),
+      global_brightness: ref(1.0),
     };
   },
   mounted() {
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalBrightness() {
-      fetch('/api/global_brightness')
+      fetch('/api/settings')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_brightness = response.global_brightness;
@@ -42,8 +42,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ global_brightness: this.global_brightness }),
       };
-
-      fetch('/api/global_brightness', requestOptions)
+      fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

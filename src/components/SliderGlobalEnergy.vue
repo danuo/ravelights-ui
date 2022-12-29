@@ -18,7 +18,7 @@ export default {
   name: 'SliderGlobalEnergy',
   setup() {
     return {
-      global_energy: ref(0.7),
+      global_energy: ref(1.0),
     };
   },
   mounted() {
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalEnergy() {
-      fetch('/api/global_energy')
+      fetch('/api/settings')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_energy = response.global_energy;
@@ -42,8 +42,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ global_energy: this.global_energy }),
       };
-
-      fetch('/api/global_energy', requestOptions)
+      fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
