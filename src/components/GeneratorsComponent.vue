@@ -1,5 +1,6 @@
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
+
   <div class="q-pa-md row" v-if="activeGenerators !== null">
     <div class="col-3" v-for="gen_type in 4" :key="gen_type">
       <q-list bordered separator>
@@ -10,7 +11,9 @@
               {{ gen_index }}
             </q-item-label>
             <q-item-label>
-              {{ activeGenerators[gen_type - 1][gen_index - 1] }}
+              {{
+                activeGenerators[generatorClasses[gen_type - 1]][gen_index - 1]
+              }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -50,7 +53,7 @@
     />
   </div>
 
-  <div class="row q-col-gutter-md">
+  <div class="row q-col-gutter-md" v-if="activeGenerators !== null">
     <div class="col-3" v-for="gen in filteredGeneratorsPattern" :key="gen">
       <q-btn
         :label="gen['generator_name']"
@@ -58,12 +61,14 @@
         class="q-pa-lg"
         @click="onSelectGenerator(gen.generator_name)"
         :color="
-          gen.generator_name == selectedPatterns[selectedTargetLevel]
+          gen.generator_name ==
+          activeGenerators[selectedTargetType][selectedTargetLevel]
             ? 'primary'
             : 'white'
         "
         :text-color="
-          gen['generator_name'] == selectedPatterns[selectedTargetLevel]
+          gen['generator_name'] ==
+          activeGenerators[selectedTargetType][selectedTargetLevel]
             ? 'white'
             : 'black'
         "
@@ -168,33 +173,26 @@ export default {
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log(response.selected);
-          console.log(response.selected['pattern']);
-          console.log(Object.keys(response.selected));
-        });
-      fetch('/api/active_generators')
-        .then((responsePromise) => responsePromise.json())
-        .then((response) => {
-          console.log(response.active_generators);
-          this.activeGenerators = response.active_generators;
-          this.selectedPatterns = this.activeGenerators[0];
+          this.activeGenerators = response.selected;
         })
         .catch((err) => {
           console.log(err);
         });
     },
     onSelectGenerator(generatorName: string) {
-      this.selectedPatterns[this.selectedTargetLevel] = generatorName;
-      this.activeGenerators[0] = this.selectedPatterns;
+      this.activeGenerators[this.selectedTargetType][this.selectedTargetLevel] =
+        generatorName;
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type_name: 'pattern',
-          level_index: this.selectedTargetLevel + 1,
-          generator_name: generatorName,
+          action: 'set_generator',
+          gen_type: this.selectedTargetType,
+          gen_name: generatorName,
+          level_index: this.selectedTargetLevel,
         }),
       };
-      fetch('/api/set_generators', requestOptions)
+      fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
