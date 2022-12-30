@@ -11,9 +11,7 @@
               {{ gen_index }}
             </q-item-label>
             <q-item-label>
-              {{
-                activeGenerators[generatorClasses[gen_type - 1]][gen_index - 1]
-              }}
+              {{ activeGenerators[generatorClasses[gen_type - 1]][gen_index] }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -36,9 +34,9 @@
       v-model="selectedTargetLevel"
       toggle-color="primary"
       :options="[
-        { label: 'Primary', value: 0 },
-        { label: 'Seconday', value: 1 },
-        { label: 'Tertiary', value: 2 },
+        { label: 'Primary', value: 1 },
+        { label: 'Seconday', value: 2 },
+        { label: 'Tertiary', value: 3 },
       ]"
     />
   </div>
@@ -112,7 +110,7 @@ export default {
       generatorClasses: ref(['']),
       effectMetadata: ref({}),
       activeFilters: ref([]),
-      selectedTargetLevel: ref(0),
+      selectedTargetLevel: ref(1),
       selectedTargetType: ref<string>(),
       selectedPatterns: ref([null, null, null]),
     };
