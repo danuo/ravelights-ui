@@ -38,7 +38,7 @@ export default {
           console.log('Logging timeline response...');
           console.log(response);
           this.selectedTimelineIndex = response.active_timeline_index;
-          this.availableTimelines = response.available_timelines;
+          this.availableTimelines = response.meta_available_timelines;
           this.timelineOptions = [];
           for (const [index, name] of this.availableTimelines.entries()) {
             this.timelineOptions.push({

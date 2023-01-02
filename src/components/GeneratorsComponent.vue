@@ -95,9 +95,9 @@ import { ref } from 'vue';
 
 interface GeneratorMetadata {
   active_timeline_index: number; // int
-  available_timelines: string[]; // list of strings
-  available_keywords: string[];
-  available_generators: string;
+  meta_available_timelines: string[]; // list of strings
+  meta_available_keywords: string[];
+  meta_available_generators: string;
   generator_class_names: string[];
 }
 
@@ -127,7 +127,7 @@ export default {
       ) {
         return [];
       }
-      return this.generatorMetadata['available_generators'][
+      return this.generatorMetadata['meta_available_generators'][
         this.selectedTargetType
       ].filter((generator) => {
         return this.isIncludedInFilter(generator['generator_keywords']);
@@ -136,10 +136,10 @@ export default {
     selectableKeywords() {
       let filterOptions = [];
       if (this.generatorMetadata !== undefined) {
-        for (var index in this.generatorMetadata['available_keywords']) {
+        for (var index in this.generatorMetadata['meta_available_keywords']) {
           filterOptions.push({
-            label: this.generatorMetadata['available_keywords'][index],
-            value: this.generatorMetadata['available_keywords'][index],
+            label: this.generatorMetadata['meta_available_keywords'][index],
+            value: this.generatorMetadata['meta_available_keywords'][index],
           });
         }
       }
@@ -152,11 +152,11 @@ export default {
       ) {
         return [];
       }
-      return this.generatorMetadata['available_generators']['effect'].filter(
-        (generator) => {
-          return this.isIncludedInFilter(generator['generator_keywords']);
-        }
-      );
+      return this.generatorMetadata['meta_available_generators'][
+        'effect'
+      ].filter((generator) => {
+        return this.isIncludedInFilter(generator['generator_keywords']);
+      });
     },
   },
   methods: {
