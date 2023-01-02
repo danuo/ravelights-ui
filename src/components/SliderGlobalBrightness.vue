@@ -40,7 +40,10 @@ export default {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ global_brightness: this.global_brightness }),
+        body: JSON.stringify({
+          action: 'change_settings',
+          global_brightness: this.global_brightness,
+        }),
       };
       fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)

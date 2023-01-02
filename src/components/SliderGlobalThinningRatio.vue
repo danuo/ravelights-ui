@@ -41,6 +41,7 @@ export default {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          action: 'change_settings',
           global_thinning_ratio: this.global_thinning_ratio,
         }),
       };

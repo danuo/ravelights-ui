@@ -204,6 +204,7 @@ export default {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          action: 'set_effect',
           effect_name: effectName,
           length_frames: 8,
         }),

@@ -40,7 +40,7 @@ export default {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bpm: this.bpm }),
+        body: JSON.stringify({ action: 'change_settings', bpm: this.bpm }),
       };
       fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)

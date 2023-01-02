@@ -40,7 +40,10 @@ export default {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ global_energy: this.global_energy }),
+        body: JSON.stringify({
+          action: 'change_settings',
+          global_energy: this.global_energy,
+        }),
       };
       fetch('/api/settings', requestOptions)
         .then((responsePromise) => responsePromise)
