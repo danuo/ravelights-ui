@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalThinningRatio() {
-      fetch('/api/settings')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_thinning_ratio = response.global_thinning_ratio;
@@ -45,7 +45,7 @@ export default {
           global_thinning_ratio: this.global_thinning_ratio,
         }),
       };
-      fetch('/api/settings', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

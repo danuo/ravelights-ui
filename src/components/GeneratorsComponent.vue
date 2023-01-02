@@ -167,7 +167,7 @@ export default {
       }));
     },
     getActiveGenerators() {
-      fetch('/api/settings')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log(response.selected);
@@ -190,7 +190,7 @@ export default {
           level_index: this.selectedTargetLevel,
         }),
       };
-      fetch('/api/settings', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -224,7 +224,7 @@ export default {
       });
     },
     getGeneratorMetadata() {
-      fetch('/api/patternscheduler')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.generatorMetadata = response;

@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getAvailableTimelines() {
-      fetch('/api/patternscheduler')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log('Logging timeline response...');
@@ -62,7 +62,7 @@ export default {
           timeline_index: this.selectedTimelineIndex,
         }),
       };
-      fetch('/api/patternscheduler', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

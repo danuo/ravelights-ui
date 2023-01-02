@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalBrightness() {
-      fetch('/api/settings')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_brightness = response.global_brightness;
@@ -45,7 +45,7 @@ export default {
           global_brightness: this.global_brightness,
         }),
       };
-      fetch('/api/settings', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

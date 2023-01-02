@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     getGlobalEnergy() {
-      fetch('/api/settings')
+      fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.global_energy = response.global_energy;
@@ -45,7 +45,7 @@ export default {
           global_energy: this.global_energy,
         }),
       };
-      fetch('/api/settings', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
