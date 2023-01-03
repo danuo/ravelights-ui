@@ -209,7 +209,7 @@ export default {
           length_frames: 8,
         }),
       };
-      fetch('/api/set_effects', requestOptions)
+      fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -228,7 +228,9 @@ export default {
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.generatorMetadata = response;
-          this.generatorClasses = response['generator_class_names'];
+          this.generatorClasses = response[
+            'generator_classes_identifiers'
+          ].slice(0, 4);
           this.selectedTargetType = this.generatorClasses[0];
           console.log(response);
         })
