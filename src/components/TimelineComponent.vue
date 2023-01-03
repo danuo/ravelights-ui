@@ -10,6 +10,7 @@
       dense
     />
   </div>
+  <button class="primary" @click="setTimeline()">apply timeline</button>
 </template>
 
 <script lang="ts">
@@ -32,6 +33,7 @@ export default {
   },
   methods: {
     getAvailableTimelines() {
+      console.log('loading timeline...');
       fetch('/api')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
