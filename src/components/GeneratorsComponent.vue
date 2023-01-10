@@ -153,7 +153,7 @@ export default {
         return [];
       }
       return this.generatorMetadata['meta_available_generators'][
-        'effect'
+        'effect_glob'
       ].filter((generator) => {
         return this.isIncludedInFilter(generator['generator_keywords']);
       });
