@@ -7,7 +7,7 @@
 <script>
 import GlobalButtons from 'components/GlobalButtons.vue';
 export default {
-  name: 'SettingsPage',
+  name: 'ActionsPage',
   components: {
     GlobalButtons,
   },
