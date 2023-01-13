@@ -43,11 +43,11 @@ export default {
       });
   },
   methods: {
-    handleClick(action) {
+    handleClick(button) {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...action, level: this.selectedTargetLevel }),
+        body: JSON.stringify({ ...button, level: this.selectedTargetLevel }),
       };
       fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
