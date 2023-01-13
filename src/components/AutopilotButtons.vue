@@ -1,61 +1,70 @@
-<!-- This is the new version -->
-
 <template>
-  <div v-for="button in buttons" :key="button.name">
-    <!-- button is toggleslider -->
-    <div v-if="button.type == 'toggle_slider'" class="row q-col-gutter-md">
-      <div class="col-4">
-        <q-toggle
-          @click="handleClick"
-          v-model="settings_autopilot[button.name_toggle]"
-          :label="button.name_toggle"
-        />
-      </div>
-      <div class="col-8">
-        <q-slider
-          @change="handleClick"
-          v-model="settings_autopilot[button.name_slider]"
-          :min="button.range_min"
-          :max="button.range_max"
-          :step="button.step"
-          track-size="20px"
-          thumb-size="40px"
-          label-always
-          :label-value="
-            Math.trunc(100 * settings_autopilot[button.name_slider]) + ' %'
-          "
-        />
-      </div>
-    </div>
+  <q-list bordered separator>
+    <q-item v-for="button in buttons" :key="button.name">
+      <!-- is toggle slider -->
+      <q-item-section v-if="button.type == 'toggle_slider'">
+        <q-item-label caption> {{ button.name_toggle }} </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-3">
+            <q-toggle
+              @click="handleClick"
+              v-model="settings_autopilot[button.name_toggle]"
+              size="40px"
+            />
+          </div>
+          <div class="col-9">
+            <q-slider
+              @change="handleClick"
+              v-model="settings_autopilot[button.name_slider]"
+              :min="button.range_min"
+              :max="button.range_max"
+              :step="button.step"
+              track-size="15px"
+              thumb-size="30px"
+              label-always
+              :label-value="
+                Math.trunc(100 * settings_autopilot[button.name_slider]) + ' %'
+              "
+            />
+          </div>
+        </div>
+      </q-item-section>
 
-    <!-- button is toggle -->
-    <div v-if="button.type == 'toggle'" class="row q-col-gutter-md">
-      <div class="col-4">
-        <q-toggle
-          @click="handleClick"
-          v-model="settings_autopilot[button.name_toggle]"
-          :label="button.name_toggle"
-        />
-      </div>
-    </div>
+      <!-- is slider with steps -->
+      <q-item-section v-if="button.type == 'slider_with_steps'">
+        <q-item-label caption> {{ button.name_slider }} </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-3"></div>
+          <div class="col-9">
+            <q-slider
+              @change="handleClick"
+              v-model="settings_autopilot[button.name_slider]"
+              track-size="15px"
+              thumb-size="30px"
+              :min="button.range_min"
+              :max="button.range_max"
+              :step="button.step"
+              label-always
+              :label-value="settings_autopilot[button.name_slider]"
+            />
+          </div>
+        </div>
+      </q-item-section>
 
-    <!-- button is slider with steps -->
-    <div v-if="button.type == 'slider_with_steps'" class="row q-col-gutter-md">
-      <div class="col-12">
-        <q-slider
-          @change="handleClick"
-          v-model="settings_autopilot[button.name_slider]"
-          track-size="20px"
-          thumb-size="40px"
-          :min="button.range_min"
-          :max="button.range_max"
-          :step="button.step"
-          label-always
-          :label-value="settings_autopilot[button.name_slider]"
-        />
-      </div>
-    </div>
-  </div>
+      <!-- is toggle -->
+      <q-item-section v-if="button.type == 'toggle'">
+        <q-item-label caption> {{ button.name_toggle }} </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-3">
+            <q-toggle
+              @click="handleClick"
+              v-model="settings_autopilot[button.name_toggle]"
+            />
+          </div>
+        </div>
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script>
