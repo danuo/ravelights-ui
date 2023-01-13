@@ -35,7 +35,7 @@ export default {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response['global_buttons'];
+        this.buttons = response['controls_live_generator'];
         console.log(response);
       })
       .catch((err) => {
