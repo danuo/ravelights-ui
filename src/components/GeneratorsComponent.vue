@@ -1,4 +1,3 @@
->
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
@@ -50,12 +49,14 @@
     />
   </div>
 
+  <!-- generator list -->
   <div class="row q-col-gutter-md" v-if="activeGenerators !== null">
-    <div class="col-3" v-for="gen in filteredGeneratorsPattern" :key="gen">
+    <div class="col-4" v-for="gen in filteredGeneratorsPattern" :key="gen">
       <q-btn
-        :label="gen['generator_name']"
-        style="width: 100%"
-        class="q-pa-lg"
+        :label="replace_underscores(gen['generator_name'])"
+        style="width: 100%; height: 100px"
+        class="q-pa-sm"
+        square="true"
         @click="onSelectGenerator(gen.generator_name)"
         :color="
           gen.generator_name ==
@@ -73,14 +74,16 @@
     </div>
   </div>
 
+  <!-- effect list -->
   <h5 class="text-center q-ma-md">Effect Selector</h5>
   <b>put length selector here</b>
   <div class="row q-col-gutter-md">
-    <div class="col-3" v-for="gen in filteredGeneratorsEffect" :key="gen">
+    <div class="col-4" v-for="gen in filteredGeneratorsEffect" :key="gen">
       <q-btn
-        :label="gen['generator_name']"
-        style="width: 100%"
-        class="q-pa-lg"
+        :label="replace_underscores(gen['generator_name'])"
+        style="width: 100%; height: 100px"
+        class="q-pa-sm"
+        square="true"
         @click="onSelectEffect(gen.generator_name)"
         color="#fff"
         text-color="#000"
@@ -159,6 +162,9 @@ export default {
     },
   },
   methods: {
+    replace_underscores(input_string) {
+      return input_string.replace(/_/g, ' ');
+    },
     generateGenTypeOptions() {
       return this.generatorClasses.map((level) => ({
         label: level.toUpperCase(),
