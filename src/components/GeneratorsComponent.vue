@@ -1,3 +1,4 @@
+>
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
@@ -10,9 +11,7 @@
               {{ generatorClasses[gen_type - 1] }}
               {{ gen_index }}
             </q-item-label>
-            <q-item-label>
-              {{ activeGenerators[generatorClasses[gen_type - 1]][gen_index] }}
-            </q-item-label>
+            {{ activeGenerators[generatorClasses[gen_type - 1]][gen_index] }}
           </q-item-section>
         </q-item>
       </q-list>
