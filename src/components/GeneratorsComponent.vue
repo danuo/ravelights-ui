@@ -1,24 +1,23 @@
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
-  <div class="q-pa-none row" v-if="activeGenerators !== null">
-    <div class="col-4" v-for="gen_index in 3" :key="gen_index">
-      <q-list bordered separator>
-        <q-item v-for="gen_type in 4" :key="gen_type" style="height: 100%">
-          <q-item-section>
-            <q-item-label caption>
-              {{ generatorClasses[gen_type - 1] }}
-              {{ gen_index }}
-            </q-item-label>
+  <div class="q-pa-none" v-if="activeGenerators !== null">
+    <q-list bordered separator class="row">
+      <q-item v-for="gen_type in 4" :key="gen_type" class="col-6">
+        <q-item-section>
+          <q-item-label caption>
+            {{ generatorClasses[gen_type - 1] }}
+          </q-item-label>
+          <div v-for="gen_index in 3" :key="gen_index">
             {{
               replace_underscores(
                 activeGenerators[generatorClasses[gen_type - 1]][gen_index]
               )
             }}
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </div>
+          </div>
+        </q-item-section>
+      </q-item>
+    </q-list>
   </div>
 
   <h5 class="text-center q-ma-md">Generator Selector</h5>
@@ -60,7 +59,7 @@
         :label="replace_underscores(gen['generator_name'])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
-        square="true"
+        :square="true"
         @click="onSelectGenerator(gen.generator_name)"
         :color="
           gen.generator_name ==
@@ -87,7 +86,7 @@
         :label="replace_underscores(gen['generator_name'])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
-        square="true"
+        :square="true"
         @click="onSelectEffect(gen.generator_name)"
         color="#fff"
         text-color="#000"
