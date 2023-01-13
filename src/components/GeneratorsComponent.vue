@@ -1,23 +1,21 @@
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
-  <div class="q-pa-none" v-if="activeGenerators !== null">
-    <q-list bordered separator class="row">
-      <q-item v-for="gen_type in 4" :key="gen_type" class="col-6">
-        <q-item-section>
-          <q-item-label caption>
-            {{ generatorClasses[gen_type - 1] }}
-          </q-item-label>
-          <div v-for="gen_index in 3" :key="gen_index">
-            {{
-              replace_underscores(
-                activeGenerators[generatorClasses[gen_type - 1]][gen_index]
-              )
-            }}
-          </div>
-        </q-item-section>
-      </q-item>
-    </q-list>
+  <div class="row q-col-gutter-xs" v-if="activeGenerators !== null">
+    <div v-for="gen_type in 4" :key="gen_type" class="col-6">
+      <div class="my-content">
+        <q-item-label caption>
+          {{ generatorClasses[gen_type - 1] }}
+        </q-item-label>
+        <div v-for="gen_index in 3" :key="gen_index">
+          {{
+            replace_underscores(
+              activeGenerators[generatorClasses[gen_type - 1]][gen_index]
+            )
+          }}
+        </div>
+      </div>
+    </div>
   </div>
 
   <h5 class="text-center q-ma-md">Generator Selector</h5>
@@ -94,6 +92,13 @@
     </div>
   </div>
 </template>
+
+<style lang="sass" scoped>
+.my-content
+  padding: 10px 15px
+  background: rgba(86,61,124,.15)
+  border: 1px solid rgba(86,61,124,.2)
+</style>
 
 <script lang="ts">
 import { ref } from 'vue';
