@@ -1,16 +1,20 @@
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
-  <div class="q-pa-md row" v-if="activeGenerators !== null">
-    <div class="col-3" v-for="gen_type in 4" :key="gen_type">
+  <div class="q-pa-none row" v-if="activeGenerators !== null">
+    <div class="col-4" v-for="gen_index in 3" :key="gen_index">
       <q-list bordered separator>
-        <q-item v-for="gen_index in 3" :key="gen_index">
+        <q-item v-for="gen_type in 4" :key="gen_type" style="height: 100%">
           <q-item-section>
             <q-item-label caption>
               {{ generatorClasses[gen_type - 1] }}
               {{ gen_index }}
             </q-item-label>
-            {{ activeGenerators[generatorClasses[gen_type - 1]][gen_index] }}
+            {{
+              replace_underscores(
+                activeGenerators[generatorClasses[gen_type - 1]][gen_index]
+              )
+            }}
           </q-item-section>
         </q-item>
       </q-list>
