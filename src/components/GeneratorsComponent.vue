@@ -1,7 +1,7 @@
 <template>
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
-  <div class="row q-col-gutter-xs" v-if="activeGenerators !== null">
+  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div v-for="gen_type in 4" :key="gen_type" class="col-6">
       <div class="grey-box">
         <q-item-label caption>
@@ -10,7 +10,7 @@
         <div v-for="gen_index in 3" :key="gen_index">
           {{
             replace_underscores(
-              activeGenerators[generatorClasses[gen_type - 1]][gen_index]
+              selectedGenerators[generatorClasses[gen_type - 1]][gen_index]
             )
           }}
         </div>
@@ -54,7 +54,7 @@
   </div>
 
   <!-- generator list -->
-  <div class="row q-col-gutter-md" v-if="activeGenerators !== null">
+  <div class="row q-col-gutter-md" v-if="selectedGenerators !== null">
     <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
@@ -64,13 +64,13 @@
         @click="setGenerator(gen.generator_name)"
         :color="
           gen.generator_name ==
-          activeGenerators[selectedTargetType][selectedTargetLevel]
+          selectedGenerators[selectedTargetType][selectedTargetLevel]
             ? 'primary'
             : 'white'
         "
         :text-color="
           gen['generator_name'] ==
-          activeGenerators[selectedTargetType][selectedTargetLevel]
+          selectedGenerators[selectedTargetType][selectedTargetLevel]
             ? 'white'
             : 'black'
         "
@@ -108,27 +108,25 @@ export default {
   name: 'ActiveGenerators',
   data() {
     return {
-      activeGenerators: null,
+      selectedGenerators: null,
       apiResponse: {},
       generatorClasses: [],
-      effectMetadata: {},
       activeFilters: [],
       selectedTargetLevel: 1,
       selectedTargetType: '',
-      selectedPatterns: [],
     };
   },
   mounted() {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.generatorMetadata = response;
+        this.apiResponse = response;
         this.generatorClasses = response['generator_classes_identifiers'].slice(
           0,
           4
         );
         this.selectedTargetType = this.generatorClasses[0];
-        this.activeGenerators = response.selected;
+        this.selectedGenerators = response.selected;
         console.log(response);
       })
       .catch((err) => {
@@ -137,10 +135,7 @@ export default {
   },
   computed: {
     filteredGenerators() {
-      if (
-        this.apiResponse === undefined ||
-        Object.keys(this.apiResponse).length === 0
-      ) {
+      if (Object.keys(this.apiResponse).length === 0) {
         return [];
       }
       return this.apiResponse['meta_available_generators'][
@@ -150,10 +145,7 @@ export default {
       });
     },
     filteredEffects() {
-      if (
-        this.apiResponse === undefined ||
-        Object.keys(this.apiResponse).length === 0
-      ) {
+      if (Object.keys(this.apiResponse).length === 0) {
         return [];
       }
       return this.apiResponse['meta_available_generators'][
@@ -164,7 +156,7 @@ export default {
     },
     selectableKeywords() {
       let filterOptions = [];
-      if (this.apiResponse !== undefined) {
+      if (this.apiResponse !== null) {
         for (var index in this.apiResponse['meta_available_keywords']) {
           filterOptions.push({
             label: this.apiResponse['meta_available_keywords'][index],
@@ -191,8 +183,9 @@ export default {
       }));
     },
     setGenerator(generatorName) {
-      this.activeGenerators[this.selectedTargetType][this.selectedTargetLevel] =
-        generatorName;
+      this.selectedGenerators[this.selectedTargetType][
+        this.selectedTargetLevel
+      ] = generatorName;
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
