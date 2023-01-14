@@ -31,7 +31,7 @@
       </q-item-section>
 
       <!-- is slider with steps -->
-      <q-item-section v-if="button.type == 'slider_with_steps'">
+      <q-item-section v-if="button.type == 'slider'">
         <q-item-label caption> {{ button.name_slider }} </q-item-label>
         <div class="row q-pa-md">
           <div class="col-3"></div>
