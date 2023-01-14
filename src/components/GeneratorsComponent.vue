@@ -3,7 +3,7 @@
 
   <div class="row q-col-gutter-xs" v-if="activeGenerators !== null">
     <div v-for="gen_type in 4" :key="gen_type" class="col-6">
-      <div class="my-content">
+      <div class="grey-box">
         <q-item-label caption>
           {{ generatorClasses[gen_type - 1] }}
         </q-item-label>
@@ -29,6 +29,7 @@
     />
   </div>
 
+  <!-- select generator level -->
   <div class="q-mb-lg">
     <q-btn-toggle
       v-model="selectedTargetLevel"
@@ -41,6 +42,7 @@
     />
   </div>
 
+  <!-- select keywords -->
   <div class="q-mb-lg">
     <q-option-group
       v-model="activeFilters"
@@ -53,13 +55,13 @@
 
   <!-- generator list -->
   <div class="row q-col-gutter-md" v-if="activeGenerators !== null">
-    <div class="col-4" v-for="gen in filteredGeneratorsPattern" :key="gen">
+    <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
-        @click="onSelectGenerator(gen.generator_name)"
+        @click="setGenerator(gen.generator_name)"
         :color="
           gen.generator_name ==
           activeGenerators[selectedTargetType][selectedTargetLevel]
@@ -80,13 +82,13 @@
   <h5 class="text-center q-ma-md">Effect Selector</h5>
   <b>put length selector here</b>
   <div class="row q-col-gutter-md">
-    <div class="col-4" v-for="gen in filteredGeneratorsEffect" :key="gen">
+    <div class="col-4" v-for="gen in filteredEffects" :key="gen">
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
-        @click="onSelectEffect(gen.generator_name)"
+        @click="setEffect(gen.generator_name)"
         color="#fff"
         text-color="#000"
       />
@@ -95,82 +97,90 @@
 </template>
 
 <style lang="sass" scoped>
-.my-content
+.grey-box
   padding: 10px 15px
   background: rgba(86,61,124,.15)
   border: 1px solid rgba(86,61,124,.2)
 </style>
 
-<script lang="ts">
-import { ref } from 'vue';
-
-interface GeneratorMetadata {
-  active_timeline_index: number; // int
-  meta_available_timelines: string[]; // list of strings
-  meta_available_keywords: string[];
-  meta_available_generators: string;
-  generator_class_names: string[];
-}
-
+<script>
 export default {
   name: 'ActiveGenerators',
-  setup() {
+  data() {
     return {
-      activeGenerators: ref(null),
-      generatorMetadata: ref<GeneratorMetadata>(),
-      generatorClasses: ref(['']),
-      effectMetadata: ref({}),
-      activeFilters: ref([]),
-      selectedTargetLevel: ref(1),
-      selectedTargetType: ref<string>(),
-      selectedPatterns: ref([null, null, null]),
+      activeGenerators: null,
+      apiResponse: {},
+      generatorClasses: [],
+      effectMetadata: {},
+      activeFilters: [],
+      selectedTargetLevel: 1,
+      selectedTargetType: '',
+      selectedPatterns: [],
     };
   },
   mounted() {
-    this.getGeneratorMetadata();
-    this.getActiveGenerators();
+    fetch('/api')
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.generatorMetadata = response;
+        this.generatorClasses = response['generator_classes_identifiers'].slice(
+          0,
+          4
+        );
+        this.selectedTargetType = this.generatorClasses[0];
+        this.activeGenerators = response.selected;
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   computed: {
-    filteredGeneratorsPattern() {
+    filteredGenerators() {
       if (
-        this.generatorMetadata === undefined ||
-        Object.keys(this.generatorMetadata).length === 0
+        this.apiResponse === undefined ||
+        Object.keys(this.apiResponse).length === 0
       ) {
         return [];
       }
-      return this.generatorMetadata['meta_available_generators'][
+      return this.apiResponse['meta_available_generators'][
         this.selectedTargetType
+      ].filter((generator) => {
+        return this.isIncludedInFilter(generator['generator_keywords']);
+      });
+    },
+    filteredEffects() {
+      if (
+        this.apiResponse === undefined ||
+        Object.keys(this.apiResponse).length === 0
+      ) {
+        return [];
+      }
+      return this.apiResponse['meta_available_generators'][
+        'effect_glob'
       ].filter((generator) => {
         return this.isIncludedInFilter(generator['generator_keywords']);
       });
     },
     selectableKeywords() {
       let filterOptions = [];
-      if (this.generatorMetadata !== undefined) {
-        for (var index in this.generatorMetadata['meta_available_keywords']) {
+      if (this.apiResponse !== undefined) {
+        for (var index in this.apiResponse['meta_available_keywords']) {
           filterOptions.push({
-            label: this.generatorMetadata['meta_available_keywords'][index],
-            value: this.generatorMetadata['meta_available_keywords'][index],
+            label: this.apiResponse['meta_available_keywords'][index],
+            value: this.apiResponse['meta_available_keywords'][index],
           });
         }
       }
       return filterOptions;
     },
-    filteredGeneratorsEffect() {
-      if (
-        this.generatorMetadata === undefined ||
-        Object.keys(this.generatorMetadata).length === 0
-      ) {
-        return [];
-      }
-      return this.generatorMetadata['meta_available_generators'][
-        'effect_glob'
-      ].filter((generator) => {
-        return this.isIncludedInFilter(generator['generator_keywords']);
-      });
-    },
   },
   methods: {
+    isIncludedInFilter(generatorCategories) {
+      return this.activeFilters.every((filter) => {
+        return generatorCategories.includes(filter);
+      });
+    },
     replace_underscores(input_string) {
       return input_string.replace(/_/g, ' ');
     },
@@ -180,18 +190,7 @@ export default {
         value: level,
       }));
     },
-    getActiveGenerators() {
-      fetch('/api')
-        .then((responsePromise) => responsePromise.json())
-        .then((response) => {
-          console.log(response.selected);
-          this.activeGenerators = response.selected;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    onSelectGenerator(generatorName: string) {
+    setGenerator(generatorName) {
       this.activeGenerators[this.selectedTargetType][this.selectedTargetLevel] =
         generatorName;
       const requestOptions = {
@@ -213,7 +212,7 @@ export default {
           console.log(err);
         });
     },
-    onSelectEffect(effectName: string) {
+    setEffect(effectName) {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -226,26 +225,6 @@ export default {
       fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    isIncludedInFilter(generatorCategories: string[]) {
-      return this.activeFilters.every((filter) => {
-        return generatorCategories.includes(filter);
-      });
-    },
-    getGeneratorMetadata() {
-      fetch('/api')
-        .then((responsePromise) => responsePromise.json())
-        .then((response) => {
-          this.generatorMetadata = response;
-          this.generatorClasses = response[
-            'generator_classes_identifiers'
-          ].slice(0, 4);
-          this.selectedTargetType = this.generatorClasses[0];
           console.log(response);
         })
         .catch((err) => {
