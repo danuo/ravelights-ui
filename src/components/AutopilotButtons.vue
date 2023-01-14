@@ -30,7 +30,7 @@
         </div>
       </q-item-section>
 
-      <!-- is slider with steps -->
+      <!-- is slider -->
       <q-item-section v-if="button.type == 'slider'">
         <q-item-label caption> {{ button.name_slider }} </q-item-label>
         <div class="row q-pa-md">
