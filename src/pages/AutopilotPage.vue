@@ -1,16 +1,16 @@
 <template>
   <q-page padding>
     <h5 class="text-center q-ma-md">Autopilot Settings</h5>
-    <AutopilotSettings />
+    <AutopilotButtons />
   </q-page>
 </template>
 
 <script lang="ts">
-import AutopilotSettings from 'components/AutopilotSettings.vue';
+import AutopilotButtons from 'components/AutopilotButtons.vue';
 export default {
   name: 'AutopilotPage',
   components: {
-    AutopilotSettings,
+    AutopilotButtons,
   },
 };
 </script>
