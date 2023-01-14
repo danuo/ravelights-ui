@@ -20,6 +20,7 @@
 
   <h5 class="text-center q-ma-md">Generator Selector</h5>
 
+  <!-- select generator type -->
   <div class="q-mb-lg">
     <q-btn-toggle
       v-model="selectedTargetType"
