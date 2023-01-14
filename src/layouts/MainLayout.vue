@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white" height-hint="98">
+    <q-header class="bg-primary text-white" height-hint="50">
       <q-tabs align="left">
         <q-route-tab to="/perform" label="Perform" />
         <q-route-tab to="/actions" label="Actions" />

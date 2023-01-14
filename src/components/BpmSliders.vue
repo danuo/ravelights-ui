@@ -11,6 +11,8 @@
               v-model="api_response[slider.var_name]"
               track-size="15px"
               thumb-size="30px"
+              color="primary"
+              selection-color="secondary"
               :min="slider.range_min"
               :max="slider.range_max"
               :step="slider.step"
