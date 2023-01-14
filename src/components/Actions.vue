@@ -27,7 +27,7 @@ export default {
   name: 'ButtonGenerator',
   data() {
     return {
-      selectedTargetLevel: 1,
+      selectedTargetLevel: 0,
       buttons: [],
     };
   },

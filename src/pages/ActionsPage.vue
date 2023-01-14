@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import GlobalButtons from 'components/GlobalButtons.vue';
+import GlobalButtons from 'src/components/Actions.vue';
 export default {
   name: 'ActionsPage',
   components: {
