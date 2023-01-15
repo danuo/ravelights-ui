@@ -13,6 +13,8 @@
               thumb-size="30px"
               color="primary"
               selection-color="secondary"
+              snap
+              :markers="slider.markers"
               :min="slider.range_min"
               :max="slider.range_max"
               :step="slider.step"

@@ -65,14 +65,14 @@
         :color="
           gen.generator_name ==
           selectedGenerators[selectedTargetType][selectedTargetLevel]
-            ? 'primary'
-            : 'white'
+            ? 'secondary'
+            : 'primary'
         "
         :text-color="
           gen['generator_name'] ==
           selectedGenerators[selectedTargetType][selectedTargetLevel]
-            ? 'white'
-            : 'black'
+            ? 'black'
+            : 'white'
         "
       />
     </div>
