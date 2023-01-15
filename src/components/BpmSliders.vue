@@ -1,4 +1,26 @@
 <template>
+  <div class="q-pa-md">
+    <q-input
+      v-model.number="api_response['bpm']"
+      filled
+      style="max-width: 200px"
+    />
+    <q-btn
+      v-model="api_response['bpm']"
+      @click="increaseBPM"
+      square
+      color="primary"
+      icon="expand_less"
+    />
+    <q-btn
+      v-model="api_response['bpm']"
+      @click="decreaseBPM"
+      square
+      color="primary"
+      icon="expand_more"
+    />
+  </div>
+
   <q-list bordered separator>
     <q-item v-for="slider in sliders" :key="slider.name">
       <!-- is slider -->
@@ -69,6 +91,18 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    increaseBPM() {
+      this.api_response['bpm'] = parseFloat(
+        (this.api_response['bpm'] + 0.1).toFixed(2)
+      );
+      this.handleClick('bpm');
+    },
+    decreaseBPM() {
+      this.api_response['bpm'] = parseFloat(
+        (this.api_response['bpm'] - 0.1).toFixed(2)
+      );
+      this.handleClick('bpm');
     },
   },
 };
