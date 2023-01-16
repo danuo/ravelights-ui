@@ -1,24 +1,63 @@
 <template>
-  <div class="q-pa-md">
-    <q-input
-      v-model.number="api_response['bpm']"
-      filled
-      style="max-width: 200px"
-    />
-    <q-btn
-      v-model="api_response['bpm']"
-      @click="increaseBPM"
-      square
-      color="primary"
-      icon="expand_less"
-    />
-    <q-btn
-      v-model="api_response['bpm']"
-      @click="decreaseBPM"
-      square
-      color="primary"
-      icon="expand_more"
-    />
+  <div class="q-col-gutter-xs">
+    <q-space />
+    <q-space />
+    <div class="row">
+      <div class="col-6">
+        <q-input v-model.number="api_response['bpm']" outlined />
+      </div>
+      <div class="col-3">
+        <q-btn
+          v-model="api_response['bpm']"
+          @click="increaseBPM"
+          style="width: 100%; height: 70px"
+          :square="true"
+          color="primary"
+          icon="expand_less"
+          size="25px"
+        />
+      </div>
+      <div class="col-3">
+        <q-btn
+          v-model="api_response['bpm']"
+          @click="decreaseBPM"
+          style="width: 100%; height: 70px"
+          color="primary"
+          icon="expand_more"
+          size="25px"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <q-btn
+          label="sync"
+          style="width: 100%; height: 70px"
+          color="primary"
+          size="20px"
+        />
+      </div>
+      <div class="col-3">
+        <q-btn
+          style="width: 100%; height: 70px"
+          color="primary"
+          icon="navigate_before"
+          size="25px"
+        />
+      </div>
+      <div class="col-3">
+        <q-btn
+          style="width: 100%; height: 70px"
+          color="primary"
+          icon="navigate_next"
+          size="25px"
+        />
+      </div>
+    </div>
+    <q-space />
+    <q-space />
+    <q-space />
+    <q-space />
   </div>
 
   <q-list bordered separator>
@@ -49,6 +88,13 @@
     </q-item>
   </q-list>
 </template>
+
+<style>
+.q-field__control {
+  height: 70px !important;
+  font-size: 25px;
+}
+</style>
 
 <script>
 export default {
