@@ -12,15 +12,23 @@
       ]"
     />
   </div>
-  <q-badge color="grey-3" text-color="black" class="q-mb-sm">
-    {{ hex }}
-  </q-badge>
 
   <q-color
     v-model="hex"
-    default-view="palette"
+    default-view="tune"
+    format-model="rgb"
     no-header-tabs
     size="huge"
+    :no-footer="true"
+  />
+  <q-color
+    v-model="hex"
+    default-view="palette"
+    format-model="rgb"
+    no-header
+    no-header-tabs
+    size="huge"
+    :no-footer="true"
     :palette="[
       '#019A9D',
       '#D9B801',
@@ -28,16 +36,15 @@
       '#B2028A',
       '#2A0449',
       '#019A9D',
+      '#019A9D',
+      '#D9B801',
+      '#E8045A',
+      '#B2028A',
+      '#2A0449',
+      '#019A9D',
     ]"
-    class="my-picker"
-    :dark="true"
   />
 </template>
-
-<style lang="sass" scoped>
-.my-picker
-  width: 100%
-</style>
 
 <script>
 export default {

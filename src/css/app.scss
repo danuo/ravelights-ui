@@ -3,3 +3,12 @@
 .q-slider--dark .q-slider__markers {
   color: rgba(0, 0, 0, 0.62);
 }
+
+.q-color-picker {
+  max-width: none;
+}
+
+.q-color-picker__cube {
+  width: 33.33% !important;
+  padding-bottom: 33.33% !important;
+}
