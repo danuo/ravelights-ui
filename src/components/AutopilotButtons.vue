@@ -10,21 +10,24 @@
               @click="handleClick"
               v-model="settings_autopilot[button.name_toggle]"
               size="40px"
+              color="secondary"
             />
           </div>
           <div class="col-9">
             <q-slider
               @change="handleClick"
               v-model="settings_autopilot[button.name_slider]"
+              color="primary"
+              selection-color="secondary"
+              track-size="15px"
+              thumb-size="30px"
+              :markers="button.markers"
               :min="button.range_min"
               :max="button.range_max"
               :step="button.step"
-              track-size="15px"
-              thumb-size="30px"
+              snap
               label-always
-              :label-value="
-                Math.trunc(100 * settings_autopilot[button.name_slider]) + ' %'
-              "
+              :label-value="settings_autopilot[button.name_slider]"
             />
           </div>
         </div>
@@ -39,11 +42,15 @@
             <q-slider
               @change="handleClick"
               v-model="settings_autopilot[button.name_slider]"
+              color="primary"
+              selection-color="secondary"
               track-size="15px"
               thumb-size="30px"
+              :markers="button.markers"
               :min="button.range_min"
               :max="button.range_max"
               :step="button.step"
+              snap
               label-always
               :label-value="settings_autopilot[button.name_slider]"
             />
@@ -59,6 +66,7 @@
             <q-toggle
               @click="handleClick"
               v-model="settings_autopilot[button.name_toggle]"
+              color="secondary"
             />
           </div>
         </div>

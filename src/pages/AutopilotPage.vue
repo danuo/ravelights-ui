@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-    <h5 class="text-center q-ma-md">Autopilot Settings</h5>
     <AutopilotButtons />
   </q-page>
 </template>
