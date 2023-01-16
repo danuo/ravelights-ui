@@ -4,7 +4,7 @@
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div v-for="gen_type in 4" :key="gen_type" class="col-6">
       <div class="grey-box">
-        <q-item-label caption>
+        <q-item-label caption style="color: #474747">
           {{ generatorClasses[gen_type - 1] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
@@ -16,6 +16,7 @@
         </div>
       </div>
     </div>
+    <q-space />
   </div>
 
   <h5 class="text-center q-ma-xs">Generator Selector</h5>
