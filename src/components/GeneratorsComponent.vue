@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <h5 class="text-center q-ma-md">Generator Selector</h5>
+  <h5 class="text-center q-ma-xs">Generator Selector</h5>
 
   <!-- select generator type -->
   <div class="q-mb-lg">
@@ -54,7 +54,7 @@
   </div>
 
   <!-- generator list -->
-  <div class="row q-col-gutter-md" v-if="selectedGenerators !== null">
+  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
