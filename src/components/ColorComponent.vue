@@ -29,20 +29,7 @@
     no-header-tabs
     size="huge"
     :no-footer="true"
-    :palette="[
-      '#019A9D',
-      '#D9B801',
-      '#E8045A',
-      '#B2028A',
-      '#2A0449',
-      '#019A9D',
-      '#019A9D',
-      '#D9B801',
-      '#E8045A',
-      '#B2028A',
-      '#2A0449',
-      '#019A9D',
-    ]"
+    :palette="palette"
   />
 </template>
 
@@ -51,16 +38,16 @@ export default {
   name: 'ColorComponent',
   data() {
     return {
-      selectedColorLevel: 'color_1',
-      buttons: [],
       hex: '#fff',
+      selectedColorLevel: 'color_1',
+      palette: [],
     };
   },
   mounted() {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response['controls']['controls_live_generator'];
+        this.palette = response['controls']['controls_color_palette'];
         console.log(response);
       })
       .catch((err) => {
