@@ -29,4 +29,4 @@ jobs:
           git add .
           git commit -m "Deploy to GitHub"
           git remote add origin https://danuo:${{ secrets.SECRET_TOKEN }}@github.com/danuo/ravelights-ui-builds.git
-          git push -u --force --quiet origin master:gh-pages
+          git push -u --force --quiet origin master
