@@ -90,7 +90,7 @@ export default {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response['controls_autopilot'];
+        this.buttons = response['controls']['controls_autopilot'];
         this.settings_autopilot = response['settings_autopilot'];
         console.log(response);
       })

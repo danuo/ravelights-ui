@@ -109,7 +109,7 @@ export default {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.sliders = response['controls_global_sliders'];
+        this.sliders = response['controls']['controls_global_sliders'];
         console.log(this.sliders);
         this.api_response = response;
         console.log(this.api_response);
