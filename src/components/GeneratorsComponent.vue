@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       selectedGenerators: null,
-      apiResponse: {},
+      apiResponse: null,
       generatorClasses: [],
       activeFilters: [],
       selectedTargetLevel: 1,
@@ -136,20 +136,20 @@ export default {
   },
   computed: {
     filteredGenerators() {
-      if (Object.keys(this.apiResponse).length === 0) {
+      if (this.apiResponse == null) {
         return [];
       }
-      return this.apiResponse['meta_available_generators'][
+      return this.apiResponse['meta']['available_generators'][
         this.selectedTargetType
       ].filter((generator) => {
         return this.isIncludedInFilter(generator['generator_keywords']);
       });
     },
     filteredEffects() {
-      if (Object.keys(this.apiResponse).length === 0) {
+      if (this.apiResponse == null) {
         return [];
       }
-      return this.apiResponse['meta_available_generators'][
+      return this.apiResponse['meta']['available_generators'][
         'effect_glob'
       ].filter((generator) => {
         return this.isIncludedInFilter(generator['generator_keywords']);
@@ -158,10 +158,10 @@ export default {
     selectableKeywords() {
       let filterOptions = [];
       if (this.apiResponse !== null) {
-        for (var index in this.apiResponse['meta_available_keywords']) {
+        for (var index in this.apiResponse['meta']['available_keywords']) {
           filterOptions.push({
-            label: this.apiResponse['meta_available_keywords'][index],
-            value: this.apiResponse['meta_available_keywords'][index],
+            label: this.apiResponse['meta']['available_keywords'][index],
+            value: this.apiResponse['meta']['available_keywords'][index],
           });
         }
       }
