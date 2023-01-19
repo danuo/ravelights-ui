@@ -6,6 +6,7 @@
         <q-route-tab to="/actions" label="Actions" />
         <q-route-tab to="/bpm" label="BPM" />
         <q-route-tab to="/autopilot" label="Autopilot" />
+        <q-route-tab to="/timelines" label="Timelines" />
       </q-tabs>
     </q-header>
 
