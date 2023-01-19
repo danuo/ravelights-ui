@@ -13,16 +13,16 @@
             <div class="column">
               <div class="col">
                 <q-btn
-                  :label="names[idx - 1]"
+                  label="load full"
                   style="width: 100%; height: 50px"
-                  color="accent"
+                  color="dark"
                 />
               </div>
               <div class="col">
                 <q-btn
-                  :label="names[idx - 1]"
+                  label="load placements"
                   style="width: 100%; height: 50px"
-                  color="primary"
+                  color="black"
                 />
               </div>
             </div>
