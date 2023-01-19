@@ -2,15 +2,15 @@
   <h5 class="text-center q-ma-md">Active Generators</h5>
 
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
-    <div v-for="gen_type in 4" :key="gen_type" class="col-6">
+    <div v-for="gen_type_idx in 4" :key="gen_type_idx" class="col-6">
       <div class="grey-box">
         <q-item-label caption style="color: #474747">
-          {{ generatorClasses[gen_type - 1] }}
+          {{ generatorClasses[gen_type_idx - 1] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
           {{
             replace_underscores(
-              selectedGenerators[generatorClasses[gen_type - 1]][gen_index]
+              selectedGenerators[generatorClasses[gen_type_idx - 1]][gen_index]
             )
           }}
         </div>
