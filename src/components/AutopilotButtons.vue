@@ -1,4 +1,7 @@
 <template>
+  <div class="q-pa-xs">
+    <q-space />
+  </div>
   <q-list bordered separator>
     <q-item v-for="button in buttons" :key="button.name">
       <!-- is toggle slider -->

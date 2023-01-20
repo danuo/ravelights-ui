@@ -1,4 +1,7 @@
 <template>
+  <div class="q-pa-xs">
+    <q-space />
+  </div>
   <div class="q-mb-lg">
     <q-btn-toggle
       v-model="selectedTargetLevel"
