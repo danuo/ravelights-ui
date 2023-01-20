@@ -1,13 +1,17 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header class="bg-primary text-white" height-hint="50">
-      <q-tabs align="left">
-        <q-route-tab to="/perform" label="Perform" />
-        <q-route-tab to="/effects" label="Effects" />
-        <q-route-tab to="/actions" label="Actions" />
-        <q-route-tab to="/bpm" label="BPM" />
-        <q-route-tab to="/autopilot" label="Autopilot" />
-        <q-route-tab to="/timelines" label="Timelines" />
+      <q-tabs align="left" style="height: 6em">
+        <q-route-tab to="/perform" name="Perform" icon="live_tv" />
+        <q-route-tab to="/effects" name="Effects" icon="stream" />
+        <q-route-tab to="/actions" name="Actions" icon="palette" />
+        <q-route-tab to="/bpm" name="BPM" icon="alarm" />
+        <q-route-tab
+          to="/autopilot"
+          name="Autopilot"
+          icon="motion_photos_auto"
+        />
+        <q-route-tab to="/timelines" name="Timelines" icon="movie" />
       </q-tabs>
     </q-header>
 
