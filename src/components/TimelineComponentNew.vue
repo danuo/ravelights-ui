@@ -25,7 +25,10 @@
                 <q-btn
                   label="load full"
                   style="width: 100%; height: 50px"
-                  color="dark"
+                  :color="idx - 1 == selectedTimelineIndex ? 'white' : 'dark'"
+                  :text-color="
+                    idx - 1 == selectedTimelineIndex ? 'black' : 'white'
+                  "
                 />
               </div>
               <div class="col">
@@ -53,7 +56,7 @@ export default {
       descriptions: null,
       svgs: null,
       colors: null,
-      selectedTimelineIndex: 2,
+      selectedTimelineIndex: null,
     };
   },
   mounted() {
@@ -61,10 +64,11 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
-        this.names = response['meta']['timelines']['names'];
-        this.descriptions = response['meta']['timelines']['descriptions'];
-        this.svgs = response['meta']['timelines']['svgs'];
-        this.colors = response['meta']['timelines']['colors'];
+        this.names = response.meta.timelines.names;
+        this.descriptions = response.meta.timelines.descriptions;
+        this.svgs = response.meta.timelines.svgs;
+        this.colors = response.meta.timelines.colors;
+        this.selectedTimelineIndex = response.active_timeline_index;
       })
       .catch((err) => {
         console.log(err);
