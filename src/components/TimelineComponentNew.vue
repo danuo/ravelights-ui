@@ -10,29 +10,29 @@
     </q-chip>
   </div>
   <q-list bordered separator v-if="apiResponse !== null">
-    <q-item v-for="idx in names.length" :key="idx">
+    <q-item v-for="(e, idx) in names.length" :key="idx">
       <q-item-section>
         <q-item-label caption>
-          {{ names[idx - 1] + descriptions[idx - 1] }}
+          {{ names[idx] + descriptions[idx] }}
         </q-item-label>
         <div class="row">
           <div class="col-8">
-            <div style="width: 100%; height: 100px" v-html="svgs[idx - 1]" />
+            <div style="width: 100%; height: 100px" v-html="svgs[idx]" />
           </div>
           <div class="col-4">
             <div class="column">
               <div class="col">
                 <q-btn
+                  @click="setTimeline(idx, true)"
                   label="load full"
                   style="width: 100%; height: 50px"
-                  :color="idx - 1 == selectedTimelineIndex ? 'white' : 'dark'"
-                  :text-color="
-                    idx - 1 == selectedTimelineIndex ? 'black' : 'white'
-                  "
+                  :color="idx == selectedTimelineIndex ? 'white' : 'dark'"
+                  :text-color="idx == selectedTimelineIndex ? 'black' : 'white'"
                 />
               </div>
               <div class="col">
                 <q-btn
+                  @click="setTimeline(idx, false)"
                   label="load placements"
                   style="width: 100%; height: 50px"
                   color="black"
@@ -74,6 +74,27 @@ export default {
         console.log(err);
       });
   },
-  methods: {},
+  methods: {
+    setTimeline(timeline_index, set_full) {
+      this.selectedTimelineIndex = timeline_index;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'set_timeline',
+          timeline_index: this.selectedTimelineIndex,
+          set_full: set_full,
+        }),
+      };
+      fetch('/api', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
 };
 </script>
