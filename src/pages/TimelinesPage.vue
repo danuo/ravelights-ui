@@ -1,15 +1,15 @@
 <template>
   <q-page padding>
-    <TimelineComponentNew />
+    <TimelineComponent />
   </q-page>
 </template>
 
 <script lang="ts">
-import TimelineComponentNew from 'src/components/TimelineComponentNew.vue';
+import TimelineComponent from 'src/components/TimelineComponent.vue';
 export default {
   name: 'TimelinesPage',
   components: {
-    TimelineComponentNew,
+    TimelineComponent,
   },
 };
 </script>
