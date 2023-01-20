@@ -1,4 +1,14 @@
 <template>
+  <div class="q-pa-md" v-if="apiResponse !== null">
+    <q-chip
+      outline
+      v-for="idx in colors.length"
+      :key="idx"
+      :style="'color: ' + colors[idx]"
+    >
+      {{ 'color' + idx }}
+    </q-chip>
+  </div>
   <q-list bordered separator v-if="apiResponse !== null">
     <q-item v-for="idx in names.length" :key="idx">
       <q-item-section>
@@ -42,6 +52,8 @@ export default {
       names: null,
       descriptions: null,
       svgs: null,
+      colors: null,
+      selectedTimelineIndex: 2,
     };
   },
   mounted() {
@@ -52,6 +64,7 @@ export default {
         this.names = response['meta']['timelines']['names'];
         this.descriptions = response['meta']['timelines']['descriptions'];
         this.svgs = response['meta']['timelines']['svgs'];
+        this.colors = response['meta']['timelines']['colors'];
       })
       .catch((err) => {
         console.log(err);
