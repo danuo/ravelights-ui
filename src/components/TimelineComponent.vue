@@ -13,7 +13,7 @@
     <q-item v-for="(e, idx) in names.length" :key="idx">
       <q-item-section>
         <q-item-label caption>
-          {{ names[idx] + descriptions[idx] }}
+          {{ names[idx] + ' | ' + descriptions[idx] }}
         </q-item-label>
         <div class="row">
           <div class="col-8">
