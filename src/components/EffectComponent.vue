@@ -1,4 +1,5 @@
 <template>
+  <h5 class="text-center q-ma-md">Effects</h5>
   <div class="q-px-lg q-pt-md q-pb-xl" v-if="api_response !== null">
     <q-slider
       v-model="length_selection"
