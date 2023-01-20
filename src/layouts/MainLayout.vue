@@ -3,6 +3,7 @@
     <q-header class="bg-primary text-white" height-hint="50">
       <q-tabs align="left">
         <q-route-tab to="/perform" label="Perform" />
+        <q-route-tab to="/effects" label="Effects" />
         <q-route-tab to="/actions" label="Actions" />
         <q-route-tab to="/bpm" label="BPM" />
         <q-route-tab to="/autopilot" label="Autopilot" />

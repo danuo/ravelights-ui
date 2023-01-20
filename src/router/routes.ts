@@ -11,6 +11,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/PerformPage.vue'),
       },
       {
+        path: '/effects',
+        component: () => import('src/pages/EffectPage.vue'),
+      },
+      {
         path: '/actions',
         component: () => import('src/pages/ActionsPage.vue'),
       },
