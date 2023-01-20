@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  name: 'TimelineComponentNew',
+  name: 'TimelineComponent',
   data() {
     return {
       apiResponse: null,
