@@ -30,6 +30,10 @@ const routes: RouteRecordRaw[] = [
         path: '/timelines',
         component: () => import('src/pages/TimelinesPage.vue'),
       },
+      {
+        path: '/trigger',
+        component: () => import('src/pages/TriggerPage.vue'),
+      },
     ],
   },
 

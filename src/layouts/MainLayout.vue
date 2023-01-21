@@ -12,6 +12,7 @@
           icon="motion_photos_auto"
         />
         <q-route-tab to="/timelines" name="Timelines" icon="movie" />
+        <q-route-tab to="/trigger" name="Trigger" icon="pattern" />
       </q-tabs>
     </q-header>
 
