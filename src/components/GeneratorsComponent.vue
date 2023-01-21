@@ -58,11 +58,11 @@
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
+        @click="setGenerator(gen.generator_name)"
         :label="replace_underscores(gen['generator_name'])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
-        @click="setGenerator(gen.generator_name)"
         :color="
           gen.generator_name ==
           selectedGenerators[selectedTargetType][selectedTargetLevel]
