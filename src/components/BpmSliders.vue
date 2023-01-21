@@ -60,28 +60,26 @@
     <q-space />
   </div>
 
-  <div class="q-px-xs q-pt-lg q-pb-md" v-if="api_response !== null"></div>
+  <div class="q-px-none q-pt-lg q-pb-md" v-if="api_response !== null">
+    <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
+    <div class="row flex-center" style="width: 100%">
+      <q-slider
+        @change="handleClickBpmMulti()"
+        v-model="bpm_multiplier_placeholder"
+        color="secondary"
+        selection-color="secondary"
+        track-size="15px"
+        thumb-size="30px"
+        :min="0"
+        :max="2"
+        :marker-labels="bpm_multiplier_mapping"
+        snap
+        style="width: 66%"
+      />
+    </div>
+  </div>
 
   <q-list bordered separator>
-    <q-item style="border-top: 0 !important">
-      <q-item-label caption> test </q-item-label>
-      <div class="row flex-center" style="width: 100%">
-        <!-- <div class="row flex-center"> -->
-        <q-slider
-          @change="handleClickBpmMulti()"
-          v-model="bpm_multiplier_placeholder"
-          color="secondary"
-          selection-color="secondary"
-          track-size="15px"
-          thumb-size="30px"
-          :min="0"
-          :max="2"
-          :marker-labels="bpm_multiplier_mapping"
-          snap
-          style="width: 66%"
-        />
-      </div>
-    </q-item>
     <q-item v-for="slider in sliders" :key="slider.name">
       <!-- is slider -->
       <q-item-section v-if="slider.type == 'slider'">
