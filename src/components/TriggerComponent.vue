@@ -18,6 +18,28 @@
     />
   </div>
 
+  <div class="q-my-lg" v-if="triggers !== null">
+    <q-btn-toggle
+      v-model="selected_level"
+      toggle-color="primary"
+      :options="[
+        { label: 'Primary', value: 1 },
+        { label: 'Seconday', value: 2 },
+        { label: 'Tertiary', value: 3 },
+      ]"
+    />
+  </div>
+
+  <div class="q-ma-md row q-col-gutter-xs" v-if="triggers !== null">
+    <div class="col-12" v-for="(e, idx) in typ.length" :key="idx">
+      <div class="my-content" style="background-color: #111">
+        <!-- {{ triggers }} -->
+        {{ triggers[typ[idx]][selected_level] }}
+        {{ selected_level }}
+      </div>
+    </div>
+  </div>
+
   <!-- length selection -->
   <q-card
     color="grey-3"
@@ -118,6 +140,7 @@ export default {
       marker_arange_to_label: null,
       marker_label_to_arange: null,
       quarters_str: ['A', 'B', 'C', 'D'],
+      typ: ['pattern', 'dimmer', 'thinner', 'effect'],
     };
   },
   mounted() {
