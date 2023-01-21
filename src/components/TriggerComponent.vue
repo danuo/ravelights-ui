@@ -135,12 +135,13 @@ export default {
         this.beat_array,
         this.loop_length
       );
-      out['loop_length'] =
-        this.marker_arange_to_label[this.loop_length_selection];
       out['quarter_str'] = this.quarter_array_to_list(
         this.quarters_array,
         this.loop_length
       );
+      out['loop_length'] =
+        this.marker_arange_to_label[this.loop_length_selection];
+      out['p'] = this.p;
       return out;
     },
   },
