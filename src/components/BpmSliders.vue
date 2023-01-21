@@ -4,11 +4,11 @@
     <q-space />
     <div class="row">
       <div class="col-6">
-        <q-input v-model.number="api_response['bpm']" outlined />
+        <q-input v-model.number="api_response['bpm_base']" outlined />
       </div>
       <div class="col-3">
         <q-btn
-          v-model="api_response['bpm']"
+          v-model="api_response['bpm_base']"
           @click="increaseBPM"
           style="width: 100%; height: 70px"
           :square="true"
@@ -19,7 +19,7 @@
       </div>
       <div class="col-3">
         <q-btn
-          v-model="api_response['bpm']"
+          v-model="api_response['bpm_base']"
           @click="decreaseBPM"
           style="width: 100%; height: 70px"
           color="primary"
@@ -60,7 +60,28 @@
     <q-space />
   </div>
 
+  <div class="q-px-xs q-pt-lg q-pb-md" v-if="api_response !== null"></div>
+
   <q-list bordered separator>
+    <q-item style="border-top: 0 !important">
+      <q-item-label caption> test </q-item-label>
+      <div class="row flex-center" style="width: 100%">
+        <!-- <div class="row flex-center"> -->
+        <q-slider
+          @change="handleClickBpmMulti()"
+          v-model="bpm_multiplier_placeholder"
+          color="secondary"
+          selection-color="secondary"
+          track-size="15px"
+          thumb-size="30px"
+          :min="0"
+          :max="2"
+          :marker-labels="bpm_multiplier_mapping"
+          snap
+          style="width: 66%"
+        />
+      </div>
+    </q-item>
     <q-item v-for="slider in sliders" :key="slider.name">
       <!-- is slider -->
       <q-item-section v-if="slider.type == 'slider'">
@@ -103,16 +124,21 @@ export default {
     return {
       sliders: [],
       api_response: {},
+      bpm_multiplier_mapping: { 0: '1/2', 1: 1, 2: 2 },
+      bpm_multiplier_placeholder: 1,
     };
   },
   mounted() {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.sliders = response['controls']['controls_global_sliders'];
-        console.log(this.sliders);
         this.api_response = response;
-        console.log(this.api_response);
+        this.sliders = response['controls']['controls_global_sliders'];
+        this.bpm_multiplier_placeholder = response.bpm_multiplier;
+        this.bpm_multiplier_placeholder =
+          this.bpm_multiplier_placeholder == 0.5
+            ? 0
+            : this.bpm_multiplier_placeholder;
       })
       .catch((err) => {
         console.log(err);
@@ -139,16 +165,23 @@ export default {
         });
     },
     increaseBPM() {
-      this.api_response['bpm'] = parseFloat(
-        (this.api_response['bpm'] + 0.1).toFixed(2)
+      this.api_response['bpm_base'] = parseFloat(
+        (this.api_response['bpm_base'] + 0.1).toFixed(2)
       );
-      this.handleClick('bpm');
+      this.handleClick('bpm_base');
     },
     decreaseBPM() {
-      this.api_response['bpm'] = parseFloat(
-        (this.api_response['bpm'] - 0.1).toFixed(2)
+      this.api_response['bpm_base'] = parseFloat(
+        (this.api_response['bpm_base'] - 0.1).toFixed(2)
       );
-      this.handleClick('bpm');
+      this.handleClick('bpm_base');
+    },
+    handleClickBpmMulti() {
+      this.api_response['bpm_multiplier'] =
+        this.bpm_multiplier_placeholder == 0
+          ? 0.5
+          : this.bpm_multiplier_placeholder;
+      this.handleClick('bpm_multiplier');
     },
   },
 };
