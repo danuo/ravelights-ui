@@ -5,16 +5,20 @@
     {{ selectedColorLevel }}
   </q-badge>
 
-  <div class="q-mb-lg">
-    <q-btn-toggle
-      v-model="selectedColorLevel"
-      toggle-color="primary"
-      :options="[
-        { label: 'color_1', value: 0 },
-        { label: 'color_2', value: 1 },
-        { label: 'color_sec_1', value: 2 },
-      ]"
-    />
+  <div class="q-mb-lg row flex-center" style="width: 100%">
+    <div class="q-gutter-y-md" style="width: 70%">
+      <q-btn-toggle
+        v-model="selectedColorLevel"
+        toggle-color="primary"
+        style="height: 60px"
+        :spread="true"
+        :options="[
+          { label: 'color_1', value: 0 },
+          { label: 'color_2', value: 1 },
+          { label: 'effect', value: 2 },
+        ]"
+      />
+    </div>
   </div>
 
   <q-color
@@ -38,6 +42,11 @@
     :palette="palette"
   />
 </template>
+
+<style lang="sass" scoped>
+.custom_button
+  width: 200px
+</style>
 
 <script>
 export default {
