@@ -7,13 +7,16 @@
 
   <div class="q-py-lg row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
-      <q-btn-toggle
-        v-model="selectedColorLevel"
-        toggle-color="primary"
-        style="height: 60px"
-        :spread="true"
-        :options="color_options"
-      />
+      <q-btn-group class="row" style="width: 100%">
+        <q-btn
+          v-for="(e, idx) in color_names.length"
+          :key="idx"
+          @click="selectedColorLevel = idx"
+          :label="color_names[idx]"
+          class="col"
+          :style="get_button_styling(idx)"
+        />
+      </q-btn-group>
     </div>
   </div>
 
@@ -58,11 +61,6 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
-.custom_button
-  width: 200px
-</style>
-
 <script>
 export default {
   name: 'ColorComponent',
@@ -99,13 +97,6 @@ export default {
         this.color[this.selectedColorLevel] = this.rgbToFloat(color_str);
       },
     },
-    color_options() {
-      let originalList = ['str1', 'str2', 'str3'];
-      return this.color_names.map((str, index) => ({
-        label: str,
-        value: index,
-      }));
-    },
   },
   methods: {
     handleClick(button) {
@@ -134,6 +125,24 @@ export default {
       var g = parseInt(parts[1]) / 255;
       var b = parseInt(parts[2]) / 255;
       return [r, g, b];
+    },
+    get_button_styling(idx) {
+      let out_list = [];
+      out_list.push('height: 60px;');
+      out_list.push('padding-top: 16px;');
+      out_list.push('border-bottom: 8px solid ');
+      out_list.push(this.floatToRgb(this.color[idx]));
+      out_list.push(';');
+      out_list.push('background-color: ');
+      out_list.push(
+        this.selectedColorLevel == idx
+          ? this.floatToRgb(this.color[idx])
+          : '#000'
+      );
+      out_list.push(';');
+      let final_str = out_list.join(' ');
+      console.log(final_str);
+      return final_str;
     },
   },
 };
