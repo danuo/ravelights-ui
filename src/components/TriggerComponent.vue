@@ -25,13 +25,12 @@
     class="q-mb-sm"
     v-if="triggers !== null"
   >
-    {{ length_selection }}
-    {{ objMarkerLabel[length_selection] }}
-    {{ typeof objMarkerLabel[length_selection] }}
-    {{ out_dict }}
+    <!-- {{ objMarkerLabel[length_selection] }} -->
+    <!-- {{ out_dict }} -->
+    {{ trigger }}
   </q-badge>
 
-  <div class="q-pa-md q-gutter-sm" v-if="triggers !== null">
+  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     {{ trigger }}
     <q-slider
       v-model="length_selection"
@@ -50,7 +49,7 @@
 
   <!-- quarter toggle -->
 
-  <q-btn-group class="row" style="width: 100%">
+  <q-btn-group class="row" style="width: 100%" v-if="triggers !== null">
     <q-btn
       v-for="(e, idx) in 4"
       :key="idx"
@@ -67,6 +66,8 @@ export default {
   name: 'TriggerComponent',
   data() {
     return {
+      selected_type: 'pattern',
+      selected_level: 1,
       triggers: null,
       trigger: null,
       length_selection: 0,
@@ -81,7 +82,7 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
-        this.trigger = this.triggers.pattern[0];
+        this.trigger = this.triggers[this.selected_type][this.selected_level];
         this.objMarkerLabel = response.meta.steps_dict;
         this.beat_array = this.beat_list_to_array(
           this.trigger.trigger_on_beats
@@ -98,7 +99,7 @@ export default {
     out_dict() {
       let out = {};
       out['loop_length'] = this.objMarkerLabel[this.length_selection];
-      out['quarter_str'] = this.quarter_array_to_str(this.quarters_bool);
+      out['quarter_str'] = this.quarter_array_to_list(this.quarters_bool);
       return out;
     },
   },
