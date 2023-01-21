@@ -54,6 +54,21 @@
       label-value="trigger loop length"
     />
   </div>
+  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
+    <q-slider
+      v-model="p"
+      color="primary"
+      selection-color="secondary"
+      track-size="15px"
+      thumb-size="30px"
+      snap
+      :min="0"
+      :max="1"
+      :step="0.1"
+      label-always
+      :label-value="p"
+    />
+  </div>
 
   <!-- quarter toggle -->
 
@@ -74,13 +89,14 @@ export default {
   name: 'TriggerComponent',
   data() {
     return {
+      temp_trigger: null,
       selected_type: 'pattern',
       selected_level: 1,
       triggers: null,
-      temp_trigger: null,
-      loop_length_selection: 0,
       beat_array: Array(32).fill(false),
       quarters_array: Array(4).fill(false),
+      loop_length_selection: 0,
+      p: 0,
       marker_arange_to_label: null,
       marker_label_to_arange: null,
       quarters_str: ['A', 'B', 'C', 'D'],
@@ -103,6 +119,7 @@ export default {
         );
         this.loop_length_selection =
           this.marker_label_to_arange[trigger.loop_length];
+        this.p = trigger.p;
       })
       .catch((err) => {
         console.log(err);
