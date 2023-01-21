@@ -1,9 +1,9 @@
 <template>
   <h5 class="text-center q-ma-md">Colors</h5>
-  <q-badge color="grey-3" text-color="black" class="q-mb-sm">
+  <!-- <q-badge color="grey-3" text-color="black" class="q-mb-sm">
     {{ color }}
     {{ selectedColorLevel }}
-  </q-badge>
+  </q-badge> -->
 
   <div class="q-mb-lg row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 70%">
@@ -12,11 +12,7 @@
         toggle-color="primary"
         style="height: 60px"
         :spread="true"
-        :options="[
-          { label: 'color_1', value: 0 },
-          { label: 'color_2', value: 1 },
-          { label: 'effect', value: 2 },
-        ]"
+        :options="color_options"
       />
     </div>
   </div>
@@ -66,7 +62,7 @@ export default {
         this.palette = response.controls.controls_color_palette;
         this.color = response.color;
         this.color_names = response.color_names;
-        console.log(response);
+        console.log(this.color_names);
       })
       .catch((err) => {
         console.log(err);
@@ -81,6 +77,13 @@ export default {
       set(color_str) {
         this.color[this.selectedColorLevel] = this.rgbToFloat(color_str);
       },
+    },
+    color_options() {
+      let originalList = ['str1', 'str2', 'str3'];
+      return this.color_names.map((str, index) => ({
+        label: str,
+        value: index,
+      }));
     },
   },
   methods: {
