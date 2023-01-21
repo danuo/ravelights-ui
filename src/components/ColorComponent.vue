@@ -1,20 +1,25 @@
 <template>
   <h5 class="text-center q-ma-md">Colors</h5>
+  <q-badge color="grey-3" text-color="black" class="q-mb-sm">
+    {{ color }}
+    {{ selectedColorLevel }}
+  </q-badge>
+
   <div class="q-mb-lg">
     <q-btn-toggle
       v-model="selectedColorLevel"
       toggle-color="primary"
       :options="[
-        { label: 'color_1', value: 'color_1' },
-        { label: 'color_2', value: 'color_2' },
-        { label: 'color_sec_1', value: 'color_sec_1' },
-        { label: 'color_sec_2', value: 'color_sec_2' },
+        { label: 'color_1', value: 0 },
+        { label: 'color_2', value: 1 },
+        { label: 'color_sec_1', value: 2 },
       ]"
     />
   </div>
 
   <q-color
-    v-model="hex"
+    v-model="color_str"
+    default-value="#000"
     default-view="tune"
     format-model="rgb"
     no-header-tabs
@@ -22,7 +27,8 @@
     :no-footer="true"
   />
   <q-color
-    v-model="hex"
+    v-model="color_str"
+    default-value="#000"
     default-view="palette"
     format-model="rgb"
     no-header
@@ -38,8 +44,10 @@ export default {
   name: 'ColorComponent',
   data() {
     return {
-      hex: '#fff',
-      selectedColorLevel: 'color_1',
+      hex2: 'fff',
+      color: [[1.0, 0, 0]],
+      color_names: [],
+      selectedColorLevel: 0,
       palette: [],
     };
   },
@@ -47,12 +55,34 @@ export default {
     fetch('/api')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.palette = response['controls']['controls_color_palette'];
+        this.palette = response.controls.controls_color_palette;
+        this.color = response.color;
+        this.color_names = response.color_names;
         console.log(response);
       })
       .catch((err) => {
         console.log(err);
       });
+  },
+  computed: {
+    // writable
+    hex: {
+      get() {
+        return this.color[this.selectedColorLevel];
+      },
+      set(value) {
+        return (this.color[this.selectedColorLevel] = value);
+      },
+    },
+    color_str: {
+      get() {
+        const color_float = this.color[this.selectedColorLevel];
+        return this.floatToRgb(color_float);
+      },
+      set(color_str) {
+        this.color[this.selectedColorLevel] = this.rgbToFloat(color_str);
+      },
+    },
   },
   methods: {
     handleClick(button) {
@@ -69,6 +99,18 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    floatToRgb(floatList) {
+      return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
+        floatList[1] * 255
+      )}, ${Math.round(floatList[2] * 255)})`;
+    },
+    rgbToFloat(rgb) {
+      var parts = rgb.substring(4, rgb.length - 1).split(',');
+      var r = parseInt(parts[0]) / 255;
+      var g = parseInt(parts[1]) / 255;
+      var b = parseInt(parts[2]) / 255;
+      return [r, g, b];
     },
   },
 };
