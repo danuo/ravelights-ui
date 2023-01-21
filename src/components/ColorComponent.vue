@@ -44,7 +44,6 @@ export default {
   name: 'ColorComponent',
   data() {
     return {
-      hex2: 'fff',
       color: [[1.0, 0, 0]],
       color_names: [],
       selectedColorLevel: 0,
@@ -65,15 +64,6 @@ export default {
       });
   },
   computed: {
-    // writable
-    hex: {
-      get() {
-        return this.color[this.selectedColorLevel];
-      },
-      set(value) {
-        return (this.color[this.selectedColorLevel] = value);
-      },
-    },
     color_str: {
       get() {
         const color_float = this.color[this.selectedColorLevel];
