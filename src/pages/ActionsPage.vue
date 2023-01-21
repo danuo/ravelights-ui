@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <GlobalButtons />
     <ColorComponent />
   </q-page>
