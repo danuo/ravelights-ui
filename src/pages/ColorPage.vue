@@ -7,7 +7,7 @@
 <script>
 import ColorComponent from 'src/components/ColorComponent.vue';
 export default {
-  name: 'ActionsPage',
+  name: 'ColorPage',
   components: {
     ColorComponent,
   },
