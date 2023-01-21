@@ -1,12 +1,65 @@
+<!-- welche gen brauchen überhaupt trigger?
+* pattern * 3
+- vfilter
+* dimmer * 3
+* thinner * 3
+* pattern sec * 3
+* effects -> hat keine level
+
+-->
+
 <template>
   <h5 class="text-center q-ma-md">triggers</h5>
-  <div class="q-pa-md q-gutter-sm">
+  <div class="q-pa-md q-gutter-sm" v-if="triggers !== null">
     <q-btn
       v-for="(e, idx) in triggers['pattern'].length"
       :key="idx"
       label="test"
     />
   </div>
+
+  <!-- length selection -->
+  <q-badge
+    color="grey-3"
+    text-color="black"
+    class="q-mb-sm"
+    v-if="triggers !== null"
+  >
+    {{ length_selection }}
+    {{ objMarkerLabel[length_selection] }}
+    {{ typeof objMarkerLabel[length_selection] }}
+    {{ out_dict }}
+  </q-badge>
+
+  <div class="q-pa-md q-gutter-sm" v-if="triggers !== null">
+    {{ trigger }}
+    <q-slider
+      v-model="length_selection"
+      color="primary"
+      selection-color="secondary"
+      track-size="15px"
+      thumb-size="30px"
+      :min="0"
+      :max="Object.keys(objMarkerLabel).length - 2"
+      :marker-labels="objMarkerLabel"
+      snap
+      label-always
+      label-value="trigger loop length"
+    />
+  </div>
+
+  <!-- quarter toggle -->
+
+  <q-btn-group class="row" style="width: 100%">
+    <q-btn
+      v-for="(e, idx) in 4"
+      :key="idx"
+      @click="quarters_bool[idx] = !quarters_bool[idx]"
+      :label="quarters_str[idx]"
+      class="col"
+      :color="quarters_bool[idx] ? 'white' : 'black'"
+    />
+  </q-btn-group>
 </template>
 
 <script>
@@ -15,6 +68,12 @@ export default {
   data() {
     return {
       triggers: null,
+      trigger: null,
+      length_selection: 0,
+      beat_array: Array(32).fill(false),
+      quarters_array: Array(4).fill(false),
+      objMarkerLabel: null,
+      quarters_str: ['A', 'B', 'C', 'D'],
     };
   },
   mounted() {
@@ -22,11 +81,60 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
+        this.trigger = this.triggers.pattern[0];
+        this.objMarkerLabel = response.meta.steps_dict;
+        this.beat_array = this.beat_list_to_array(
+          this.trigger.trigger_on_beats
+        );
+        this.quarters_array = this.quarter_list_to_array(
+          this.trigger.trigger_on_quarters
+        );
       })
       .catch((err) => {
         console.log(err);
       });
   },
-  methods: {},
+  computed: {
+    out_dict() {
+      let out = {};
+      out['loop_length'] = this.objMarkerLabel[this.length_selection];
+      out['quarter_str'] = this.quarter_array_to_str(this.quarters_bool);
+      return out;
+    },
+  },
+  methods: {
+    beat_array_to_list(beat_array, length) {
+      let result = [];
+      for (let i = 0; i < length; i++) {
+        if (beat_array[i]) {
+          result.push(i);
+        }
+      }
+      return result;
+    },
+    quarter_array_to_list(q_array, length) {
+      let result = [];
+      for (let i = 0; i < length; i++) {
+        if (q_array[i]) {
+          result.push(this.quarters_str[i]);
+        }
+      }
+      return result;
+    },
+    beat_list_to_array(beat_list) {
+      let array = Array(32).fill(false);
+      for (let num of beat_list) {
+        array[num] = true;
+      }
+      return array;
+    },
+    quarter_list_to_array(q_list) {
+      let array = Array(32).fill(false);
+      for (let letter of q_list) {
+        array[alphabet.indexOf(letter)] = true;
+      }
+      return array;
+    },
+  },
 };
 </script>
