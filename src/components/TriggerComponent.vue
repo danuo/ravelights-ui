@@ -39,6 +39,7 @@
     </div>
   </q-card>
 
+  <!-- slider 1 -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
       v-model="loop_length_selection"
@@ -54,6 +55,8 @@
       label-value="trigger loop length"
     />
   </div>
+
+  <!-- slider 2 -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
       v-model="p"
@@ -82,6 +85,21 @@
       :color="quarters_array[idx] ? 'white' : 'black'"
     />
   </q-btn-group>
+
+  <!-- beat selector -->
+  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
+    <div class="col-3" v-for="(e, idx) in loop_length" :key="idx">
+      <q-btn
+        @click="beat_array[idx] = !beat_array[idx]"
+        :label="idx"
+        style="width: 100%; height: 100px"
+        class="q-pa-sm"
+        :square="true"
+        :color="beat_array[idx] ? 'secondary' : 'primary'"
+        :text-color="beat_array[idx] ? 'black' : 'white'"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -127,7 +145,11 @@ export default {
   },
   computed: {
     loop_length() {
-      return this.marker_arange_to_label[this.loop_length_selection];
+      if (this.marker_arange_to_label !== null) {
+        return this.marker_arange_to_label[this.loop_length_selection];
+      } else {
+        return 0;
+      }
     },
     out_dict() {
       let out = {};
@@ -180,11 +202,15 @@ export default {
       return array;
     },
     invert_dict(dict) {
-      let inverted = Object.keys(dict).reduce((obj, key) => {
-        obj[dict[key]] = key;
-        return obj;
-      }, {});
-      return inverted;
+      if (dict !== null) {
+        let inverted = Object.keys(dict).reduce((obj, key) => {
+          obj[dict[key]] = key;
+          return obj;
+        }, {});
+        return inverted;
+      } else {
+        return null;
+      }
     },
   },
 };
