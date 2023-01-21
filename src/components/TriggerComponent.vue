@@ -19,7 +19,7 @@
   </div>
 
   <!-- length selection -->
-  <q-badge
+  <q-card
     color="grey-3"
     text-color="black"
     class="q-mb-sm"
@@ -27,20 +27,24 @@
   >
     <!-- {{ objMarkerLabel[length_selection] }} -->
     <!-- {{ out_dict }} -->
-    {{ trigger }}
-  </q-badge>
+    <div>
+      {{ trigger }}
+    </div>
+    <div>
+      {{ out_dict }}
+    </div>
+  </q-card>
 
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
-    {{ trigger }}
     <q-slider
-      v-model="length_selection"
+      v-model="loop_length_selection"
       color="primary"
       selection-color="secondary"
       track-size="15px"
       thumb-size="30px"
       :min="0"
-      :max="Object.keys(objMarkerLabel).length - 2"
-      :marker-labels="objMarkerLabel"
+      :max="Object.keys(marker_arange_to_label).length - 2"
+      :marker-labels="marker_arange_to_label"
       snap
       label-always
       label-value="trigger loop length"
@@ -70,10 +74,11 @@ export default {
       selected_level: 1,
       triggers: null,
       trigger: null,
-      length_selection: 0,
+      loop_length_selection: 0,
       beat_array: Array(32).fill(false),
       quarters_array: Array(4).fill(false),
-      objMarkerLabel: null,
+      marker_arange_to_label: null,
+      marker_label_to_arange: null,
       quarters_str: ['A', 'B', 'C', 'D'],
     };
   },
@@ -83,13 +88,18 @@ export default {
       .then((response) => {
         this.triggers = response.triggers;
         this.trigger = this.triggers[this.selected_type][this.selected_level];
-        this.objMarkerLabel = response.meta.steps_dict;
+        this.marker_arange_to_label = response.meta.steps_dict;
+        this.marker_label_to_arange = this.invert_dict(
+          this.marker_arange_to_label
+        );
         this.beat_array = this.beat_list_to_array(
           this.trigger.trigger_on_beats
         );
         this.quarters_array = this.quarter_list_to_array(
           this.trigger.trigger_on_quarters
         );
+        this.loop_length_selection =
+          this.marker_label_to_arange[this.trigger.loop_length];
       })
       .catch((err) => {
         console.log(err);
@@ -98,7 +108,8 @@ export default {
   computed: {
     out_dict() {
       let out = {};
-      out['loop_length'] = this.objMarkerLabel[this.length_selection];
+      out['loop_length'] =
+        this.marker_arange_to_label[this.loop_length_selection];
       out['quarter_str'] = this.quarter_array_to_list(this.quarters_bool);
       return out;
     },
@@ -130,11 +141,19 @@ export default {
       return array;
     },
     quarter_list_to_array(q_list) {
+      let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       let array = Array(32).fill(false);
       for (let letter of q_list) {
         array[alphabet.indexOf(letter)] = true;
       }
       return array;
+    },
+    invert_dict(dict) {
+      let inverted = Object.keys(dict).reduce((obj, key) => {
+        obj[dict[key]] = key;
+        return obj;
+      }, {});
+      return inverted;
     },
   },
 };
