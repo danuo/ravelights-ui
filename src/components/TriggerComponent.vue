@@ -28,7 +28,11 @@
     <!-- {{ objMarkerLabel[length_selection] }} -->
     <!-- {{ out_dict }} -->
     <div>
-      {{ trigger }}
+      {{ temp_trigger }}
+    </div>
+    <div>
+      {{ quarters_array }}
+      {{ loop_length }}
     </div>
     <div>
       {{ out_dict }}
@@ -57,10 +61,10 @@
     <q-btn
       v-for="(e, idx) in 4"
       :key="idx"
-      @click="quarters_bool[idx] = !quarters_bool[idx]"
+      @click="quarters_array[idx] = !quarters_array[idx]"
       :label="quarters_str[idx]"
       class="col"
-      :color="quarters_bool[idx] ? 'white' : 'black'"
+      :color="quarters_array[idx] ? 'white' : 'black'"
     />
   </q-btn-group>
 </template>
@@ -73,7 +77,7 @@ export default {
       selected_type: 'pattern',
       selected_level: 1,
       triggers: null,
-      trigger: null,
+      temp_trigger: null,
       loop_length_selection: 0,
       beat_array: Array(32).fill(false),
       quarters_array: Array(4).fill(false),
@@ -87,30 +91,39 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
-        this.trigger = this.triggers[this.selected_type][this.selected_level];
+        let trigger = this.triggers[this.selected_type][this.selected_level];
+        this.temp_trigger = trigger;
         this.marker_arange_to_label = response.meta.steps_dict;
         this.marker_label_to_arange = this.invert_dict(
           this.marker_arange_to_label
         );
-        this.beat_array = this.beat_list_to_array(
-          this.trigger.trigger_on_beats
-        );
+        this.beat_array = this.beat_list_to_array(trigger.trigger_on_beats);
         this.quarters_array = this.quarter_list_to_array(
-          this.trigger.trigger_on_quarters
+          trigger.trigger_on_quarters
         );
         this.loop_length_selection =
-          this.marker_label_to_arange[this.trigger.loop_length];
+          this.marker_label_to_arange[trigger.loop_length];
       })
       .catch((err) => {
         console.log(err);
       });
   },
   computed: {
+    loop_length() {
+      return this.marker_arange_to_label[this.loop_length_selection];
+    },
     out_dict() {
       let out = {};
+      out['beat_list'] = this.beat_array_to_list(
+        this.beat_array,
+        this.loop_length
+      );
       out['loop_length'] =
         this.marker_arange_to_label[this.loop_length_selection];
-      out['quarter_str'] = this.quarter_array_to_list(this.quarters_bool);
+      out['quarter_str'] = this.quarter_array_to_list(
+        this.quarters_array,
+        this.loop_length
+      );
       return out;
     },
   },
