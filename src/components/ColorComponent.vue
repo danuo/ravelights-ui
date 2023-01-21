@@ -21,6 +21,7 @@
   </div>
 
   <q-color
+    @change="send_color"
     v-model="color_str"
     default-value="#000"
     default-view="tune"
@@ -30,6 +31,7 @@
     :no-footer="true"
   />
   <q-color
+    @change="send_color"
     v-model="color_str"
     default-value="#000"
     default-view="palette"
@@ -99,11 +101,11 @@ export default {
     },
   },
   methods: {
-    handleClick(button) {
+    send_color() {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...button, level: this.selectedTargetLevel }),
+        body: JSON.stringify({ action: 'change_settings', color: this.color }),
       };
       fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
