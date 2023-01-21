@@ -1,12 +1,12 @@
 <template>
-  <h5 class="text-center q-ma-md">Colors</h5>
+  <!-- <h5 class="text-center q-ma-md">Colors</h5> -->
   <!-- <q-badge color="grey-3" text-color="black" class="q-mb-sm">
     {{ color }}
     {{ selectedColorLevel }}
   </q-badge> -->
 
-  <div class="q-mb-lg row flex-center" style="width: 100%">
-    <div class="q-gutter-y-md" style="width: 70%">
+  <div class="q-py-lg row flex-center" style="width: 100%">
+    <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-toggle
         v-model="selectedColorLevel"
         toggle-color="primary"
@@ -37,6 +37,25 @@
     :no-footer="true"
     :palette="palette"
   />
+
+  <div class="row q-pa-md">
+    <div class="col-4">
+      <q-toggle
+        v-model="temp_toggle"
+        size="40px"
+        color="secondary"
+        label="Activate Rule"
+      />
+    </div>
+    <div class="col-8">
+      <q-select
+        outlined
+        v-model="model"
+        :options="rule_options"
+        label="Outlined"
+      />
+    </div>
+  </div>
 </template>
 
 <style lang="sass" scoped>
@@ -53,6 +72,8 @@ export default {
       color_names: [],
       selectedColorLevel: 0,
       palette: [],
+      rule_options: ['none', 'random', 'complementary'],
+      temp_toggle: true,
     };
   },
   mounted() {
