@@ -53,8 +53,13 @@
       {{ temp_trigger }}
     </div>
     <div>
+      {{ beats_array }}
       {{ quarters_array }}
+      {{ p }}
       {{ loop_length }}
+    </div>
+    <div>
+      {{ repr }}
     </div>
     <div>
       {{ out_dict }}
@@ -154,10 +159,8 @@ export default {
         this.marker_label_to_arange = this.invert_dict(
           this.marker_arange_to_label
         );
-        this.beat_array = this.beat_list_to_array(trigger.trigger_on_beats);
-        this.quarters_array = this.quarter_list_to_array(
-          trigger.trigger_on_quarters
-        );
+        this.beats_array = trigger.beats_array;
+        this.quarters_array = trigger.quarters_array;
         this.loop_length_selection =
           this.marker_label_to_arange[trigger.loop_length];
         this.p = trigger.p;
@@ -174,41 +177,42 @@ export default {
         return 0;
       }
     },
-    out_dict() {
-      let out = {};
-      out['beat_list'] = this.beat_array_to_list(
-        this.beat_array,
-        this.loop_length
-      );
-      out['quarter_str'] = this.quarter_array_to_list(
-        this.quarters_array,
-        this.loop_length
-      );
-      out['loop_length'] =
-        this.marker_arange_to_label[this.loop_length_selection];
-      out['p'] = this.p;
-      return out;
-    },
-  },
-  methods: {
-    beat_array_to_list(beat_array, length) {
+    beats_list() {
       let result = [];
-      for (let i = 0; i < length; i++) {
-        if (beat_array[i]) {
+      for (let i = 0; i < this.loop_length; i++) {
+        if (this.beats_array[i]) {
           result.push(i);
         }
       }
       return result;
     },
-    quarter_array_to_list(q_array, length) {
+    quarters_list() {
       let result = [];
-      for (let i = 0; i < length; i++) {
-        if (q_array[i]) {
+      for (let i = 0; i < this.loop_length; i++) {
+        if (this.quarters_array[i]) {
           result.push(this.quarters_str[i]);
         }
       }
       return result;
     },
+    repr() {
+      let out = [];
+      out.push(this.beats_list);
+      out.push(this.quarters_list);
+      out.push(this.marker_arange_to_label[this.loop_length_selection]);
+      out.push(this.p);
+      return out;
+    },
+    out_dict() {
+      return {
+        beats_array: this.beats_array,
+        quarters_array: this.quarters_array,
+        loop_length: this.loop_length,
+        p: this.p,
+      };
+    },
+  },
+  methods: {
     beat_list_to_array(beat_list) {
       let array = Array(32).fill(false);
       for (let num of beat_list) {
