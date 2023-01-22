@@ -9,13 +9,43 @@
 -->
 
 <template>
-  <h5 class="text-center q-ma-md">triggers</h5>
-  <div class="q-pa-md q-gutter-sm" v-if="triggers !== null">
-    <q-btn
-      v-for="(e, idx) in triggers['pattern'].length"
-      :key="idx"
-      label="test"
-    />
+  <div class="row q-col-gutter-xs" v-if="triggers !== null">
+    <div v-for="idx in 2" :key="idx" class="col-6">
+      <div class="grey-box">
+        <div class="row justify-between">
+          <div
+            v-for="string in ['beats', 'quarters', 'length', 'p']"
+            :key="string"
+          >
+            {{ string }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      v-for="(e, gen_type_idx) in typ.length"
+      :key="gen_type_idx"
+      class="col-6"
+    >
+      <div class="grey-box">
+        <q-item-label caption style="color: #474747">
+          {{ typ[gen_type_idx] }}
+        </q-item-label>
+        <div v-for="level_index in 3" :key="level_index">
+          <div class="row justify-between">
+            <div
+              v-for="it in this.repr_ui(
+                this.get_trigger(typ[gen_type_idx], level_index)
+              )"
+              :key="it"
+            >
+              {{ it }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <q-space />
   </div>
 
   <div class="q-my-lg" v-if="triggers !== null">
@@ -39,6 +69,7 @@
       </div>
     </div>
   </div>
+  {{ triggers }}
 
   <!-- length selection -->
   <q-card
@@ -145,7 +176,7 @@ export default {
       marker_arange_to_label: null,
       marker_label_to_arange: null,
       quarters_letters: ['A', 'B', 'C', 'D'],
-      typ: ['pattern', 'dimmer', 'thinner', 'effect'],
+      typ: ['pattern', 'vfilter', 'dimmer', 'thinner', 'pattern_sec', 'effect'],
     };
   },
   mounted() {
@@ -178,22 +209,10 @@ export default {
       }
     },
     beats_list() {
-      let result = [];
-      for (let i = 0; i < this.loop_length; i++) {
-        if (this.beats_array[i]) {
-          result.push(i);
-        }
-      }
-      return result;
+      return this.get_beats_list(this.beats_array, this.loop_length);
     },
     quarters_str() {
-      let string = '';
-      for (let i = 0; i < this.loop_length; i++) {
-        if (this.quarters_array[i]) {
-          string += this.quarters_letters[i];
-        }
-      }
-      return string;
+      return this.get_quarters_str(this.quarters_array, this.loop_length);
     },
     repr() {
       return [
@@ -215,6 +234,35 @@ export default {
     },
   },
   methods: {
+    get_beats_list(beats_array, loop_length) {
+      let result = [];
+      for (let i = 0; i < loop_length; i++) {
+        if (beats_array[i]) {
+          result.push(i);
+        }
+      }
+      return result;
+    },
+    get_quarters_str(quarters_array, loop_length) {
+      let string = '';
+      for (let i = 0; i < loop_length; i++) {
+        if (quarters_array[i]) {
+          string += this.quarters_letters[i];
+        }
+      }
+      return string;
+    },
+    repr_ui(trigger) {
+      return [
+        this.get_beats_list(trigger.beats_array, trigger.loop_length),
+        this.get_quarters_str(trigger.quarters_array, trigger.loop_length),
+        trigger.loop_length,
+        trigger.p,
+      ];
+    },
+    get_trigger(a, b) {
+      return this.triggers[a][b];
+    },
     invert_dict(dict) {
       if (dict !== null) {
         let inverted = Object.keys(dict).reduce((obj, key) => {
