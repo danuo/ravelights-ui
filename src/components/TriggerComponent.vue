@@ -196,12 +196,12 @@ export default {
       return result;
     },
     repr() {
-      let out = [];
-      out.push(this.beats_list);
-      out.push(this.quarters_list);
-      out.push(this.marker_arange_to_label[this.loop_length_selection]);
-      out.push(this.p);
-      return out;
+      return [
+        this.beats_list,
+        this.quarters_list,
+        this.marker_arange_to_label[this.loop_length_selection],
+        this.p,
+      ];
     },
     out_dict() {
       return {
