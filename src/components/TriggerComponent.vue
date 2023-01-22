@@ -107,7 +107,7 @@
       v-for="(e, idx) in 4"
       :key="idx"
       @click="quarters_array[idx] = !quarters_array[idx]"
-      :label="quarters_str[idx]"
+      :label="quarters_letters[idx]"
       class="col"
       :color="quarters_array[idx] ? 'white' : 'black'"
     />
@@ -144,7 +144,7 @@ export default {
       p: 0,
       marker_arange_to_label: null,
       marker_label_to_arange: null,
-      quarters_str: ['A', 'B', 'C', 'D'],
+      quarters_letters: ['A', 'B', 'C', 'D'],
       typ: ['pattern', 'dimmer', 'thinner', 'effect'],
     };
   },
@@ -186,19 +186,19 @@ export default {
       }
       return result;
     },
-    quarters_list() {
-      let result = [];
+    quarters_str() {
+      let string = '';
       for (let i = 0; i < this.loop_length; i++) {
         if (this.quarters_array[i]) {
-          result.push(this.quarters_str[i]);
+          string += this.quarters_letters[i];
         }
       }
-      return result;
+      return string;
     },
     repr() {
       return [
         this.beats_list,
-        this.quarters_list,
+        this.quarters_str,
         this.marker_arange_to_label[this.loop_length_selection],
         this.p,
       ];
