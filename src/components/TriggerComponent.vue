@@ -213,21 +213,6 @@ export default {
     },
   },
   methods: {
-    beat_list_to_array(beat_list) {
-      let array = Array(32).fill(false);
-      for (let num of beat_list) {
-        array[num] = true;
-      }
-      return array;
-    },
-    quarter_list_to_array(q_list) {
-      let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let array = Array(32).fill(false);
-      for (let letter of q_list) {
-        array[alphabet.indexOf(letter)] = true;
-      }
-      return array;
-    },
     invert_dict(dict) {
       if (dict !== null) {
         let inverted = Object.keys(dict).reduce((obj, key) => {
