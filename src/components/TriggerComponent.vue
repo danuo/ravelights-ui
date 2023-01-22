@@ -209,6 +209,8 @@ export default {
         quarters_array: this.quarters_array,
         loop_length: this.loop_length,
         p: this.p,
+        selected_type: this.selected_type,
+        selected_level: this.selected_level,
       };
     },
   },
