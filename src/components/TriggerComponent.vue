@@ -50,6 +50,13 @@
 
   <div class="q-my-lg" v-if="triggers !== null">
     <q-btn-toggle
+      v-model="selected_type"
+      toggle-color="secondary"
+      :options="typ_options"
+    />
+  </div>
+  <div class="q-my-lg" v-if="triggers !== null">
+    <q-btn-toggle
       v-model="selected_level"
       toggle-color="primary"
       :options="[
@@ -59,6 +66,8 @@
       ]"
     />
   </div>
+
+  {{ typ_options }}
 
   <!-- {{ triggers }} -->
 
@@ -166,6 +175,7 @@ export default {
       marker_label_to_arange: null,
       quarters_letters: ['A', 'B', 'C', 'D'],
       typ: ['pattern', 'vfilter', 'dimmer', 'thinner', 'pattern_sec', 'effect'],
+      typ_options: null,
     };
   },
   mounted() {
@@ -188,6 +198,9 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+    this.typ_options = this.typ.map((x) => {
+      return { label: x, value: x };
+    });
   },
   computed: {
     loop_length() {
