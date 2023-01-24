@@ -144,7 +144,7 @@ export default {
   },
   methods: {
     handleClick(var_name) {
-      const requestBody = {
+      let requestBody = {
         action: 'change_settings',
       };
       requestBody[var_name] = this.api_response[var_name];
