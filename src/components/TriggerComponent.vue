@@ -67,34 +67,6 @@
     />
   </div>
 
-  {{ typ_options }}
-
-  <!-- {{ triggers }} -->
-
-  <!-- length selection -->
-  <q-card
-    color="grey-3"
-    text-color="black"
-    class="q-mb-sm"
-    v-if="triggers !== null"
-  >
-    <div>
-      {{ temp_trigger }}
-    </div>
-    <div>
-      {{ beats_array }}
-      {{ quarters_array }}
-      {{ p }}
-      {{ loop_length }}
-    </div>
-    <div>
-      {{ repr }}
-    </div>
-    <div>
-      {{ out_dict }}
-    </div>
-  </q-card>
-
   <!-- slider 1 -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
@@ -104,8 +76,8 @@
       track-size="15px"
       thumb-size="30px"
       :min="0"
-      :max="Object.keys(marker_arange_to_label).length - 2"
-      :marker-labels="marker_arange_to_label"
+      :max="Object.keys(marker_arange_to_value).length - 2"
+      :marker-labels="marker_arange_to_value"
       snap
       label-always
       label-value="trigger loop length"
@@ -144,15 +116,16 @@
 
   <!-- beat selector -->
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
-    <div class="col-3" v-for="(e, idx) in loop_length" :key="idx">
+    <div class="col-3" v-for="(e, idx) in 16" :key="idx">
       <q-btn
-        @click="beat_array[idx] = !beat_array[idx]"
+        @click="beats_array[idx] = !beats_array[idx]"
         :label="idx"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
-        :color="beat_array[idx] ? 'secondary' : 'primary'"
-        :text-color="beat_array[idx] ? 'black' : 'white'"
+        :color="idx < loop_length && beats_array[idx] ? 'secondary' : 'primary'"
+        :text-color="beats_array[idx] ? 'black' : 'white'"
+        :disable="idx < loop_length ? false : true"
       />
     </div>
   </div>
@@ -163,16 +136,11 @@ export default {
   name: 'TriggerComponent',
   data() {
     return {
-      temp_trigger: null,
       selected_type: 'pattern',
       selected_level: 1,
       triggers: null,
-      beat_array: Array(32).fill(false),
-      quarters_array: Array(4).fill(false),
-      loop_length_selection: 0,
-      p: 0,
-      marker_arange_to_label: null,
-      marker_label_to_arange: null,
+      marker_arange_to_value: null,
+      marker_value_to_arange: null,
       quarters_letters: ['A', 'B', 'C', 'D'],
       typ: ['pattern', 'vfilter', 'dimmer', 'thinner', 'pattern_sec', 'effect'],
       typ_options: null,
@@ -183,17 +151,10 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
-        let trigger = this.triggers[this.selected_type][this.selected_level];
-        this.temp_trigger = trigger;
-        this.marker_arange_to_label = response.meta.steps_dict;
-        this.marker_label_to_arange = this.invert_dict(
-          this.marker_arange_to_label
+        this.marker_arange_to_value = response.meta.steps_dict;
+        this.marker_value_to_arange = this.invert_dict(
+          this.marker_arange_to_value
         );
-        this.beats_array = trigger.beats_array;
-        this.quarters_array = trigger.quarters_array;
-        this.loop_length_selection =
-          this.marker_label_to_arange[trigger.loop_length];
-        this.p = trigger.p;
       })
       .catch((err) => {
         console.log(err);
@@ -203,9 +164,65 @@ export default {
     });
   },
   computed: {
+    beats_array: {
+      get() {
+        if (this.triggers !== null) {
+          return this.triggers[this.selected_type][this.selected_level]
+            .beats_array;
+        } else {
+          return [true];
+        }
+      },
+      set(value) {
+        this.triggers[this.selected_type][this.selected_level].beats_array =
+          value;
+      },
+    },
+    quarters_array: {
+      get() {
+        if (this.triggers !== null) {
+          return this.triggers[this.selected_type][this.selected_level]
+            .quarters_array;
+        } else {
+          return [true];
+        }
+      },
+      set(value) {
+        this.triggers[this.selected_type][this.selected_level].quarters_array =
+          value;
+      },
+    },
+    loop_length_selection: {
+      get() {
+        if (this.triggers !== null) {
+          let loop_length =
+            this.triggers[this.selected_type][this.selected_level].loop_length;
+          return this.marker_value_to_arange[loop_length];
+        } else {
+          return 8;
+        }
+      },
+      set(loop_length_sel) {
+        let loop_length_value = this.marker_arange_to_value[loop_length_sel];
+        this.triggers[this.selected_type][this.selected_level].loop_length =
+          loop_length_value;
+      },
+    },
+    p: {
+      get() {
+        if (this.triggers !== null) {
+          return this.triggers[this.selected_type][this.selected_level].p;
+        } else {
+          return 1.0;
+        }
+      },
+      set(value) {
+        this.triggers[this.selected_type][this.selected_level].p = value;
+      },
+    },
     loop_length() {
-      if (this.marker_arange_to_label !== null) {
-        return this.marker_arange_to_label[this.loop_length_selection];
+      if (this.marker_arange_to_value !== null) {
+        return this.marker_arange_to_value[this.loop_length_selection];
       } else {
         return 0;
       }
@@ -220,7 +237,7 @@ export default {
       return [
         this.beats_list,
         this.quarters_str,
-        this.marker_arange_to_label[this.loop_length_selection],
+        this.marker_arange_to_value[this.loop_length_selection],
         this.p,
       ];
     },
