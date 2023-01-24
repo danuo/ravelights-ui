@@ -68,6 +68,7 @@
   <!-- slider p -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
+      @change="set_trigger()"
       v-model="p"
       color="primary"
       selection-color="secondary"
@@ -85,6 +86,7 @@
   <!-- slider loop length -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
+      @change="set_trigger()"
       v-model="loop_length_selection"
       color="primary"
       selection-color="secondary"
@@ -100,10 +102,13 @@
   </div>
 
   <!-- beat selector -->
-  <div class="row q-col-gutter-xs q-py-xl" v-if="selectedGenerators !== null">
+  <div class="row q-col-gutter-xs q-py-xl" v-if="triggers !== null">
     <div class="col-3" v-for="(e, idx) in 4" :key="idx">
       <q-btn
-        @click="quarters_array[idx] = !quarters_array[idx]"
+        @click="
+          quarters_array[idx] = !quarters_array[idx];
+          set_trigger();
+        "
         :label="quarters_letters[idx]"
         class="col"
         :color="quarters_array[idx] ? 'secondary' : 'primary'"
@@ -111,10 +116,13 @@
       />
     </div>
   </div>
-  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
+  <div class="row q-col-gutter-xs" v-if="triggers !== null">
     <div class="col-3" v-for="(e, idx) in 16" :key="idx">
       <q-btn
-        @click="beats_array[idx] = !beats_array[idx]"
+        @click="
+          beats_array[idx] = !beats_array[idx];
+          set_trigger();
+        "
         :label="idx"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
@@ -288,6 +296,27 @@ export default {
       } else {
         return null;
       }
+    },
+    set_trigger() {
+      let requestBody = {
+        ...this.triggers[this.selected_type][this.selected_level],
+        action: 'set_trigger',
+        gen_type: this.selected_type,
+        level_index: this.selected_level,
+      };
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      };
+      fetch('/api', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
