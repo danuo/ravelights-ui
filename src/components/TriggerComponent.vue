@@ -27,7 +27,12 @@
       :key="gen_type_idx"
       class="col-6"
     >
-      <div class="grey-box">
+      <div
+        @click="this.selected_type = typ[gen_type_idx]"
+        :class="
+          this.selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'
+        "
+      >
         <q-item-label caption style="color: #474747">
           {{ typ[gen_type_idx] }}
         </q-item-label>
@@ -50,13 +55,6 @@
 
   <div class="q-my-lg" v-if="triggers !== null">
     <q-btn-toggle
-      v-model="selected_type"
-      toggle-color="secondary"
-      :options="typ_options"
-    />
-  </div>
-  <div class="q-my-lg" v-if="triggers !== null">
-    <q-btn-toggle
       v-model="selected_level"
       toggle-color="primary"
       :options="[
@@ -67,24 +65,7 @@
     />
   </div>
 
-  <!-- slider 1 -->
-  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
-    <q-slider
-      v-model="loop_length_selection"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      :min="0"
-      :max="Object.keys(marker_arange_to_value).length - 2"
-      :marker-labels="marker_arange_to_value"
-      snap
-      label-always
-      label-value="trigger loop length"
-    />
-  </div>
-
-  <!-- slider 2 -->
+  <!-- slider p -->
   <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
     <q-slider
       v-model="p"
@@ -101,20 +82,35 @@
     />
   </div>
 
-  <!-- quarter toggle -->
-
-  <q-btn-group class="row" style="width: 100%" v-if="triggers !== null">
-    <q-btn
-      v-for="(e, idx) in 4"
-      :key="idx"
-      @click="quarters_array[idx] = !quarters_array[idx]"
-      :label="quarters_letters[idx]"
-      class="col"
-      :color="quarters_array[idx] ? 'white' : 'black'"
+  <!-- slider loop length -->
+  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
+    <q-slider
+      v-model="loop_length_selection"
+      color="primary"
+      selection-color="secondary"
+      track-size="15px"
+      thumb-size="30px"
+      :min="0"
+      :max="Object.keys(marker_arange_to_value).length - 2"
+      :marker-labels="marker_arange_to_value"
+      snap
+      label-always
+      label-value="trigger loop length"
     />
-  </q-btn-group>
+  </div>
 
   <!-- beat selector -->
+  <div class="row q-col-gutter-xs q-py-xl" v-if="selectedGenerators !== null">
+    <div class="col-3" v-for="(e, idx) in 4" :key="idx">
+      <q-btn
+        @click="quarters_array[idx] = !quarters_array[idx]"
+        :label="quarters_letters[idx]"
+        class="col"
+        :color="quarters_array[idx] ? 'secondary' : 'primary'"
+        style="width: 100%; height: 100px"
+      />
+    </div>
+  </div>
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div class="col-3" v-for="(e, idx) in 16" :key="idx">
       <q-btn
