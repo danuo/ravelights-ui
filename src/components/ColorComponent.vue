@@ -46,7 +46,8 @@
   <div class="row q-pa-md">
     <div class="col-4">
       <q-toggle
-        v-model="temp_toggle"
+        @click="handleClick('color_sec_active')"
+        v-model="color_sec_active"
         size="40px"
         color="secondary"
         label="Activate Rule"
@@ -54,9 +55,10 @@
     </div>
     <div class="col-8">
       <q-select
+        @update:model-value="handleClick('color_sec_mode')"
         outlined
-        v-model="model"
-        :options="rule_options"
+        v-model="color_sec_mode"
+        :options="color_sec_mode_names"
         label="Outlined"
       />
     </div>
@@ -76,7 +78,9 @@ export default {
       color_names: [],
       selectedColorLevel: 0,
       palette: [],
-      rule_options: ['none', 'random', 'complementary'],
+      color_sec_active: true,
+      color_sec_mode: '',
+      color_sec_mode_names: [''],
       temp_toggle: true,
     };
   },
@@ -87,6 +91,9 @@ export default {
         this.palette = response.controls.controls_color_palette;
         this.color = response.color;
         this.color_names = response.color_names;
+        this.color_sec_active = response.color_sec_active;
+        this.color_sec_mode = response.color_sec_mode;
+        this.color_sec_mode_names = response.color_sec_mode_names;
         console.log(this.color_names);
       })
       .catch((err) => {
@@ -105,6 +112,26 @@ export default {
     },
   },
   methods: {
+    handleClick(var_name) {
+      console.log(var_name);
+      let requestBody = {
+        action: 'change_settings',
+      };
+      requestBody[var_name] = this[var_name];
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      };
+      fetch('/api', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     update_color() {
       fetch('/api')
         .then((responsePromise) => responsePromise.json())
