@@ -64,6 +64,10 @@
 </template>
 
 <script>
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default {
   name: 'ColorComponent',
   data() {
@@ -129,7 +133,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      setTimeout(this.update_color(), 500);
+      sleep(200).then(() => {
+        this.update_color();
+      });
     },
     floatToRgb(floatList) {
       return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
