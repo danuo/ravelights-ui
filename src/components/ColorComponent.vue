@@ -101,11 +101,25 @@ export default {
     },
   },
   methods: {
+    update_color() {
+      fetch('/api')
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.color = response.color;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     send_color() {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'change_settings', color: this.color }),
+        body: JSON.stringify({
+          action: 'set_color',
+          color: this.color[this.selectedColorLevel],
+          level: this.selectedColorLevel,
+        }),
       };
       fetch('/api', requestOptions)
         .then((responsePromise) => responsePromise)
@@ -115,6 +129,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      setTimeout(this.update_color(), 500);
     },
     floatToRgb(floatList) {
       return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
