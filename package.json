@@ -13,7 +13,6 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "quasar": "^2.6.0",
-    "quasar-cli": "^0.17.26",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0"
   },
