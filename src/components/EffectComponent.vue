@@ -28,7 +28,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;

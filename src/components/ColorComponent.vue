@@ -85,7 +85,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.palette = response.controls.controls_color_palette;
@@ -123,7 +123,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -133,7 +133,7 @@ export default {
         });
     },
     update_color() {
-      fetch('/api')
+      fetch('/rest')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.color = response.color;
@@ -152,7 +152,7 @@ export default {
           level: this.selectedColorLevel,
         }),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

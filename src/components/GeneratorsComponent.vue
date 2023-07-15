@@ -111,7 +111,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -190,7 +190,7 @@ export default {
           level_index: this.selectedTargetLevel,
         }),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -209,7 +209,7 @@ export default {
           length_frames: 8,
         }),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

@@ -127,7 +127,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;
@@ -153,7 +153,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
