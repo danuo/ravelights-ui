@@ -90,7 +90,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.buttons = response['controls']['controls_autopilot'];
@@ -111,7 +111,7 @@ export default {
           action: 'set_settings_autopilot',
         }),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

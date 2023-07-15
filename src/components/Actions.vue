@@ -35,7 +35,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/api')
+    fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.buttons = response['controls']['controls_live_generator'];
@@ -52,7 +52,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...button, level: this.selectedTargetLevel }),
       };
-      fetch('/api', requestOptions)
+      fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
