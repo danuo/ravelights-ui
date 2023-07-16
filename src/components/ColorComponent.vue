@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     get_color() {
-      fetch('/api/color')
+      fetch('/rest/color')
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.color = response;
