@@ -1,5 +1,5 @@
 <template>
-  <h5 class="text-center q-ma-md">Effects</h5>
+  <h5 class="text-center q-ma-md">Effect Selector</h5>
   <div class="q-px-lg q-pt-md q-pb-xl" v-if="apiResponse !== null">
     <q-slider
       v-model="length_selection"
@@ -16,8 +16,6 @@
     />
   </div>
 
-  <h5 class="text-center q-ma-md">Effect Selector</h5>
-
   <!-- effect list -->
   <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
     <div
@@ -30,7 +28,7 @@
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
-        @click="setEffect(gen.generator_name)"
+        @click="setEffect(gen.generator_name, objMarkerLabel[length_selection])"
         color="primary"
         text-color="#000"
       />
@@ -63,14 +61,14 @@ export default {
     replace_underscores(input_string) {
       return input_string.replace(/_/g, ' ');
     },
-    setEffect(effectName) {
+    setEffect(effectName, length) {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'set_effect',
           effect_name: effectName,
-          length_frames: 8,
+          length_frames: length,
         }),
       };
       fetch('/rest', requestOptions)
