@@ -142,11 +142,11 @@ export default {
       if (this.apiResponse == null) {
         return [];
       }
-      return this.apiResponse['meta']['available_generators'][
-        'effect_glob'
-      ].filter((generator) => {
-        return this.isIncludedInFilter(generator['generator_keywords']);
-      });
+      return this.apiResponse['meta']['available_generators']['effect'].filter(
+        (generator) => {
+          return this.isIncludedInFilter(generator['generator_keywords']);
+        }
+      );
     },
     selectableKeywords() {
       let filterOptions = [];
