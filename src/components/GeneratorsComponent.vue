@@ -78,23 +78,6 @@
       />
     </div>
   </div>
-
-  <!-- effect list -->
-  <h5 class="text-center q-ma-md">Effect Selector</h5>
-  <b>put length selector here</b>
-  <div class="row q-col-gutter-md">
-    <div class="col-4" v-for="gen in filteredEffects" :key="gen">
-      <q-btn
-        :label="replace_underscores(gen['generator_name'])"
-        style="width: 100%; height: 100px"
-        class="q-pa-sm"
-        :square="true"
-        @click="setEffect(gen.generator_name)"
-        color="#fff"
-        text-color="#000"
-      />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -138,16 +121,6 @@ export default {
         return this.isIncludedInFilter(generator['generator_keywords']);
       });
     },
-    filteredEffects() {
-      if (this.apiResponse == null) {
-        return [];
-      }
-      return this.apiResponse['meta']['available_generators']['effect'].filter(
-        (generator) => {
-          return this.isIncludedInFilter(generator['generator_keywords']);
-        }
-      );
-    },
     selectableKeywords() {
       let filterOptions = [];
       if (this.apiResponse !== null) {
@@ -188,25 +161,6 @@ export default {
           gen_type: this.selectedTargetType,
           gen_name: generatorName,
           level_index: this.selectedTargetLevel,
-        }),
-      };
-      fetch('/rest', requestOptions)
-        .then((responsePromise) => responsePromise)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    setEffect(effectName) {
-      const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'set_effect',
-          effect_name: effectName,
-          length_frames: 8,
         }),
       };
       fetch('/rest', requestOptions)
