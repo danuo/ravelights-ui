@@ -15,8 +15,11 @@
       :label-value="'effect length'"
     />
   </div>
+
   <h5 class="text-center q-ma-md">Effect Selector</h5>
-  <div class="row q-col-gutter-md" v-if="apiResponse !== null">
+
+  <!-- effect list -->
+  <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
     <div
       class="col-4"
       v-for="gen in apiResponse['meta']['available_generators']['effect']"
@@ -28,7 +31,7 @@
         class="q-pa-sm"
         :square="true"
         @click="setEffect(gen.generator_name)"
-        color="#fff"
+        color="primary"
         text-color="#000"
       />
     </div>
