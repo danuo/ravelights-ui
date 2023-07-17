@@ -43,6 +43,18 @@
     :palette="palette"
   />
 
+  <h5 class="text-center q-ma-xs">Color Settings</h5>
+
+  <div class="text-subtitle2">Select Color Transition Speed</div>
+  <div class="q-mb-lg">
+    <q-btn-toggle
+      v-model="selectedColorSpeed"
+      @click="handleClick('selectedColorSpeed')"
+      toggle-color="primary"
+      :options="generateColorTransitionSpeedOptions()"
+    />
+  </div>
+
   <div class="row q-pa-md">
     <div class="col-4">
       <q-toggle
@@ -76,7 +88,9 @@ export default {
     return {
       color: [[1.0, 0, 0]],
       color_names: [],
+      color_transition_speeds: [''],
       selectedColorLevel: 0,
+      selectedColorSpeed: '',
       palette: [],
       color_sec_active: true,
       color_sec_mode: '',
@@ -92,10 +106,13 @@ export default {
         this.palette = response.controls.controls_color_palette;
         // this.color = response.color;
         this.color_names = response.color_names;
+        this.color_transition_speeds =
+          response.controls.color_transition_speeds;
+        this.selectedColorSpeed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
         this.color_sec_mode_names = response.color_sec_mode_names;
-        console.log(this.color_names);
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);
@@ -195,6 +212,12 @@ export default {
       let final_str = out_list.join(' ');
       console.log(final_str);
       return final_str;
+    },
+    generateColorTransitionSpeedOptions() {
+      return this.color_transition_speeds.map((speed_str) => ({
+        label: speed_str.toUpperCase(),
+        value: speed_str,
+      }));
     },
   },
 };
