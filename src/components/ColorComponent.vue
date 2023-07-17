@@ -21,7 +21,7 @@
   </div>
 
   <q-color
-    @change="send_color"
+    @change="put_color"
     v-model="color_str"
     default-value="#000"
     default-view="tune"
@@ -31,7 +31,7 @@
     :no-footer="true"
   />
   <q-color
-    @change="send_color"
+    @change="put_color"
     v-model="color_str"
     default-value="#000"
     default-view="palette"
@@ -85,11 +85,12 @@ export default {
     };
   },
   mounted() {
+    this.get_color();
     fetch('/rest')
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.palette = response.controls.controls_color_palette;
-        this.color = response.color;
+        // this.color = response.color;
         this.color_names = response.color_names;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
@@ -112,6 +113,16 @@ export default {
     },
   },
   methods: {
+    get_color() {
+      fetch('/rest/color')
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.color = response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     handleClick(var_name) {
       console.log(var_name);
       let requestBody = {
@@ -132,17 +143,7 @@ export default {
           console.log(err);
         });
     },
-    update_color() {
-      fetch('/rest')
-        .then((responsePromise) => responsePromise.json())
-        .then((response) => {
-          this.color = response.color;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    send_color() {
+    put_color() {
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -152,17 +153,18 @@ export default {
           level: this.selectedColorLevel,
         }),
       };
-      fetch('/rest', requestOptions)
+      fetch('/rest/color', requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
+          // this.color = response;
           console.log(response);
         })
         .catch((err) => {
           console.log(err);
         });
-      sleep(200).then(() => {
-        this.update_color();
-      });
+      // sleep(200).then(() => {
+      // this.get_color();
+      // });
     },
     floatToRgb(floatList) {
       return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
