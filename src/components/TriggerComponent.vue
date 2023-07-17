@@ -268,7 +268,7 @@ export default {
     },
     get_quarters_str(quarters_array, loop_length) {
       let string = '';
-      for (let i = 0; i < loop_length; i++) {
+      for (let i = 0; i < 4; i++) {
         if (quarters_array[i]) {
           string += this.quarters_letters[i];
         }
