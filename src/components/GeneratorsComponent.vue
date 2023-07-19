@@ -34,12 +34,29 @@
         </div>
       </div>
     </div>
+
+    <div class="col-12">
+      <div class="grey-box row">
+        <div class="col-4" v-for="button in buttons" :key="button">
+          <q-item-label caption style="color: #474747"
+            >{{ button }}
+          </q-item-label>
+          <q-toggle
+            @click="handleClickChangeSettings(button)"
+            v-model="apiResponse[button]"
+            color="secondary"
+          />
+        </div>
+      </div>
+    </div>
+    <q-space />
+  </div>
+
+  <div class="q-pa-xs">
     <q-space />
   </div>
 
   <h5 class="text-center q-ma-xs">Generator Selector</h5>
-
-  * global vfilter * global thinner * global dimmer
 
   <!-- select generator level -->
   <div class="q-mb-lg">
@@ -96,12 +113,13 @@ export default {
   name: 'ActiveGenerators',
   data() {
     return {
+      apiResponse: null,
+      selectedGenerators: null,
       selected_type: 'pattern',
       selected_level: 1,
-      selectedGenerators: null,
       activeFilters: [],
       typ: ['pattern', 'pattern_sec', 'vfilter', 'dimmer', 'thinner', 'effect'],
-      apiResponse: null,
+      buttons: ['global_vfilter', 'global_dimmer', 'global_thinner'],
     };
   },
   mounted() {
@@ -110,6 +128,7 @@ export default {
       .then((response) => {
         this.apiResponse = response;
         this.selectedGenerators = response.selected;
+        console.log(this.apiResponse);
       })
       .catch((err) => {
         console.log(err);
@@ -163,6 +182,25 @@ export default {
           gen_name: generatorName,
           level_index: this.selected_level,
         }),
+      };
+      fetch('/rest', requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    handleClickChangeSettings(var_name) {
+      let requestBody = {
+        action: 'change_settings',
+      };
+      requestBody[var_name] = this.apiResponse[var_name];
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
       };
       fetch('/rest', requestOptions)
         .then((responsePromise) => responsePromise)
