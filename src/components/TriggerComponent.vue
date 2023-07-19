@@ -146,8 +146,7 @@ export default {
       marker_arange_to_value: null,
       marker_value_to_arange: null,
       quarters_letters: ['A', 'B', 'C', 'D'],
-      typ: ['pattern', 'vfilter', 'dimmer', 'thinner', 'pattern_sec', 'effect'],
-      typ_options: null,
+      typ: ['pattern', 'pattern_sec', 'vfilter', 'dimmer', 'thinner', 'effect'],
     };
   },
   mounted() {
@@ -163,9 +162,6 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    this.typ_options = this.typ.map((x) => {
-      return { label: x, value: x };
-    });
   },
   computed: {
     beats_array: {
