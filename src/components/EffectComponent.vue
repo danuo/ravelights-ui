@@ -16,6 +16,45 @@
     />
   </div>
 
+  <div class="q-pa-md">
+    <div class="q-gutter-y-md">
+      <q-card>
+        <q-tabs v-model="tab" dense align="justify">
+          <q-tab name="beat_limit" label="Beat Limit" />
+          <q-tab name="frame_limit" label="Frame Limit" />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="beat_limit">
+            other stuff with strobe on beats
+            <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
+              <q-slider
+                v-model="length_selection"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(objMarkerLabel).length - 1"
+                :marker-labels="objMarkerLabel"
+                snap
+                label-always
+                :label-value="'effect length'"
+              />
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel name="frame_limit">
+            <div class="text-h6">Alarms</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+    </div>
+  </div>
+
   <q-btn
     label="clear effect queue"
     @click="clearEffectQueue()"
@@ -45,17 +84,19 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
-  name: 'EffectComponent',
+  name: "EffectComponent",
   data() {
     return {
       apiResponse: null,
       objMarkerLabel: null,
       length_selection: 0,
+      tab: ref("beat_limit"),
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -67,19 +108,19 @@ export default {
   },
   methods: {
     replace_underscores(input_string) {
-      return input_string.replace(/_/g, ' ');
+      return input_string.replace(/_/g, " ");
     },
     setEffect(effectName, length) {
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: 'set_effect',
+          action: "set_effect",
           effect_name: effectName,
           length_frames: length,
         }),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -90,14 +131,14 @@ export default {
     },
     clearEffectQueue() {
       let requestBody = {
-        action: 'clear_effect_queue',
+        action: "clear_effect_queue",
       };
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
