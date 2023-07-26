@@ -4,7 +4,7 @@
   <div class="q-pa-md">
     <div class="q-gutter-y-md">
       <q-card>
-        <q-tabs v-model="mode" dense align="justify">
+        <q-tabs v-model="mode" align="justify">
           <q-tab name="quarters" label="Beat Limit" />
           <q-tab name="frames" label="Frame Limit" />
         </q-tabs>
@@ -13,7 +13,7 @@
 
         <q-tab-panels v-model="mode" animated>
           <q-tab-panel name="quarters">
-            <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
+            <div class="q-px-lg q-pt-lg q-pb-xs">
               <q-slider
                 v-model="loop_length"
                 color="primary"
@@ -44,7 +44,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="frames">
-            <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
+            <div class="q-px-lg q-pt-lg q-pb-xs">
               <q-slider
                 v-model="frames_length"
                 color="primary"
@@ -111,7 +111,8 @@ export default {
         6: 12,
         7: 20,
         8: 40,
-        9: "inf",
+        9: "match",
+        10: "inf",
       },
       loop_length_options: {
         0: 1,
@@ -120,7 +121,8 @@ export default {
         3: 8,
         4: 16,
         5: 32,
-        6: "inf",
+        6: "match",
+        7: "inf",
       },
       loop_length: 3,
       mode: ref("quarters"),
@@ -131,7 +133,6 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
-        this.loop_length_options = response.meta.steps_dict;
       })
       .catch((err) => {
         console.log(err);
