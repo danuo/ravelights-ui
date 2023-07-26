@@ -13,7 +13,6 @@
 
         <q-tab-panels v-model="mode" animated>
           <q-tab-panel name="quarters">
-            other stuff with strobe on beats
             <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
               <q-slider
                 v-model="loop_length"
@@ -45,8 +44,21 @@
           </q-tab-panel>
 
           <q-tab-panel name="frames">
-            <div class="text-h6">Alarms</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
+              <q-slider
+                v-model="frames_length"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(frames_length_options).length - 1"
+                :marker-labels="frames_length_options"
+                snap
+                label-always
+                label-value="frames length"
+              />
+            </div>
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
