@@ -1,52 +1,50 @@
 <template>
   <h5 class="text-center q-ma-md">Effect Selector</h5>
-  <div class="q-px-lg q-pt-md q-pb-xl" v-if="apiResponse !== null">
-    <q-slider
-      v-model="length_selection"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      :min="0"
-      :max="Object.keys(objMarkerLabel).length - 1"
-      :marker-labels="objMarkerLabel"
-      snap
-      label-always
-      :label-value="'effect length'"
-    />
-  </div>
 
   <div class="q-pa-md">
     <div class="q-gutter-y-md">
       <q-card>
-        <q-tabs v-model="tab" dense align="justify">
-          <q-tab name="beat_limit" label="Beat Limit" />
-          <q-tab name="frame_limit" label="Frame Limit" />
+        <q-tabs v-model="mode" dense align="justify">
+          <q-tab name="quarters" label="Beat Limit" />
+          <q-tab name="frames" label="Frame Limit" />
         </q-tabs>
 
         <q-separator />
 
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="beat_limit">
+        <q-tab-panels v-model="mode" animated>
+          <q-tab-panel name="quarters">
             other stuff with strobe on beats
             <div class="q-px-lg q-pt-lg q-pb-xs" v-if="apiResponse !== null">
               <q-slider
-                v-model="length_selection"
+                v-model="loop_length"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(objMarkerLabel).length - 1"
-                :marker-labels="objMarkerLabel"
+                :max="Object.keys(loop_length_options).length - 1"
+                :marker-labels="loop_length_options"
                 snap
                 label-always
-                :label-value="'effect length'"
+                label-value="loop length"
+              />
+              <q-slider
+                v-model="frames_length"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(frames_length_options).length - 1"
+                :marker-labels="frames_length_options"
+                snap
+                label-always
+                label-value="frames length"
               />
             </div>
           </q-tab-panel>
 
-          <q-tab-panel name="frame_limit">
+          <q-tab-panel name="frames">
             <div class="text-h6">Alarms</div>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </q-tab-panel>
@@ -72,7 +70,7 @@
     >
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
-        @click="setEffect(gen.generator_name, objMarkerLabel[length_selection])"
+        @click="setEffect(gen.generator_name, loop_length_options[loop_length])"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
@@ -90,9 +88,30 @@ export default {
   data() {
     return {
       apiResponse: null,
-      objMarkerLabel: null,
-      length_selection: 0,
-      tab: ref("beat_limit"),
+      frames_length: 5,
+      frames_length_options: {
+        0: 1,
+        1: 2,
+        2: 3,
+        3: 4,
+        4: 6,
+        5: 8,
+        6: 12,
+        7: 20,
+        8: 40,
+        9: "inf",
+      },
+      loop_length_options: {
+        0: 1,
+        1: 2,
+        2: 4,
+        3: 8,
+        4: 16,
+        5: 32,
+        6: "inf",
+      },
+      loop_length: 3,
+      mode: ref("quarters"),
     };
   },
   mounted() {
@@ -100,7 +119,7 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
-        this.objMarkerLabel = response.meta.steps_dict;
+        this.loop_length_options = response.meta.steps_dict;
       })
       .catch((err) => {
         console.log(err);
