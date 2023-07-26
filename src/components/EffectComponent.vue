@@ -3,7 +3,7 @@
 
   <div class="q-pa-md">
     <div class="q-gutter-y-md">
-      <q-card>
+      <q-card flat bordered style="background-color: rgb(30, 6, 23)">
         <q-tabs v-model="mode" align="justify">
           <q-tab name="quarters" label="Beat Limit" />
           <q-tab name="frames" label="Frame Limit" />
@@ -11,7 +11,11 @@
 
         <q-separator />
 
-        <q-tab-panels v-model="mode" animated>
+        <q-tab-panels
+          v-model="mode"
+          animated
+          style="background-color: rgb(10, 2, 6)"
+        >
           <q-tab-panel name="quarters">
             <div class="q-px-lg q-pt-lg q-pb-xs">
               <q-slider
