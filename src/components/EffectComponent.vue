@@ -6,19 +6,43 @@
       Frames Pattern Selection
     </q-item-label>
   </div>
-  <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
+  <div class="row q-col-gutter-xs">
     <div
       v-for="(e, gen_type_idx) in this.frame_patterns.length"
       :key="gen_type_idx"
       class="col-6"
     >
       <div
-        @click="this.selected_pattern = gen_type_idx"
+        @click="this.selected_frame_pattern = gen_type_idx"
         :class="
-          this.selected_pattern == gen_type_idx ? 'green-box' : 'grey-box'
+          this.selected_frame_pattern == gen_type_idx ? 'green-box' : 'grey-box'
         "
       >
         <div>{{ this.frame_patterns[gen_type_idx] }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-px-md q-py-xs">
+    <q-item-label caption style="color: #474747">
+      Quater Pattern Selection
+    </q-item-label>
+  </div>
+  <div class="row q-col-gutter-xs">
+    <div
+      v-for="(e, gen_type_idx) in this.quarter_patterns.length"
+      :key="gen_type_idx"
+      class="col-6"
+    >
+      <div
+        @click="this.selected_quarter_pattern = gen_type_idx"
+        :class="
+          this.selected_quarter_pattern == gen_type_idx
+            ? 'green-box'
+            : 'grey-box'
+        "
+      >
+        <div>{{ this.quarter_patterns[gen_type_idx] }}</div>
       </div>
     </div>
   </div>
@@ -164,11 +188,16 @@ export default {
     return {
       apiResponse: null,
       limit_frames: 5,
-      selected_pattern: 0,
+      selected_frame_pattern: 0,
       frame_patterns: [
         [0, 1, 2, 3],
         [0, 2, 4, 6],
         [0, 4, 8, 10, 12],
+      ],
+      selected_quarter_pattern: 0,
+      quarter_patterns: [
+        ["A1", "A2"],
+        ["A1", "C1"],
       ],
       limit_frames_options: {
         0: 1,
