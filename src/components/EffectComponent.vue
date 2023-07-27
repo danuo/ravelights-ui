@@ -17,22 +17,37 @@
           style="background-color: rgb(10, 2, 6)"
         >
           <q-tab-panel name="quarters">
-            <div class="q-pa-lg">
+            <div class="q-pa-xl">
               <q-slider
-                v-model="frames_limit"
+                v-model="limit_frames"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(frames_limit_options).length - 1"
-                :marker-labels="frames_limit_options"
+                :max="Object.keys(limit_frames_options).length - 1"
+                :marker-labels="limit_frames_options"
                 snap
                 label-always
                 label-value="frames limit"
               />
             </div>
-            <div class="q-pa-lg">
+            <div class="q-pa-xl">
+              <q-slider
+                v-model="limit_quarters"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(limit_quarters_options).length - 1"
+                :marker-labels="limit_quarters_options"
+                snap
+                label-always
+                label-value="quarters limit"
+              />
+            </div>
+            <div class="q-pa-xl">
               <q-slider
                 v-model="loop_length"
                 color="primary"
@@ -47,16 +62,16 @@
                 label-value="loop length"
               />
             </div>
-            <div class="q-pa-lg">
+            <div class="q-pa-xl">
               <q-slider
-                v-model="loop_limit"
+                v-model="limit_loop"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(loop_limit_options).length - 1"
-                :marker-labels="loop_limit_options"
+                :max="Object.keys(limit_loop_options).length - 1"
+                :marker-labels="limit_loop_options"
                 snap
                 label-always
                 label-value="loop limit"
@@ -65,16 +80,16 @@
           </q-tab-panel>
 
           <q-tab-panel name="frames">
-            <div class="q-px-lg q-pt-lg q-pb-xs">
+            <div class="q-pa-xl">
               <q-slider
-                v-model="frames_limit_options"
+                v-model="limit_frames"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(frames_limit_options).length - 1"
-                :marker-labels="frames_limit_options"
+                :max="Object.keys(limit_frames_options).length - 1"
+                :marker-labels="limit_frames_options"
                 snap
                 label-always
                 label-value="frames limit"
@@ -121,8 +136,8 @@ export default {
   data() {
     return {
       apiResponse: null,
-      frames_limit: 5,
-      frames_limit_options: {
+      limit_frames: 5,
+      limit_frames_options: {
         0: 1,
         1: 2,
         2: 3,
@@ -135,6 +150,18 @@ export default {
         9: "match",
         10: "inf",
       },
+      limit_quarters: 5,
+      limit_quarters_options: {
+        0: 1,
+        1: 2,
+        2: 3,
+        3: 4,
+        4: 6,
+        5: 8,
+        6: 16,
+        7: 32,
+        8: "match",
+      },
       loop_length: 3,
       loop_length_options: {
         0: 1,
@@ -144,8 +171,8 @@ export default {
         4: 16,
         5: 32,
       },
-      loop_limit: 5,
-      loop_limit_options: {
+      limit_loop: 5,
+      limit_loop_options: {
         0: 1,
         1: 2,
         2: 3,
@@ -182,9 +209,10 @@ export default {
           action: "set_effect",
           effect_name: effectName,
           mode: this.mode,
-          limit_frames: this.frames_limit_options[this.frames_limit],
+          limit_frames: this.limit_frames_options[this.limit_frames],
+          limit_quarters: this.limit_quarters_options[this.limit_quarters],
           loop_length_beats: this.loop_length_options[this.loop_length],
-          limit_quarters_loop: this.loop_limit_options[this.loop_limit],
+          limit_quarters_loop: this.limit_loop_options[this.limit_loop],
         }),
       };
       fetch("/rest", requestOptions)
