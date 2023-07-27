@@ -17,7 +17,22 @@
           style="background-color: rgb(10, 2, 6)"
         >
           <q-tab-panel name="quarters">
-            <div class="q-px-lg q-pt-lg q-pb-xs">
+            <div class="q-pa-lg">
+              <q-slider
+                v-model="frames_limit"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(frames_limit_options).length - 1"
+                :marker-labels="frames_limit_options"
+                snap
+                label-always
+                label-value="frames limit"
+              />
+            </div>
+            <div class="q-pa-lg">
               <q-slider
                 v-model="loop_length"
                 color="primary"
@@ -31,18 +46,20 @@
                 label-always
                 label-value="loop length"
               />
+            </div>
+            <div class="q-pa-lg">
               <q-slider
-                v-model="frames_length"
+                v-model="loop_limit"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(frames_length_options).length - 1"
-                :marker-labels="frames_length_options"
+                :max="Object.keys(loop_limit_options).length - 1"
+                :marker-labels="loop_limit_options"
                 snap
                 label-always
-                label-value="frames length"
+                label-value="loop limit"
               />
             </div>
           </q-tab-panel>
@@ -50,17 +67,17 @@
           <q-tab-panel name="frames">
             <div class="q-px-lg q-pt-lg q-pb-xs">
               <q-slider
-                v-model="frames_length"
+                v-model="frames_limit_options"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(frames_length_options).length - 1"
-                :marker-labels="frames_length_options"
+                :max="Object.keys(frames_limit_options).length - 1"
+                :marker-labels="frames_limit_options"
                 snap
                 label-always
-                label-value="frames length"
+                label-value="frames limit"
               />
             </div>
           </q-tab-panel>
@@ -86,7 +103,7 @@
     >
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
-        @click="setEffect(gen.generator_name, loop_length_options[loop_length])"
+        @click="setEffect(gen.generator_name)"
         style="width: 100%; height: 100px"
         class="q-pa-sm"
         :square="true"
@@ -104,8 +121,8 @@ export default {
   data() {
     return {
       apiResponse: null,
-      frames_length: 5,
-      frames_length_options: {
+      frames_limit: 5,
+      frames_limit_options: {
         0: 1,
         1: 2,
         2: 3,
@@ -118,6 +135,7 @@ export default {
         9: "match",
         10: "inf",
       },
+      loop_length: 3,
       loop_length_options: {
         0: 1,
         1: 2,
@@ -125,10 +143,20 @@ export default {
         3: 8,
         4: 16,
         5: 32,
-        6: "match",
-        7: "inf",
       },
-      loop_length: 3,
+      loop_limit: 5,
+      loop_limit_options: {
+        0: 1,
+        1: 2,
+        2: 3,
+        3: 4,
+        4: 6,
+        5: 8,
+        6: 12,
+        7: 20,
+        8: 40,
+        9: "inf",
+      },
       mode: ref("quarters"),
     };
   },
@@ -153,7 +181,10 @@ export default {
         body: JSON.stringify({
           action: "set_effect",
           effect_name: effectName,
-          length_frames: length,
+          mode: this.mode,
+          limit_frames: this.frames_limit_options[this.frames_limit],
+          loop_length_beats: this.loop_length_options[this.loop_length],
+          limit_quarters_loop: this.loop_limit_options[this.loop_limit],
         }),
       };
       fetch("/rest", requestOptions)
