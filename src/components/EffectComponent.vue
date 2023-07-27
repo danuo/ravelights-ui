@@ -1,6 +1,22 @@
 <template>
   <h5 class="text-center q-ma-md">Effect Selector</h5>
 
+  <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
+    <div
+      v-for="(e, gen_type_idx) in this.frame_patterns.length"
+      :key="gen_type_idx"
+      class="col-6"
+    >
+      <div
+        @click="this.selected_pattern = gen_type_idx"
+        :class="this.selected_pattern == 0 ? 'green-box' : 'grey-box'"
+      >
+        <q-item-label caption style="color: #474747"> test </q-item-label>
+        <div>{{ this.frame_patterns[gen_type_idx] }}</div>
+      </div>
+    </div>
+  </div>
+
   <div class="q-pa-md">
     <div class="q-gutter-y-md">
       <q-card flat bordered style="background-color: rgb(30, 6, 23)">
@@ -137,6 +153,12 @@ export default {
     return {
       apiResponse: null,
       limit_frames: 5,
+      selected_pattern: 0,
+      frame_patterns: [
+        [0, 1, 2, 3],
+        [0, 2, 4, 6],
+        [0, 4, 8, 10, 12],
+      ],
       limit_frames_options: {
         0: 1,
         1: 2,
