@@ -9,7 +9,9 @@
     >
       <div
         @click="this.selected_pattern = gen_type_idx"
-        :class="this.selected_pattern == 0 ? 'green-box' : 'grey-box'"
+        :class="
+          this.selected_pattern == gen_type_idx ? 'green-box' : 'grey-box'
+        "
       >
         <q-item-label caption style="color: #474747"> test </q-item-label>
         <div>{{ this.frame_patterns[gen_type_idx] }}</div>
