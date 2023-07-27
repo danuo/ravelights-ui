@@ -47,7 +47,13 @@
     </div>
   </div>
 
-  <div class="q-pa-md">
+  <div class="q-px-md q-pt-lg q-pb-xs">
+    <q-item-label caption style="color: #474747">
+      Quater Pattern Selection
+    </q-item-label>
+  </div>
+
+  <div class="q-px-md">
     <div class="q-gutter-y-md">
       <q-card flat bordered style="background-color: rgb(30, 6, 23)">
         <q-tabs v-model="mode" align="justify">
@@ -63,7 +69,7 @@
           style="background-color: rgb(10, 2, 6)"
         >
           <q-tab-panel name="quarters">
-            <div class="q-px-xl q-py-md">
+            <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 frames limit
               </q-item-label>
@@ -79,7 +85,7 @@
                 snap
               />
             </div>
-            <div class="q-px-xl q-py-md">
+            <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 quarters limit
               </q-item-label>
@@ -95,7 +101,7 @@
                 snap
               />
             </div>
-            <div class="q-px-xl q-py-md">
+            <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 loop length
               </q-item-label>
@@ -111,7 +117,7 @@
                 snap
               />
             </div>
-            <div class="q-px-xl q-py-md">
+            <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 loop limit
               </q-item-label>
@@ -130,7 +136,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="frames">
-            <div class="q-px-xl q-py-md">
+            <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 frames limit
               </q-item-label>
