@@ -1,6 +1,11 @@
 <template>
   <h5 class="text-center q-ma-md">Effect Selector</h5>
 
+  <div class="q-px-md q-py-xs">
+    <q-item-label caption style="color: #474747">
+      Frames Pattern Selection
+    </q-item-label>
+  </div>
   <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
     <div
       v-for="(e, gen_type_idx) in this.frame_patterns.length"
@@ -13,7 +18,6 @@
           this.selected_pattern == gen_type_idx ? 'green-box' : 'grey-box'
         "
       >
-        <q-item-label caption style="color: #474747"> test </q-item-label>
         <div>{{ this.frame_patterns[gen_type_idx] }}</div>
       </div>
     </div>
