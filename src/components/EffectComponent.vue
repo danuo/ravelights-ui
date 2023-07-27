@@ -33,7 +33,10 @@
           style="background-color: rgb(10, 2, 6)"
         >
           <q-tab-panel name="quarters">
-            <div class="q-pa-xl">
+            <div class="q-px-xl q-py-md">
+              <q-item-label caption style="color: #676767">
+                frames limit
+              </q-item-label>
               <q-slider
                 v-model="limit_frames"
                 color="primary"
@@ -44,11 +47,12 @@
                 :max="Object.keys(limit_frames_options).length - 1"
                 :marker-labels="limit_frames_options"
                 snap
-                label-always
-                label-value="frames limit"
               />
             </div>
-            <div class="q-pa-xl">
+            <div class="q-px-xl q-py-md">
+              <q-item-label caption style="color: #676767">
+                quarters limit
+              </q-item-label>
               <q-slider
                 v-model="limit_quarters"
                 color="primary"
@@ -59,11 +63,12 @@
                 :max="Object.keys(limit_quarters_options).length - 1"
                 :marker-labels="limit_quarters_options"
                 snap
-                label-always
-                label-value="quarters limit"
               />
             </div>
-            <div class="q-pa-xl">
+            <div class="q-px-xl q-py-md">
+              <q-item-label caption style="color: #676767">
+                loop length
+              </q-item-label>
               <q-slider
                 v-model="loop_length"
                 color="primary"
@@ -74,11 +79,12 @@
                 :max="Object.keys(loop_length_options).length - 1"
                 :marker-labels="loop_length_options"
                 snap
-                label-always
-                label-value="loop length"
               />
             </div>
-            <div class="q-pa-xl">
+            <div class="q-px-xl q-py-md">
+              <q-item-label caption style="color: #676767">
+                loop limit
+              </q-item-label>
               <q-slider
                 v-model="limit_loop"
                 color="primary"
@@ -89,14 +95,15 @@
                 :max="Object.keys(limit_loop_options).length - 1"
                 :marker-labels="limit_loop_options"
                 snap
-                label-always
-                label-value="loop limit"
               />
             </div>
           </q-tab-panel>
 
           <q-tab-panel name="frames">
-            <div class="q-pa-xl">
+            <div class="q-px-xl q-py-md">
+              <q-item-label caption style="color: #676767">
+                frames limit
+              </q-item-label>
               <q-slider
                 v-model="limit_frames"
                 color="primary"
@@ -107,8 +114,6 @@
                 :max="Object.keys(limit_frames_options).length - 1"
                 :marker-labels="limit_frames_options"
                 snap
-                label-always
-                label-value="frames limit"
               />
             </div>
           </q-tab-panel>
