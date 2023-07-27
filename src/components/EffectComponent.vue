@@ -2,6 +2,22 @@
   <h5 class="text-center q-ma-md">Effect Selector</h5>
 
   <div class="q-px-md q-py-xs">
+    <q-item-label caption style="color: #474747"> Multi </q-item-label>
+  </div>
+  <q-slider
+    v-model="multi"
+    color="primary"
+    selection-color="secondary"
+    track-size="15px"
+    thumb-size="30px"
+    :min="1"
+    :max="5"
+    :step="1"
+    marker-labels
+    snap
+  />
+
+  <div class="q-px-md q-py-xs">
     <q-item-label caption style="color: #474747">
       Frames Pattern Selection
     </q-item-label>
@@ -200,6 +216,7 @@ export default {
         [0, 2, 4, 6],
         [0, 4, 8, 10, 12],
       ],
+      multi: 1,
       selected_quarter_pattern: 0,
       quarter_patterns: [
         ["A1", "A2"],
@@ -281,6 +298,7 @@ export default {
           limit_quarters: this.limit_quarters_options[this.limit_quarters],
           loop_length_beats: this.loop_length_options[this.loop_length],
           limit_quarters_loop: this.limit_loop_options[this.limit_loop],
+          multi: this.multi,
         }),
       };
       fetch("/rest", requestOptions)
