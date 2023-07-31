@@ -6,14 +6,14 @@
       :key="idx"
       :style="'color: ' + colors[idx]"
     >
-      {{ 'color' + idx }}
+      {{ "color" + idx }}
     </q-chip>
   </div>
   <q-list bordered separator v-if="apiResponse !== null">
     <q-item v-for="(e, idx) in names.length" :key="idx">
       <q-item-section>
         <q-item-label caption>
-          {{ names[idx] + ' | ' + descriptions[idx] }}
+          {{ names[idx] + " | " + descriptions[idx] }}
         </q-item-label>
         <div class="row">
           <div class="col-8">
@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  name: 'TimelineComponent',
+  name: "TimelineComponent",
   data() {
     return {
       apiResponse: null,
@@ -60,7 +60,7 @@ export default {
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -78,15 +78,15 @@ export default {
     setTimeline(timeline_index, set_full) {
       this.selectedTimelineIndex = timeline_index;
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: 'set_timeline',
+          action: "set_timeline",
           timeline_index: this.selectedTimelineIndex,
           set_full: set_full,
         }),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
