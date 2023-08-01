@@ -1,5 +1,5 @@
 <template>
-  <q-list bordered separator>
+  <q-list bordered separator v-if="this.effect_list.length > 0">
     <q-item v-for="item in this.effect_list" :key="item">
       <q-item-section>
         <div class="row">
@@ -40,6 +40,10 @@ export default {
   },
   mounted() {
     this.refresh_effect_list();
+    this.$bus.on("refresh_effect_list", () => {
+      console.log("it worked");
+      this.delayed_execute(this.refresh_effect_list);
+    });
   },
   methods: {
     refresh_effect_list() {
@@ -75,6 +79,11 @@ export default {
       this.effect_list = this.effect_list.filter(
         (item) => item.name !== effect_name
       );
+    },
+    delayed_execute(func) {
+      timer = setTimeout(() => {
+        func();
+      }, 250);
     },
   },
 };

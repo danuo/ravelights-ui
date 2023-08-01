@@ -204,6 +204,7 @@
 
 <script>
 import { ref } from "vue";
+
 export default {
   name: "EffectComponent",
   data() {
@@ -286,7 +287,7 @@ export default {
     replace_underscores(input_string) {
       return input_string.replace(/_/g, " ");
     },
-    setEffect(effectName, length) {
+    setEffect(effectName) {
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -309,6 +310,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.$bus.emit("refresh_effect_list");
     },
     clearEffectQueue() {
       let requestBody = {
