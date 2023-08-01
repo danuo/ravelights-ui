@@ -1,64 +1,81 @@
 <template>
-  <div class="q-pa-md">
-    <q-list bordered separator>
-      <q-slide-item
-        v-for="item in this.effect_list"
-        :key="item"
-        @left="onLeft"
-        @right="onRight"
-        left-color="red"
-        right-color="red"
-      >
-        <template v-slot:left>
-          <div class="row items-center">Remove Effect</div>
-        </template>
-        <template v-slot:right>
-          <div class="row items-center">Remove Effect</div>
-        </template>
-
-        <q-item>
-          <q-item-section>Effect Name</q-item-section>
-        </q-item>
-      </q-slide-item>
-    </q-list>
-  </div>
+  <q-list bordered separator>
+    <q-item v-for="item in this.effect_list" :key="item">
+      <q-item-section>
+        <div class="row">
+          <div class="col-8">
+            <q-item-label overline>{{ item.name }}</q-item-label>
+            <q-markup-table flat dense square style="background-color: black">
+              <tbody>
+                <tr>
+                  <td class="text-left">{{ item.mode }}</td>
+                  <td class="text-left">{{ item.limit_frames }}</td>
+                  <td class="text-left">{{ item.loop_length }}</td>
+                </tr>
+              </tbody>
+            </q-markup-table>
+          </div>
+          <div class="col-4">
+            <q-btn
+              @click="remove_effect(item.name)"
+              label="remove"
+              color="grey"
+              style="width: 100%; height: 100%"
+            />
+          </div>
+        </div>
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script>
-import { useQuasar } from "quasar";
-import { onBeforeUnmount } from "vue";
+import { ref } from "vue";
 
 export default {
-  data() {
+  setup() {
     return {
-      effect_list: [1, 2, 3],
+      effect_list: ref([]),
     };
   },
-  setup() {
-    const $q = useQuasar();
-    let timer;
-
-    function finalize(reset) {
-      timer = setTimeout(() => {
-        reset();
-      }, 1000);
-    }
-
-    onBeforeUnmount(() => {
-      clearTimeout(timer);
-    });
-
-    return {
-      onLeft({ reset }) {
-        $q.notify("Left action triggered. Resetting in 1 second.");
-        finalize(reset);
-      },
-
-      onRight({ reset }) {
-        $q.notify("Right action triggered. Resetting in 1 second.");
-        finalize(reset);
-      },
-    };
+  mounted() {
+    this.refresh_effect_list();
+  },
+  methods: {
+    refresh_effect_list() {
+      fetch("/rest/effect")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          console.log("here");
+          console.log(response);
+          this.effect_list = response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    remove_effect(effect_name) {
+      const requestBody = {
+        action: "remove_effect",
+        effect_name: effect_name,
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/effect", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.effect_list = this.effect_list.filter(
+        (item) => item.name !== effect_name
+      );
+    },
   },
 };
 </script>
