@@ -36,12 +36,16 @@ export default {
   setup() {
     return {
       effect_list: ref([]),
+      timer: "",
     };
+  },
+  created() {
+    this.refresh_effect_list();
+    this.timer = setInterval(this.refresh_effect_list, 1000);
   },
   mounted() {
     this.refresh_effect_list();
     this.$bus.on("refresh_effect_list", () => {
-      console.log("it worked");
       this.delayed_execute(this.refresh_effect_list);
     });
   },
@@ -50,7 +54,7 @@ export default {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          console.log("here");
+          console.log("refresh");
           console.log(response);
           this.effect_list = response;
         })
@@ -81,9 +85,15 @@ export default {
       );
     },
     delayed_execute(func) {
-      timer = setTimeout(() => {
+      let timer = setTimeout(() => {
         func();
-      }, 250);
+      }, 100);
+    },
+    cancelAutoUpdate() {
+      clearInterval(this.timer);
+    },
+    beforeUnmount() {
+      this.cancelAutoUpdate();
     },
   },
 };
