@@ -69,8 +69,9 @@
     <div class="q-gutter-y-md">
       <q-card flat bordered style="background-color: rgb(30, 6, 23)">
         <q-tabs v-model="mode" align="justify">
-          <q-tab name="quarters" label="Beat Limit" />
           <q-tab name="frames" label="Frame Limit" />
+          <q-tab name="quarters" label="Quarters Limit" />
+          <q-tab name="loopquarters" label="Loop Quarters Limit" />
         </q-tabs>
 
         <q-separator />
@@ -80,7 +81,45 @@
           animated
           style="background-color: rgb(10, 2, 6)"
         >
+          <q-tab-panel name="frames">
+            <div class="q-px-md q-py-md">
+              <q-item-label caption style="color: #676767">
+                frames limit
+              </q-item-label>
+              <q-slider
+                v-model="limit_frames"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(limit_frames_options).length - 1"
+                :marker-labels="limit_frames_options"
+                snap
+              />
+            </div>
+          </q-tab-panel>
+
           <q-tab-panel name="quarters">
+            <div class="q-px-md q-py-md">
+              <q-item-label caption style="color: #676767">
+                quarters limit
+              </q-item-label>
+              <q-slider
+                v-model="limit_quarters"
+                color="primary"
+                selection-color="secondary"
+                track-size="15px"
+                thumb-size="30px"
+                :min="0"
+                :max="Object.keys(limit_frames_options).length - 1"
+                :marker-labels="limit_frames_options"
+                snap
+              />
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel name="loopquarters">
             <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
                 frames limit
@@ -102,14 +141,14 @@
                 quarters limit
               </q-item-label>
               <q-slider
-                v-model="limit_quarters"
+                v-model="limit_loopquarters"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
                 thumb-size="30px"
                 :min="0"
-                :max="Object.keys(limit_quarters_options).length - 1"
-                :marker-labels="limit_quarters_options"
+                :max="Object.keys(limit_loopquarters_options).length - 1"
+                :marker-labels="limit_loopquarters_options"
                 snap
               />
             </div>
@@ -142,25 +181,6 @@
                 :min="0"
                 :max="Object.keys(limit_loop_options).length - 1"
                 :marker-labels="limit_loop_options"
-                snap
-              />
-            </div>
-          </q-tab-panel>
-
-          <q-tab-panel name="frames">
-            <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                frames limit
-              </q-item-label>
-              <q-slider
-                v-model="limit_frames"
-                color="primary"
-                selection-color="secondary"
-                track-size="15px"
-                thumb-size="30px"
-                :min="0"
-                :max="Object.keys(limit_frames_options).length - 1"
-                :marker-labels="limit_frames_options"
                 snap
               />
             </div>
@@ -230,13 +250,15 @@ export default {
         4: 6,
         5: 8,
         6: 12,
-        7: 20,
-        8: 40,
-        9: "match",
-        10: "inf",
+        7: 16,
+        8: 20,
+        9: 40,
+        10: "match",
+        11: "inf",
       },
       limit_quarters: 5,
-      limit_quarters_options: {
+      limit_loopquarters: 5,
+      limit_loopquarters_options: {
         0: 1,
         1: 2,
         2: 3,
@@ -295,7 +317,9 @@ export default {
           effect_name: effectName,
           mode: this.mode,
           limit_frames: this.limit_frames_options[this.limit_frames],
-          limit_quarters: this.limit_quarters_options[this.limit_quarters],
+          limit_quarters: this.limit_frames_options[this.limit_quarters],
+          limit_loopquarters:
+            this.limit_loopquarters_options[this.limit_loopquarters],
           loop_length_beats: this.loop_length_options[this.loop_length],
           limit_quarters_loop: this.limit_loop_options[this.limit_loop],
           multi: this.multi,
