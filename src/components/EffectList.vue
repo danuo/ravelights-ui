@@ -59,6 +59,7 @@ export default {
           this.effect_list = response;
         })
         .catch((err) => {
+          this.cancelAutoUpdate();
           console.log(err);
         });
     },
