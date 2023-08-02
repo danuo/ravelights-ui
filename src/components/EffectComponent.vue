@@ -10,11 +10,10 @@
     selection-color="secondary"
     track-size="15px"
     thumb-size="30px"
-    :min="1"
-    :max="5"
-    :step="1"
-    marker-labels
     snap
+    :min="0"
+    :max="Object.keys(multi_options).length - 1"
+    :marker-labels="multi_options"
   />
 
   <div class="q-px-md q-py-xs">
@@ -226,7 +225,6 @@ export default {
   data() {
     return {
       apiResponse: null,
-      limit_frames: 5,
       frames_pattern: 0,
       frames_pattern_options: [
         ["L1", 0],
@@ -237,11 +235,21 @@ export default {
         ["L8", 0, 4, 6],
       ],
       multi: 1,
+      multi_options: {
+        0: 1,
+        1: 2,
+        2: 3,
+        3: 4,
+        4: 5,
+        5: 10,
+        6: 20,
+      },
       quarters_pattern: 0,
       quarters_pattern_options: [
         ["1A", "2A"],
         ["1A", "1C"],
       ],
+      limit_frames: 5,
       limit_frames_options: {
         0: 1,
         1: 2,
