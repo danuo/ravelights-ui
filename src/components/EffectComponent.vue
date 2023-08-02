@@ -330,7 +330,7 @@ export default {
             this.limit_loopquarters_options[this.limit_loopquarters],
           loop_length_beats: this.loop_length_options[this.loop_length],
           limit_quarters_loop: this.limit_loop_options[this.limit_loop],
-          multi: this.multi,
+          multi: this.multi_options[this.multi],
           frames_pattern: this.frames_pattern_options[this.frames_pattern],
           quarters_pattern:
             this.quarters_pattern_options[this.quarters_pattern],
