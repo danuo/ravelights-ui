@@ -39,27 +39,32 @@ export default {
       timer: "",
     };
   },
-  created() {
-    this.refresh_effect_list();
-    this.timer = setInterval(this.refresh_effect_list, 1000);
-  },
   mounted() {
     this.refresh_effect_list();
     this.$bus.on("refresh_effect_list", () => {
       this.delayed_execute(this.refresh_effect_list);
     });
   },
+  activated() {
+    console.log("activated");
+    this.refresh_effect_list();
+    this.startAutoUpdate();
+  },
+  deactivated() {
+    console.log("deactivated");
+    this.stopAutoUpdate();
+  },
   methods: {
     refresh_effect_list() {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          console.log("refresh");
-          console.log(response);
+          // console.log("refresh");
+          // console.log(response);
           this.effect_list = response;
         })
         .catch((err) => {
-          this.cancelAutoUpdate();
+          this.stopAutoUpdate();
           console.log(err);
         });
     },
@@ -90,11 +95,15 @@ export default {
         func();
       }, 100);
     },
-    cancelAutoUpdate() {
+    startAutoUpdate() {
+      console.log("got here");
+      this.timer = setInterval(this.refresh_effect_list, 2000);
+    },
+    stopAutoUpdate() {
       clearInterval(this.timer);
     },
     beforeUnmount() {
-      this.cancelAutoUpdate();
+      this.stopAutoUpdate();
     },
   },
 };
