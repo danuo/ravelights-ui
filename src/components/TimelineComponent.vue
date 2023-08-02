@@ -4,9 +4,9 @@
       outline
       v-for="idx in colors.length"
       :key="idx"
-      :style="'color: ' + colors[idx]"
+      :style="'color: ' + colors[idx - 1]"
     >
-      {{ "color" + idx }}
+      {{ "level " + idx }}
     </q-chip>
   </div>
   <q-list bordered separator v-if="apiResponse !== null">
