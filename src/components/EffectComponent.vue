@@ -24,17 +24,15 @@
   </div>
   <div class="row q-col-gutter-xs">
     <div
-      v-for="(e, gen_type_idx) in this.frame_patterns.length"
+      v-for="(e, gen_type_idx) in this.frames_pattern_options.length"
       :key="gen_type_idx"
       class="col-6"
     >
       <div
-        @click="this.selected_frame_pattern = gen_type_idx"
-        :class="
-          this.selected_frame_pattern == gen_type_idx ? 'green-box' : 'grey-box'
-        "
+        @click="this.frames_pattern = gen_type_idx"
+        :class="this.frames_pattern == gen_type_idx ? 'green-box' : 'grey-box'"
       >
-        <div>{{ this.frame_patterns[gen_type_idx] }}</div>
+        <div>{{ this.frames_pattern_options[gen_type_idx] }}</div>
       </div>
     </div>
   </div>
@@ -46,19 +44,17 @@
   </div>
   <div class="row q-col-gutter-xs">
     <div
-      v-for="(e, gen_type_idx) in this.quarter_patterns.length"
+      v-for="(e, gen_type_idx) in this.quarters_pattern_options.length"
       :key="gen_type_idx"
       class="col-6"
     >
       <div
-        @click="this.selected_quarter_pattern = gen_type_idx"
+        @click="this.quarters_pattern = gen_type_idx"
         :class="
-          this.selected_quarter_pattern == gen_type_idx
-            ? 'green-box'
-            : 'grey-box'
+          this.quarters_pattern == gen_type_idx ? 'green-box' : 'grey-box'
         "
       >
-        <div>{{ this.quarter_patterns[gen_type_idx] }}</div>
+        <div>{{ this.quarters_pattern_options[gen_type_idx] }}</div>
       </div>
     </div>
   </div>
@@ -211,8 +207,8 @@ export default {
     return {
       apiResponse: null,
       limit_frames: 5,
-      selected_frame_pattern: 0,
-      frame_patterns: [
+      frames_pattern: 0,
+      frames_pattern_options: [
         ["L1", 0],
         ["L2", 0],
         ["L3", 0],
@@ -221,10 +217,10 @@ export default {
         ["L8", 0, 4, 6],
       ],
       multi: 1,
-      selected_quarter_pattern: 0,
-      quarter_patterns: [
-        ["A1", "A2"],
-        ["A1", "C1"],
+      quarters_pattern: 0,
+      quarters_pattern_options: [
+        ["1A", "2A"],
+        ["1A", "1C"],
       ],
       limit_frames_options: {
         0: 1,
@@ -303,6 +299,9 @@ export default {
           loop_length_beats: this.loop_length_options[this.loop_length],
           limit_quarters_loop: this.limit_loop_options[this.limit_loop],
           multi: this.multi,
+          frames_pattern: this.frames_pattern_options[this.frames_pattern],
+          quarters_pattern:
+            this.quarters_pattern_options[this.quarters_pattern],
         }),
       };
       fetch("/rest", requestOptions)
