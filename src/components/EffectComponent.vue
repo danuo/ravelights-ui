@@ -225,7 +225,7 @@ export default {
         ["L8", 0, 4, 6],
         ["L16", 0, 7, 11, 13, 15],
       ],
-      multi: 1,
+      multi: 0,
       multi_options: {
         0: 1,
         1: 2,
