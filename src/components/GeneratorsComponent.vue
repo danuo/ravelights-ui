@@ -61,7 +61,7 @@
   <!-- select generator level -->
   <div class="q-mb-lg">
     <q-btn-toggle
-      v-model="selected_level"
+      v-model="timeline_level"
       toggle-color="primary"
       :options="[
         { label: 'Primary', value: 1 },
@@ -93,13 +93,13 @@
         :square="true"
         :color="
           gen.generator_name ==
-          selectedGenerators[selected_type][selected_level]
+          selectedGenerators[selected_type][timeline_level]
             ? 'secondary'
             : 'primary'
         "
         :text-color="
           gen['generator_name'] ==
-          selectedGenerators[selected_type][selected_level]
+          selectedGenerators[selected_type][timeline_level]
             ? 'black'
             : 'white'
         "
@@ -110,20 +110,20 @@
 
 <script>
 export default {
-  name: 'ActiveGenerators',
+  name: "ActiveGenerators",
   data() {
     return {
       apiResponse: null,
       selectedGenerators: null,
-      selected_type: 'pattern',
-      selected_level: 1,
+      selected_type: "pattern",
+      timeline_level: 1,
       activeFilters: [],
-      typ: ['pattern', 'pattern_sec', 'vfilter', 'dimmer', 'thinner', 'effect'],
-      buttons: ['global_vfilter', 'global_dimmer', 'global_thinner'],
+      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
+      buttons: ["global_vfilter", "global_dimmer", "global_thinner"],
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -141,20 +141,20 @@ export default {
       }
       let selected_type = this.selected_type;
       selected_type =
-        selected_type == 'pattern_sec' ? 'pattern' : selected_type;
-      return this.apiResponse['meta']['available_generators'][
+        selected_type == "pattern_sec" ? "pattern" : selected_type;
+      return this.apiResponse["meta"]["available_generators"][
         selected_type
       ].filter((generator) => {
-        return this.isIncludedInFilter(generator['generator_keywords']);
+        return this.isIncludedInFilter(generator["generator_keywords"]);
       });
     },
     selectableKeywords() {
       let filterOptions = [];
       if (this.apiResponse !== null) {
-        for (var index in this.apiResponse['meta']['available_keywords']) {
+        for (var index in this.apiResponse["meta"]["available_keywords"]) {
           filterOptions.push({
-            label: this.apiResponse['meta']['available_keywords'][index],
-            value: this.apiResponse['meta']['available_keywords'][index],
+            label: this.apiResponse["meta"]["available_keywords"][index],
+            value: this.apiResponse["meta"]["available_keywords"][index],
           });
         }
       }
@@ -168,24 +168,24 @@ export default {
       });
     },
     replace_underscores(input_string) {
-      console.log("test")
-      console.log(input_string)
-      return input_string.replace(/_/g, ' ');
+      console.log("test");
+      console.log(input_string);
+      return input_string.replace(/_/g, " ");
     },
     setGenerator(generatorName) {
-      this.selectedGenerators[this.selected_type][this.selected_level] =
+      this.selectedGenerators[this.selected_type][this.timeline_level] =
         generatorName;
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: 'set_generator',
+          action: "set_generator",
           gen_type: this.selected_type,
           gen_name: generatorName,
-          level_index: this.selected_level,
+          level_index: this.timeline_level,
         }),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -196,15 +196,15 @@ export default {
     },
     handleClickChangeSettings(var_name) {
       let requestBody = {
-        action: 'change_settings',
+        action: "change_settings",
       };
       requestBody[var_name] = this.apiResponse[var_name];
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

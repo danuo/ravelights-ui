@@ -55,7 +55,7 @@
 
   <div class="q-my-lg" v-if="triggers !== null">
     <q-btn-toggle
-      v-model="selected_level"
+      v-model="timeline_level"
       toggle-color="primary"
       :options="[
         { label: 'Primary', value: 1 },
@@ -137,20 +137,20 @@
 
 <script>
 export default {
-  name: 'TriggerComponent',
+  name: "TriggerComponent",
   data() {
     return {
-      selected_type: 'pattern',
-      selected_level: 1,
+      selected_type: "pattern",
+      timeline_level: 1,
       triggers: null,
       marker_arange_to_value: null,
       marker_value_to_arange: null,
-      quarters_letters: ['A', 'B', 'C', 'D'],
-      typ: ['pattern', 'pattern_sec', 'vfilter', 'dimmer', 'thinner', 'effect'],
+      quarters_letters: ["A", "B", "C", "D"],
+      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
@@ -167,28 +167,28 @@ export default {
     beats_array: {
       get() {
         if (this.triggers !== null) {
-          return this.triggers[this.selected_type][this.selected_level]
+          return this.triggers[this.selected_type][this.timeline_level]
             .beats_array;
         } else {
           return [true];
         }
       },
       set(value) {
-        this.triggers[this.selected_type][this.selected_level].beats_array =
+        this.triggers[this.selected_type][this.timeline_level].beats_array =
           value;
       },
     },
     quarters_array: {
       get() {
         if (this.triggers !== null) {
-          return this.triggers[this.selected_type][this.selected_level]
+          return this.triggers[this.selected_type][this.timeline_level]
             .quarters_array;
         } else {
           return [true];
         }
       },
       set(value) {
-        this.triggers[this.selected_type][this.selected_level].quarters_array =
+        this.triggers[this.selected_type][this.timeline_level].quarters_array =
           value;
       },
     },
@@ -196,7 +196,7 @@ export default {
       get() {
         if (this.triggers !== null) {
           let loop_length =
-            this.triggers[this.selected_type][this.selected_level].loop_length;
+            this.triggers[this.selected_type][this.timeline_level].loop_length;
           return this.marker_value_to_arange[loop_length];
         } else {
           return 8;
@@ -204,20 +204,20 @@ export default {
       },
       set(loop_length_sel) {
         let loop_length_value = this.marker_arange_to_value[loop_length_sel];
-        this.triggers[this.selected_type][this.selected_level].loop_length =
+        this.triggers[this.selected_type][this.timeline_level].loop_length =
           loop_length_value;
       },
     },
     p: {
       get() {
         if (this.triggers !== null) {
-          return this.triggers[this.selected_type][this.selected_level].p;
+          return this.triggers[this.selected_type][this.timeline_level].p;
         } else {
           return 1.0;
         }
       },
       set(value) {
-        this.triggers[this.selected_type][this.selected_level].p = value;
+        this.triggers[this.selected_type][this.timeline_level].p = value;
       },
     },
     loop_length() {
@@ -248,7 +248,7 @@ export default {
         loop_length: this.loop_length,
         p: this.p,
         selected_type: this.selected_type,
-        selected_level: this.selected_level,
+        timeline_level: this.timeline_level,
       };
     },
   },
@@ -263,7 +263,7 @@ export default {
       return result;
     },
     get_quarters_str(quarters_array, loop_length) {
-      let string = '';
+      let string = "";
       for (let i = 0; i < 4; i++) {
         if (quarters_array[i]) {
           string += this.quarters_letters[i];
@@ -295,17 +295,17 @@ export default {
     },
     set_trigger() {
       let requestBody = {
-        ...this.triggers[this.selected_type][this.selected_level],
-        action: 'set_trigger',
+        ...this.triggers[this.selected_type][this.timeline_level],
+        action: "set_trigger",
         gen_type: this.selected_type,
-        level_index: this.selected_level,
+        level_index: this.timeline_level,
       };
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
