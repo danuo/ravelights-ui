@@ -1,21 +1,5 @@
 <template>
-  <div class="q-px-md q-py-xs"></div>
-  <div class="q-px-xl q-py-xs">
-    <q-item-label caption style="color: #474747"> Multi </q-item-label>
-    <q-slider
-      v-model="multi"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      snap
-      :min="0"
-      :max="Object.keys(multi_options).length - 1"
-      :marker-labels="multi_options"
-    />
-  </div>
-
-  <div class="q-px-md q-py-xs">
+  <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
       Frames Pattern Selection
     </q-item-label>
@@ -57,9 +41,24 @@
     </div>
   </div>
 
-  <div class="q-px-md q-pt-lg q-pb-xs">
+  <div class="q-px-xl q-py-xs">
+    <q-item-label caption style="color: #474747"> Multi </q-item-label>
+    <q-slider
+      v-model="multi"
+      color="primary"
+      selection-color="secondary"
+      track-size="15px"
+      thumb-size="30px"
+      snap
+      :min="0"
+      :max="Object.keys(multi_options).length - 1"
+      :marker-labels="multi_options"
+    />
+  </div>
+
+  <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
-      Quater Pattern Selection
+      Effect Timing Mode
     </q-item-label>
   </div>
 
