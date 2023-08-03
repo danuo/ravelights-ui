@@ -223,6 +223,7 @@ export default {
         ["L3", 0, 1],
         ["L4", 0],
         ["L8", 0, 4, 6],
+        ["L16", 0, 7, 11, 13, 15],
       ],
       multi: 1,
       multi_options: {
@@ -236,8 +237,9 @@ export default {
       },
       quarters_pattern: 0,
       quarters_pattern_options: [
-        ["1A", "2A"],
-        ["1A", "1C"],
+        ["0A", "0C"],
+        ["0A", "2A"],
+        ["0A", "3A", "7A", "7C"],
       ],
       limit_frames: 5,
       limit_frames_options: {
