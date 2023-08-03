@@ -1,4 +1,14 @@
 <template>
+  <div class="row justify-between">
+    <q-btn
+      label="clear effect queue"
+      @click="clearEffectQueue()"
+      style="height: 3em"
+      color="primary"
+    />
+    <q-btn label="other button" color="primary" />
+  </div>
+
   <q-list bordered separator v-if="this.effect_list.length > 0">
     <q-item v-for="item in this.effect_list" :key="item">
       <q-item-section>
@@ -104,6 +114,24 @@ export default {
     },
     beforeUnmount() {
       this.stopAutoUpdate();
+    },
+    clearEffectQueue() {
+      let requestBody = {
+        action: "clear_effect_queue",
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

@@ -1,6 +1,4 @@
 <template>
-  <h5 class="text-center q-ma-md">Effect Selector</h5>
-
   <div class="q-px-md q-py-xs">
     <q-item-label caption style="color: #474747"> Multi </q-item-label>
   </div>
@@ -189,15 +187,7 @@
     </div>
   </div>
 
-  <q-btn
-    label="clear effect queue"
-    @click="clearEffectQueue()"
-    style="height: 70px"
-    color="#ddd"
-    size="20px"
-  />
-
-  <!-- effect list -->
+  <!-- available effects -->
   <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
     <div
       class="col-4"
@@ -345,24 +335,6 @@ export default {
           console.log(err);
         });
       this.$bus.emit("refresh_effect_list");
-    },
-    clearEffectQueue() {
-      let requestBody = {
-        action: "clear_effect_queue",
-      };
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      };
-      fetch("/rest", requestOptions)
-        .then((responsePromise) => responsePromise)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
 };
