@@ -119,7 +119,7 @@
           <q-tab-panel name="loopquarters">
             <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
-                frames limit
+                frames limit [frames]
               </q-item-label>
               <q-slider
                 v-model="limit_frames"
@@ -135,7 +135,7 @@
             </div>
             <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
-                quarters limit
+                quarters limit [quarters]
               </q-item-label>
               <q-slider
                 v-model="limit_loopquarters"
@@ -151,7 +151,7 @@
             </div>
             <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
-                loop length
+                loop length [beats]
               </q-item-label>
               <q-slider
                 v-model="loop_length"
@@ -167,7 +167,7 @@
             </div>
             <div class="q-px-md q-py-md">
               <q-item-label caption style="color: #676767">
-                loop limit
+                loop limit [n times]
               </q-item-label>
               <q-slider
                 v-model="limit_loop"
