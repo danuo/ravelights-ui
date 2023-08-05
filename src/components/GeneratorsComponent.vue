@@ -123,9 +123,9 @@ export default {
         "global_vfilter",
         "global_dimmer",
         "global_thinner",
-        "load_thinner",
-        "load_dimmer",
-        "set_triggers",
+        "load_thinner_with_pat",
+        "load_dimmer_with_pat",
+        "load_triggers_with_gen",
       ],
     };
   },
