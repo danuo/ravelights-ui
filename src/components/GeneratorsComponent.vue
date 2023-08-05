@@ -30,7 +30,7 @@
           {{ typ[4] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
-          {{ replace_underscores(selectedGenerators[typ[3]][gen_index]) }}
+          {{ replace_underscores(selectedGenerators[typ[4]][gen_index]) }}
         </div>
       </div>
     </div>
