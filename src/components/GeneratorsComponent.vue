@@ -189,7 +189,7 @@ export default {
           action: "set_generator",
           gen_type: this.selected_type,
           gen_name: generatorName,
-          level_index: this.timeline_level,
+          timeline_level: this.timeline_level,
         }),
       };
       fetch("/rest", requestOptions)

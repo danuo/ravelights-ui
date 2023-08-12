@@ -36,11 +36,11 @@
         <q-item-label caption style="color: #474747">
           {{ typ[gen_type_idx] }}
         </q-item-label>
-        <div v-for="level_index in 3" :key="level_index">
+        <div v-for="timeline_level in 3" :key="timeline_level">
           <div class="row justify-between">
             <div
               v-for="it in this.repr_ui(
-                this.get_trigger(typ[gen_type_idx], level_index)
+                this.get_trigger(typ[gen_type_idx], timeline_level)
               )"
               :key="it"
             >
