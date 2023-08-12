@@ -47,8 +47,8 @@
   <div class="text-subtitle2">Select Color Transition Speed</div>
   <div class="q-mb-lg">
     <q-btn-toggle
-      v-model="selectedColorSpeed"
-      @click="change_settings('selectedColorSpeed')"
+      v-model="color_transition_speed"
+      @click="change_settings('color_transition_speed')"
       toggle-color="primary"
       :options="generateColorTransitionSpeedOptions()"
     />
@@ -85,7 +85,7 @@ export default {
       color_names: [],
       color_transition_speeds: [""],
       selectedColorLevel: 0,
-      selectedColorSpeed: "",
+      color_transition_speed: "",
       palette: [],
       color_sec_active: true,
       color_sec_mode: "",
@@ -102,7 +102,7 @@ export default {
         this.color_names = response.color_names;
         this.color_transition_speeds =
           response.controls.color_transition_speeds;
-        // this.selectedColorSpeed = response.color_transition_speed;
+        this.color_transition_speed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
         this.color_sec_mode_names = response.color_sec_mode_names;
@@ -145,7 +145,7 @@ export default {
         body: JSON.stringify(requestBody),
       };
       fetch("/rest", requestOptions)
-        .then((responsePromise) => responsePromise.json())
+        .then((responsePromise) => responsePromise)
         .then((response) => {})
         .catch((err) => {
           console.log(err);
