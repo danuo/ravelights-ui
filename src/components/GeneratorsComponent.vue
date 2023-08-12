@@ -1,7 +1,24 @@
 <template>
-  <h5 class="text-center q-ma-md">Active Generators</h5>
+  <h5 class="text-center q-ma-md">Load Generators</h5>
 
+  <!-- setting toggles -->
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
+    <div class="col-12">
+      <div class="grey-box row">
+        <div class="col-4" v-for="button in buttons" :key="button">
+          <q-item-label caption style="color: #474747"
+            >{{ button }}
+          </q-item-label>
+          <q-toggle
+            @click="handleClickChangeSettings(button)"
+            v-model="apiResponse[button]"
+            color="secondary"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- select type -->
     <div v-for="(e, gen_type_idx) in 4" :key="gen_type_idx" class="col-6">
       <div
         @click="this.selected_type = typ[gen_type_idx]"
@@ -30,33 +47,15 @@
           {{ typ[4] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
-          {{ replace_underscores(selectedGenerators[typ[3]][gen_index]) }}
+          {{ replace_underscores(selectedGenerators[typ[4]][gen_index]) }}
         </div>
       </div>
     </div>
-
-    <div class="col-12">
-      <div class="grey-box row">
-        <div class="col-4" v-for="button in buttons" :key="button">
-          <q-item-label caption style="color: #474747"
-            >{{ button }}
-          </q-item-label>
-          <q-toggle
-            @click="handleClickChangeSettings(button)"
-            v-model="apiResponse[button]"
-            color="secondary"
-          />
-        </div>
-      </div>
-    </div>
-    <q-space />
   </div>
 
   <div class="q-pa-xs">
     <q-space />
   </div>
-
-  <h5 class="text-center q-ma-xs">Generator Selector</h5>
 
   <!-- select generator level -->
   <div class="q-mb-lg">
@@ -68,6 +67,7 @@
         { label: 'Seconday', value: 2 },
         { label: 'Tertiary', value: 3 },
       ]"
+      style="height: 3em"
     />
   </div>
 
@@ -119,7 +119,14 @@ export default {
       timeline_level: 1,
       activeFilters: [],
       typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
-      buttons: ["global_vfilter", "global_dimmer", "global_thinner"],
+      buttons: [
+        "global_vfilter",
+        "global_dimmer",
+        "global_thinner",
+        "load_thinner_with_pat",
+        "load_dimmer_with_pat",
+        "load_triggers_with_gen",
+      ],
     };
   },
   mounted() {
