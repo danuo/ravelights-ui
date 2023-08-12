@@ -298,7 +298,7 @@ export default {
         ...this.triggers[this.selected_type][this.timeline_level],
         action: "set_trigger",
         gen_type: this.selected_type,
-        level_index: this.timeline_level,
+        timeline_level: this.timeline_level,
       };
       const requestOptions = {
         method: "PUT",
