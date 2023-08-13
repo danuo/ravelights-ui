@@ -10,7 +10,7 @@
         <div class="q-mt-xs row justify-between">
           <q-btn-toggle
             v-model="devices[idx]['device_manual_timeline_level']"
-            @click="changeIndex()"
+            @click="change_device_settings(idx, 'device_manual_timeline_level')"
             :options="[
               { label: 'black', value: 0 },
               { label: '[1]', value: 1 },
