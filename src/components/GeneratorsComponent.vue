@@ -131,7 +131,7 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -199,7 +199,7 @@ export default {
           timeline_level: this.timeline_level,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -218,7 +218,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

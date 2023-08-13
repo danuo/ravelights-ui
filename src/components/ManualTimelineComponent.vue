@@ -1,7 +1,7 @@
 <template>
   <div class="q-mt-xs row justify-between">
     <q-btn-toggle
-      v-model="manual_global_timeline_level"
+      v-model="global_manual_timeline_level"
       @click="changeIndex()"
       :toggle-color="use_manual_timeline ? 'primary' : 'dark'"
       :options="[
@@ -30,18 +30,18 @@ import { ref } from "vue";
 export default {
   setup() {
     return {
-      manual_global_timeline_level: ref(0),
+      global_manual_timeline_level: ref(0),
       use_manual_timeline: ref(true),
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         console.log(response);
         this.use_manual_timeline = response.use_manual_timeline;
-        this.manual_global_timeline_level =
-          response.manual_global_timeline_level;
+        this.global_manual_timeline_level =
+          response.global_manual_timeline_level;
       })
       .catch((err) => {
         console.log(err);
@@ -55,11 +55,11 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "set_settings",
-          manual_global_timeline_level: this.manual_global_timeline_level,
+          global_manual_timeline_level: this.global_manual_timeline_level,
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -77,7 +77,7 @@ export default {
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

@@ -47,7 +47,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...button, level: this.selectedTargetLevel }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

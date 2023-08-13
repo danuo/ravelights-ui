@@ -6,7 +6,6 @@
       style="height: 3em"
       color="primary"
     />
-    <q-btn label="other button" color="primary" />
   </div>
 
   <q-list bordered separator v-if="this.effect_list.length > 0">
@@ -121,7 +120,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
