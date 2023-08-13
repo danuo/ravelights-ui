@@ -11,7 +11,7 @@
       ]"
     />
   </div>
-  <div class="row q-col-gutter-xs">
+  <div class="q-mb-lg row q-col-gutter-xs">
     <q-btn
       class="col-4"
       v-for="button in buttons"
@@ -24,7 +24,6 @@
 
 <script>
 export default {
-  name: "ButtonGenerator",
   data() {
     return {
       selectedTargetLevel: 0,
@@ -32,11 +31,10 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/meta")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response["controls"]["controls_live_generator"];
-        console.log(response);
+        this.buttons = response.controls_live_generator;
       })
       .catch((err) => {
         console.log(err);

@@ -1,17 +1,17 @@
 <template>
   <q-page padding>
-    <GlobalButtons />
+    <ActionButtons />
     <TriggerComponent />
   </q-page>
 </template>
 
 <script lang="ts">
 import TriggerComponent from "src/components/TriggerComponent.vue";
-import GlobalButtons from "src/components/Actions.vue";
+import ActionButtons from "src/components/ActionButtons.vue";
 export default {
   name: "TriggerPage",
   components: {
-    GlobalButtons,
+    ActionButtons,
     TriggerComponent,
   },
 };
