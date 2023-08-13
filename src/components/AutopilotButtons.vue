@@ -90,7 +90,7 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.settings_autopilot = response["settings_autopilot"];
@@ -119,7 +119,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

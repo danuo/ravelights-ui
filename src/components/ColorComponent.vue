@@ -98,7 +98,7 @@ export default {
   },
   mounted() {
     this.get_color();
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.color_names = response.color_names;
@@ -152,7 +152,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {})
         .catch((err) => {

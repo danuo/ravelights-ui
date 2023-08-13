@@ -121,7 +121,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

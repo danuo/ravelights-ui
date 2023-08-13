@@ -158,7 +158,7 @@ export default {
   },
   mounted() {
     console.log("fetch rest");
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
@@ -310,7 +310,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

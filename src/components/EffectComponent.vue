@@ -292,7 +292,7 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
@@ -333,7 +333,7 @@ export default {
             this.quarters_pattern_options[this.quarters_pattern],
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

@@ -35,7 +35,7 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         console.log(response);
@@ -59,7 +59,7 @@ export default {
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -77,7 +77,7 @@ export default {
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

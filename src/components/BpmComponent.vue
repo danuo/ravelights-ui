@@ -124,7 +124,7 @@ export default {
     };
   },
   mounted() {
-    fetch("/rest")
+    fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;
@@ -157,7 +157,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -177,7 +177,7 @@ export default {
           action: "set_sync",
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           const currentTime2 = new Date().getTime();
@@ -198,7 +198,7 @@ export default {
           value: value,
         }),
       };
-      fetch("/rest", requestOptions)
+      fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => response)
         .catch((err) => {
