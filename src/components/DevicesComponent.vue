@@ -2,7 +2,25 @@
   <q-list bordered separator>
     <q-item v-for="(e, idx) in devices.length" :key="idx">
       <q-item-section>
-        <q-item-label caption> device_frameskip </q-item-label>
+        <q-item-label caption style="color: #676767">
+          Device {{ idx }} | lights:{{ devices[idx].n_lights }} | leds:{{
+            devices[idx].n_leds
+          }}
+        </q-item-label>
+        <div class="q-mt-xs row justify-between">
+          <q-btn-toggle
+            v-model="devices[idx]['device_manual_timeline_level']"
+            @click="changeIndex()"
+            :options="[
+              { label: 'black', value: 0 },
+              { label: '[1]', value: 1 },
+              { label: '[2]', value: 2 },
+              { label: '[3]', value: 3 },
+              { label: 'none', value: 4 },
+            ]"
+            size="lg"
+          />
+        </div>
         <div class="q-px-md q-py-md">
           <q-item-label caption style="color: #676767">
             device_triggerskip
@@ -17,7 +35,6 @@
             :min="0"
             :max="10"
             snap
-            label-always
           />
           <q-item-label caption style="color: #676767">
             device_frameskip
@@ -32,7 +49,6 @@
             :min="1"
             :max="10"
             snap
-            label-always
           />
           <q-item-label caption style="color: #676767">
             device_brightness
