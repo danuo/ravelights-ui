@@ -117,21 +117,21 @@
 
 <script>
 export default {
-  name: 'BpmSliders',
+  name: "BpmSliders",
   data() {
     return {
       sliders: [],
       api_response: {},
-      bpm_multiplier_mapping: { 0: '1/2', 1: 1, 2: 2 },
+      bpm_multiplier_mapping: { 0: "1/2", 1: 1, 2: 2 },
       bpm_multiplier_placeholder: 1,
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;
-        this.sliders = response['controls']['controls_global_sliders'];
+        this.sliders = response["controls"]["controls_global_sliders"];
         this.bpm_multiplier_placeholder = response.bpm_multiplier;
         this.bpm_multiplier_placeholder =
           this.bpm_multiplier_placeholder == 0.5
@@ -145,15 +145,15 @@ export default {
   methods: {
     handleClick(var_name) {
       let requestBody = {
-        action: 'change_settings',
+        action: "set_settings",
       };
       requestBody[var_name] = this.api_response[var_name];
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -163,23 +163,23 @@ export default {
         });
     },
     increaseBPM() {
-      this.api_response['bpm_base'] = parseFloat(
-        (this.api_response['bpm_base'] + 0.1).toFixed(2)
+      this.api_response["bpm_base"] = parseFloat(
+        (this.api_response["bpm_base"] + 0.1).toFixed(2)
       );
-      this.handleClick('bpm_base');
+      this.handleClick("bpm_base");
     },
     decreaseBPM() {
-      this.api_response['bpm_base'] = parseFloat(
-        (this.api_response['bpm_base'] - 0.1).toFixed(2)
+      this.api_response["bpm_base"] = parseFloat(
+        (this.api_response["bpm_base"] - 0.1).toFixed(2)
       );
-      this.handleClick('bpm_base');
+      this.handleClick("bpm_base");
     },
     handleClickBpmMulti() {
-      this.api_response['bpm_multiplier'] =
+      this.api_response["bpm_multiplier"] =
         this.bpm_multiplier_placeholder == 0
           ? 0.5
           : this.bpm_multiplier_placeholder;
-      this.handleClick('bpm_multiplier');
+      this.handleClick("bpm_multiplier");
     },
   },
 };

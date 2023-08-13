@@ -53,7 +53,7 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "change_settings",
+          action: "set_settings",
           manual_timeline_level: this.manual_timeline_level,
           use_manual_timeline: this.use_manual_timeline,
         }),
@@ -72,7 +72,7 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "change_settings",
+          action: "set_settings",
           use_manual_timeline: this.use_manual_timeline,
         }),
       };

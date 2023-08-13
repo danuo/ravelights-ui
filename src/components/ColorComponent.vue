@@ -50,7 +50,7 @@
     </q-item-label>
     <q-btn-toggle
       v-model="color_transition_speed"
-      @click="change_settings('color_transition_speed')"
+      @click="set_settings('color_transition_speed')"
       toggle-color="primary"
       :options="generateColorTransitionSpeedOptions()"
     />
@@ -59,7 +59,7 @@
   <div class="row q-pa-md flex-center">
     <div class="col-4">
       <q-toggle
-        @click="change_settings('color_sec_active')"
+        @click="set_settings('color_sec_active')"
         v-model="color_sec_active"
         size="40px"
         color="secondary"
@@ -68,7 +68,7 @@
     </div>
     <div class="col-8">
       <q-select
-        @update:model-value="change_settings('color_sec_mode')"
+        @update:model-value="set_settings('color_sec_mode')"
         outlined
         v-model="color_sec_mode"
         :options="color_sec_mode_names"
@@ -142,9 +142,9 @@ export default {
           console.log(err);
         });
     },
-    change_settings(var_name) {
+    set_settings(var_name) {
       let requestBody = {
-        action: "change_settings",
+        action: "set_settings",
       };
       requestBody[var_name] = this[var_name];
       const requestOptions = {

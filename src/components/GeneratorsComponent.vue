@@ -210,7 +210,7 @@ export default {
     },
     handleClickChangeSettings(var_name) {
       let requestBody = {
-        action: "change_settings",
+        action: "set_settings",
       };
       requestBody[var_name] = this.apiResponse[var_name];
       const requestOptions = {
