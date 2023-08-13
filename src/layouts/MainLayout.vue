@@ -13,6 +13,7 @@
           icon="motion_photos_auto"
         />
         <q-route-tab to="/timelines" name="Timelines" icon="movie" />
+        <q-route-tab to="/devices" name="Devices" icon="widgets" />
       </q-tabs>
     </q-header>
 
