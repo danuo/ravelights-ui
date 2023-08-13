@@ -145,7 +145,6 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.meta = response;
-        console.log(this.apiResponse);
       })
       .catch((err) => {
         console.log(err);
@@ -185,8 +184,6 @@ export default {
       });
     },
     replace_underscores(input_string) {
-      console.log("test");
-      console.log(input_string);
       return input_string.replace(/_/g, " ");
     },
     setGenerator(generatorName) {

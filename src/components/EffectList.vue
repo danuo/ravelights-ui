@@ -69,8 +69,6 @@ export default {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          // console.log("refresh");
-          // console.log(response);
           this.effect_list = response;
         })
         .catch((err) => {
@@ -106,7 +104,6 @@ export default {
       }, 100);
     },
     startAutoUpdate() {
-      console.log("got here");
       this.timer = setInterval(this.refresh_effect_list, 2000);
     },
     stopAutoUpdate() {
