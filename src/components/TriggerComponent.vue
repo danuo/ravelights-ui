@@ -143,25 +143,30 @@ export default {
       selected_type: "pattern",
       timeline_level: 1,
       triggers: null,
-      marker_arange_to_value: null,
+      marker_arange_to_value: {
+        0: 1,
+        1: 2,
+        2: 4,
+        3: 8,
+        4: 16,
+        5: 32,
+      },
       marker_value_to_arange: null,
       quarters_letters: ["A", "B", "C", "D"],
       typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
     };
   },
   mounted() {
+    console.log("fetch rest");
     fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.triggers = response.triggers;
-        this.marker_arange_to_value = response.meta.steps_dict;
-        this.marker_value_to_arange = this.invert_dict(
-          this.marker_arange_to_value
-        );
       })
       .catch((err) => {
         console.log(err);
       });
+    this.marker_value_to_arange = this.invert_dict(this.marker_arange_to_value);
   },
   computed: {
     beats_array: {
