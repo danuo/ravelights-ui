@@ -1,7 +1,5 @@
 <template>
-  <div class="q-col-gutter-xs">
-    <q-space />
-    <q-space />
+  <div class="q-mt-xs q-col-gutter-xs">
     <div class="row">
       <div class="col-6">
         <q-input v-model.number="api_response['bpm_base']" outlined />
@@ -9,7 +7,7 @@
       <div class="col-3">
         <q-btn
           v-model="api_response['bpm_base']"
-          @click="increaseBPM"
+          @click="change_bpm(0.1)"
           style="width: 100%; height: 70px"
           :square="true"
           color="primary"
@@ -20,7 +18,7 @@
       <div class="col-3">
         <q-btn
           v-model="api_response['bpm_base']"
-          @click="decreaseBPM"
+          @click="change_bpm(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="expand_more"
@@ -31,6 +29,7 @@
     <div class="row">
       <div class="col-6">
         <q-btn
+          @click="sync"
           label="sync"
           style="width: 100%; height: 70px"
           color="primary"
@@ -39,6 +38,7 @@
       </div>
       <div class="col-3">
         <q-btn
+          @click="change_sync(0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_before"
@@ -47,6 +47,7 @@
       </div>
       <div class="col-3">
         <q-btn
+          @click="change_sync(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_next"
@@ -54,17 +55,13 @@
         />
       </div>
     </div>
-    <q-space />
-    <q-space />
-    <q-space />
-    <q-space />
   </div>
 
-  <div class="q-px-none q-pt-lg q-pb-md" v-if="api_response !== null">
+  <div class="q-px-none q-mt-lg q-mb-md" v-if="api_response !== null">
     <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
     <div class="row flex-center" style="width: 100%">
       <q-slider
-        @change="handleClickBpmMulti()"
+        @change="change_settings_bpm_multiplier()"
         v-model="bpm_multiplier_placeholder"
         color="secondary"
         selection-color="secondary"
@@ -80,14 +77,14 @@
   </div>
 
   <q-list bordered separator>
-    <q-item v-for="slider in sliders" :key="slider.name">
+    <q-item v-for="slider in controls_global_sliders" :key="slider.name">
       <!-- is slider -->
       <q-item-section v-if="slider.type == 'slider'">
         <q-item-label caption> {{ slider.var_name }} </q-item-label>
         <div class="row q-pa-md">
           <div class="col-12">
             <q-slider
-              @change="handleClick(slider.var_name)"
+              @change="change_settings(slider.var_name)"
               v-model="api_response[slider.var_name]"
               color="primary"
               selection-color="secondary"
@@ -117,21 +114,20 @@
 
 <script>
 export default {
-  name: 'BpmSliders',
+  name: "BpmComponent",
   data() {
     return {
-      sliders: [],
+      controls_global_sliders: [],
       api_response: {},
-      bpm_multiplier_mapping: { 0: '1/2', 1: 1, 2: 2 },
+      bpm_multiplier_mapping: { 0: "1/2", 1: 1, 2: 2 },
       bpm_multiplier_placeholder: 1,
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;
-        this.sliders = response['controls']['controls_global_sliders'];
         this.bpm_multiplier_placeholder = response.bpm_multiplier;
         this.bpm_multiplier_placeholder =
           this.bpm_multiplier_placeholder == 0.5
@@ -141,19 +137,27 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.controls_global_sliders = response.controls_global_sliders;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
-    handleClick(var_name) {
+    change_settings(var_name) {
       let requestBody = {
-        action: 'change_settings',
+        action: "set_settings",
       };
       requestBody[var_name] = this.api_response[var_name];
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);
@@ -162,24 +166,57 @@ export default {
           console.log(err);
         });
     },
-    increaseBPM() {
-      this.api_response['bpm_base'] = parseFloat(
-        (this.api_response['bpm_base'] + 0.1).toFixed(2)
-      );
-      this.handleClick('bpm_base');
+    sync() {
+      const currentTime = new Date().getTime();
+      console.log("before");
+      console.log(currentTime);
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "set_sync",
+        }),
+      };
+      fetch("/rest", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          const currentTime2 = new Date().getTime();
+          console.log("after");
+          console.log(currentTime2);
+          return response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    decreaseBPM() {
-      this.api_response['bpm_base'] = parseFloat(
-        (this.api_response['bpm_base'] - 0.1).toFixed(2)
-      );
-      this.handleClick('bpm_base');
+    change_sync(value) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "adjust_sync",
+          value: value,
+        }),
+      };
+      fetch("/rest", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => response)
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    handleClickBpmMulti() {
-      this.api_response['bpm_multiplier'] =
+    change_bpm(value) {
+      this.api_response["bpm_base"] = parseFloat(
+        (this.api_response["bpm_base"] + value).toFixed(2)
+      );
+      this.change_settings("bpm_base");
+    },
+    change_settings_bpm_multiplier() {
+      this.api_response["bpm_multiplier"] =
         this.bpm_multiplier_placeholder == 0
           ? 0.5
           : this.bpm_multiplier_placeholder;
-      this.handleClick('bpm_multiplier');
+      this.change_settings("bpm_multiplier");
     },
   },
 };

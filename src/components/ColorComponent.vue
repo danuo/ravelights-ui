@@ -4,7 +4,7 @@
     {{ selectedColorLevel }}
   </q-badge> -->
 
-  <div class="q-py-lg row flex-center" style="width: 100%">
+  <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
         <q-btn
@@ -50,7 +50,7 @@
     </q-item-label>
     <q-btn-toggle
       v-model="color_transition_speed"
-      @click="change_settings('color_transition_speed')"
+      @click="set_settings('color_transition_speed')"
       toggle-color="primary"
       :options="generateColorTransitionSpeedOptions()"
     />
@@ -59,7 +59,7 @@
   <div class="row q-pa-md flex-center">
     <div class="col-4">
       <q-toggle
-        @click="change_settings('color_sec_active')"
+        @click="set_settings('color_sec_active')"
         v-model="color_sec_active"
         size="40px"
         color="secondary"
@@ -68,7 +68,7 @@
     </div>
     <div class="col-8">
       <q-select
-        @update:model-value="change_settings('color_sec_mode')"
+        @update:model-value="set_settings('color_sec_mode')"
         outlined
         v-model="color_sec_mode"
         :options="color_sec_mode_names"
@@ -101,15 +101,20 @@ export default {
     fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.palette = response.controls.controls_color_palette;
         this.color_names = response.color_names;
-        this.color_transition_speeds =
-          response.controls.color_transition_speeds;
         this.color_transition_speed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
         this.color_sec_mode_names = response.color_sec_mode_names;
-        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.palette = response.controls_color_palette;
+        this.color_transition_speeds = response.color_transition_speeds;
       })
       .catch((err) => {
         console.log(err);
@@ -137,9 +142,9 @@ export default {
           console.log(err);
         });
     },
-    change_settings(var_name) {
+    set_settings(var_name) {
       let requestBody = {
-        action: "change_settings",
+        action: "set_settings",
       };
       requestBody[var_name] = this[var_name];
       const requestOptions = {
@@ -176,8 +181,6 @@ export default {
         });
     },
     floatToRgb(floatList) {
-      console.log("testsd");
-      console.log(floatList);
       return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
         floatList[1] * 255
       )}, ${Math.round(floatList[2] * 255)})`;

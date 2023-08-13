@@ -1,15 +1,15 @@
 <template>
   <q-page padding>
-    <BpmSliders />
+    <BpmComponent />
   </q-page>
 </template>
 
 <script>
-import BpmSliders from 'src/components/BpmSliders.vue';
+import BpmComponent from "src/components/BpmComponent.vue";
 export default {
-  name: 'BPMPage',
+  name: "BPMPage",
   components: {
-    BpmSliders,
+    BpmComponent,
   },
 };
 </script>

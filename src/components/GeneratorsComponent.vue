@@ -114,6 +114,7 @@ export default {
   data() {
     return {
       apiResponse: null,
+      meta: null,
       selectedGenerators: null,
       selected_type: "pattern",
       timeline_level: 1,
@@ -140,28 +141,36 @@ export default {
       .catch((err) => {
         console.log(err);
       });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.meta = response;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   computed: {
     filteredGenerators() {
-      if (this.apiResponse == null) {
+      if (this.meta == null) {
         return [];
       }
       let selected_type = this.selected_type;
       selected_type =
         selected_type == "pattern_sec" ? "pattern" : selected_type;
-      return this.apiResponse["meta"]["available_generators"][
-        selected_type
-      ].filter((generator) => {
-        return this.isIncludedInFilter(generator["generator_keywords"]);
-      });
+      return this.meta["available_generators"][selected_type].filter(
+        (generator) => {
+          return this.isIncludedInFilter(generator["generator_keywords"]);
+        }
+      );
     },
     selectableKeywords() {
       let filterOptions = [];
-      if (this.apiResponse !== null) {
-        for (var index in this.apiResponse["meta"]["available_keywords"]) {
+      if (this.meta !== null) {
+        for (var index in this.meta["available_keywords"]) {
           filterOptions.push({
-            label: this.apiResponse["meta"]["available_keywords"][index],
-            value: this.apiResponse["meta"]["available_keywords"][index],
+            label: this.meta["available_keywords"][index],
+            value: this.meta["available_keywords"][index],
           });
         }
       }
@@ -175,8 +184,6 @@ export default {
       });
     },
     replace_underscores(input_string) {
-      console.log("test");
-      console.log(input_string);
       return input_string.replace(/_/g, " ");
     },
     setGenerator(generatorName) {
@@ -203,7 +210,7 @@ export default {
     },
     handleClickChangeSettings(var_name) {
       let requestBody = {
-        action: "change_settings",
+        action: "set_settings",
       };
       requestBody[var_name] = this.apiResponse[var_name];
       const requestOptions = {

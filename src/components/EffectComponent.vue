@@ -188,12 +188,8 @@
   </div>
 
   <!-- available effects -->
-  <div class="row q-col-gutter-xs" v-if="apiResponse !== null">
-    <div
-      class="col-4"
-      v-for="gen in apiResponse['meta']['available_generators']['effect']"
-      :key="gen"
-    >
+  <div class="row q-col-gutter-xs" v-if="available_effects !== null">
+    <div class="col-4" v-for="gen in available_effects" :key="gen">
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
         @click="setEffect(gen.generator_name)"
@@ -215,6 +211,7 @@ export default {
   data() {
     return {
       apiResponse: null,
+      available_effects: null,
       frames_pattern: 0,
       frames_pattern_options: [
         ["L1", 0],
@@ -299,6 +296,14 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.available_effects = response.available_generators.effect;
       })
       .catch((err) => {
         console.log(err);

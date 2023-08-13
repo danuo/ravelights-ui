@@ -80,7 +80,7 @@
 
 <script>
 export default {
-  name: 'ButtonGenerator',
+  name: "ButtonGenerator",
   data() {
     return {
       temp_toggle: 0,
@@ -90,12 +90,18 @@ export default {
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response['controls']['controls_autopilot'];
-        this.settings_autopilot = response['settings_autopilot'];
-        console.log(response);
+        this.settings_autopilot = response["settings_autopilot"];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.buttons = response.controls_autopilot;
       })
       .catch((err) => {
         console.log(err);
@@ -103,15 +109,17 @@ export default {
   },
   methods: {
     handleClick() {
-      const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...this.settings_autopilot,
-          action: 'set_settings_autopilot',
-        }),
+      const data = {
+        ...this.settings_autopilot,
+        action: "set_settings_autopilot",
       };
-      fetch('/rest', requestOptions)
+      console.log(data);
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      };
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

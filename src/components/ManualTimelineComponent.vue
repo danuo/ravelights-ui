@@ -1,7 +1,7 @@
 <template>
-  <div class="row justify-between">
+  <div class="q-mt-xs row justify-between">
     <q-btn-toggle
-      v-model="manual_timeline_level"
+      v-model="manual_global_timeline_level"
       @click="changeIndex()"
       :toggle-color="use_manual_timeline ? 'primary' : 'dark'"
       :options="[
@@ -30,7 +30,7 @@ import { ref } from "vue";
 export default {
   setup() {
     return {
-      manual_timeline_level: ref(0),
+      manual_global_timeline_level: ref(0),
       use_manual_timeline: ref(true),
     };
   },
@@ -40,7 +40,8 @@ export default {
       .then((response) => {
         console.log(response);
         this.use_manual_timeline = response.use_manual_timeline;
-        this.manual_timeline_level = response.manual_timeline_level;
+        this.manual_global_timeline_level =
+          response.manual_global_timeline_level;
       })
       .catch((err) => {
         console.log(err);
@@ -53,8 +54,8 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "change_settings",
-          manual_timeline_level: this.manual_timeline_level,
+          action: "set_settings",
+          manual_global_timeline_level: this.manual_global_timeline_level,
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
@@ -72,7 +73,7 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "change_settings",
+          action: "set_settings",
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
