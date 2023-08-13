@@ -101,7 +101,6 @@ export default {
     fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.palette = response.controls.controls_color_palette;
         this.color_names = response.color_names;
         this.color_transition_speed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
@@ -114,6 +113,7 @@ export default {
     fetch("/rest/meta")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
+        this.palette = response.controls_color_palette;
         this.color_transition_speeds = response.color_transition_speeds;
       })
       .catch((err) => {
