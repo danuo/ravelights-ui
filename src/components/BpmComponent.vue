@@ -1,7 +1,5 @@
 <template>
-  <div class="q-col-gutter-xs">
-    <q-space />
-    <q-space />
+  <div class="q-mt-xs q-col-gutter-xs">
     <div class="row">
       <div class="col-6">
         <q-input v-model.number="api_response['bpm_base']" outlined />
@@ -57,13 +55,9 @@
         />
       </div>
     </div>
-    <q-space />
-    <q-space />
-    <q-space />
-    <q-space />
   </div>
 
-  <div class="q-px-none q-pt-lg q-pb-md" v-if="api_response !== null">
+  <div class="q-px-none q-mt-lg q-mb-md" v-if="api_response !== null">
     <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
     <div class="row flex-center" style="width: 100%">
       <q-slider

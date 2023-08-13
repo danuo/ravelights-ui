@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-between">
+  <div class="q-mt-xs row justify-between">
     <q-btn
       label="clear effect queue"
       @click="clearEffectQueue()"

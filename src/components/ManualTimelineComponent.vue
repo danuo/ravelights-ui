@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-between">
+  <div class="q-mt-xs row justify-between">
     <q-btn-toggle
       v-model="manual_global_timeline_level"
       @click="changeIndex()"

@@ -1,8 +1,5 @@
 <template>
-  <div class="q-pa-xs">
-    <q-space />
-  </div>
-  <div class="q-mb-lg">
+  <div class="q-mt-xs q-mb-lg">
     <q-btn-toggle
       v-model="selectedTargetLevel"
       toggle-color="primary"
@@ -27,7 +24,7 @@
 
 <script>
 export default {
-  name: 'ButtonGenerator',
+  name: "ButtonGenerator",
   data() {
     return {
       selectedTargetLevel: 0,
@@ -35,10 +32,10 @@ export default {
     };
   },
   mounted() {
-    fetch('/rest')
+    fetch("/rest")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.buttons = response['controls']['controls_live_generator'];
+        this.buttons = response["controls"]["controls_live_generator"];
         console.log(response);
       })
       .catch((err) => {
@@ -48,11 +45,11 @@ export default {
   methods: {
     handleClick(button) {
       const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...button, level: this.selectedTargetLevel }),
       };
-      fetch('/rest', requestOptions)
+      fetch("/rest", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
           console.log(response);

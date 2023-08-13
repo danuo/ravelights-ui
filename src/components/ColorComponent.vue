@@ -4,7 +4,7 @@
     {{ selectedColorLevel }}
   </q-badge> -->
 
-  <div class="q-py-lg row flex-center" style="width: 100%">
+  <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
         <q-btn
