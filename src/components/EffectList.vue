@@ -6,7 +6,6 @@
       style="height: 3em"
       color="primary"
     />
-    <q-btn label="other button" color="primary" />
   </div>
 
   <q-list bordered separator v-if="this.effect_list.length > 0">
