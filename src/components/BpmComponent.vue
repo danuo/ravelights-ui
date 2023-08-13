@@ -9,7 +9,7 @@
       <div class="col-3">
         <q-btn
           v-model="api_response['bpm_base']"
-          @click="increaseBPM"
+          @click="change_bpm(0.1)"
           style="width: 100%; height: 70px"
           :square="true"
           color="primary"
@@ -20,7 +20,7 @@
       <div class="col-3">
         <q-btn
           v-model="api_response['bpm_base']"
-          @click="decreaseBPM"
+          @click="change_bpm(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="expand_more"
@@ -31,6 +31,7 @@
     <div class="row">
       <div class="col-6">
         <q-btn
+          @click="sync"
           label="sync"
           style="width: 100%; height: 70px"
           color="primary"
@@ -39,6 +40,7 @@
       </div>
       <div class="col-3">
         <q-btn
+          @click="change_sync(0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_before"
@@ -47,6 +49,7 @@
       </div>
       <div class="col-3">
         <q-btn
+          @click="change_sync(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_next"
@@ -64,7 +67,7 @@
     <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
     <div class="row flex-center" style="width: 100%">
       <q-slider
-        @change="handleClickBpmMulti()"
+        @change="change_settings_bpm_multiplier()"
         v-model="bpm_multiplier_placeholder"
         color="secondary"
         selection-color="secondary"
@@ -87,7 +90,7 @@
         <div class="row q-pa-md">
           <div class="col-12">
             <q-slider
-              @change="handleClick(slider.var_name)"
+              @change="change_settings(slider.var_name)"
               v-model="api_response[slider.var_name]"
               color="primary"
               selection-color="secondary"
@@ -150,7 +153,7 @@ export default {
       });
   },
   methods: {
-    handleClick(var_name) {
+    change_settings(var_name) {
       let requestBody = {
         action: "set_settings",
       };
@@ -169,24 +172,57 @@ export default {
           console.log(err);
         });
     },
-    increaseBPM() {
-      this.api_response["bpm_base"] = parseFloat(
-        (this.api_response["bpm_base"] + 0.1).toFixed(2)
-      );
-      this.handleClick("bpm_base");
+    sync() {
+      const currentTime = new Date().getTime();
+      console.log("before");
+      console.log(currentTime);
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "set_sync",
+        }),
+      };
+      fetch("/rest", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          const currentTime2 = new Date().getTime();
+          console.log("after");
+          console.log(currentTime2);
+          return response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    decreaseBPM() {
-      this.api_response["bpm_base"] = parseFloat(
-        (this.api_response["bpm_base"] - 0.1).toFixed(2)
-      );
-      this.handleClick("bpm_base");
+    change_sync(value) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "adjust_sync",
+          value: value,
+        }),
+      };
+      fetch("/rest", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => response)
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    handleClickBpmMulti() {
+    change_bpm(value) {
+      this.api_response["bpm_base"] = parseFloat(
+        (this.api_response["bpm_base"] + value).toFixed(2)
+      );
+      this.change_settings("bpm_base");
+    },
+    change_settings_bpm_multiplier() {
       this.api_response["bpm_multiplier"] =
         this.bpm_multiplier_placeholder == 0
           ? 0.5
           : this.bpm_multiplier_placeholder;
-      this.handleClick("bpm_multiplier");
+      this.change_settings("bpm_multiplier");
     },
   },
 };
