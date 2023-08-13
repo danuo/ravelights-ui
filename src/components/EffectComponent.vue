@@ -62,7 +62,7 @@
     </q-item-label>
   </div>
 
-  <div class="q-px-md">
+  <div class="q-px-md q-pb-md">
     <div class="q-gutter-y-md">
       <q-card flat bordered style="background-color: rgb(30, 6, 23)">
         <q-tabs v-model="mode" align="justify">
