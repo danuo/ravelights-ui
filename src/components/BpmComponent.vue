@@ -80,7 +80,7 @@
   </div>
 
   <q-list bordered separator>
-    <q-item v-for="slider in sliders" :key="slider.name">
+    <q-item v-for="slider in controls_global_sliders" :key="slider.name">
       <!-- is slider -->
       <q-item-section v-if="slider.type == 'slider'">
         <q-item-label caption> {{ slider.var_name }} </q-item-label>
@@ -117,10 +117,10 @@
 
 <script>
 export default {
-  name: "BpmSliders",
+  name: "BpmComponent",
   data() {
     return {
-      sliders: [],
+      controls_global_sliders: [],
       api_response: {},
       bpm_multiplier_mapping: { 0: "1/2", 1: 1, 2: 2 },
       bpm_multiplier_placeholder: 1,
@@ -131,12 +131,19 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.api_response = response;
-        this.sliders = response["controls"]["controls_global_sliders"];
         this.bpm_multiplier_placeholder = response.bpm_multiplier;
         this.bpm_multiplier_placeholder =
           this.bpm_multiplier_placeholder == 0.5
             ? 0
             : this.bpm_multiplier_placeholder;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.controls_global_sliders = response.controls_global_sliders;
       })
       .catch((err) => {
         console.log(err);
