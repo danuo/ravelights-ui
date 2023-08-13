@@ -103,13 +103,18 @@ export default {
       .then((response) => {
         this.palette = response.controls.controls_color_palette;
         this.color_names = response.color_names;
-        this.color_transition_speeds =
-          response.controls.color_transition_speeds;
         this.color_transition_speed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
         this.color_sec_mode_names = response.color_sec_mode_names;
-        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.color_transition_speeds = response.color_transition_speeds;
       })
       .catch((err) => {
         console.log(err);
@@ -176,8 +181,6 @@ export default {
         });
     },
     floatToRgb(floatList) {
-      console.log("testsd");
-      console.log(floatList);
       return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
         floatList[1] * 255
       )}, ${Math.round(floatList[2] * 255)})`;
