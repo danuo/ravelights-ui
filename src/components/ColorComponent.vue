@@ -44,8 +44,10 @@
 
   <h5 class="text-center q-ma-xs">Color Settings</h5>
 
-  <div class="text-subtitle2">Select Color Transition Speed</div>
-  <div class="q-mb-lg">
+  <div class="q-ma-lg row flex-center">
+    <q-item-label caption style="color: #474747">
+      Select Color Transition Speed
+    </q-item-label>
     <q-btn-toggle
       v-model="color_transition_speed"
       @click="change_settings('color_transition_speed')"
@@ -54,7 +56,7 @@
     />
   </div>
 
-  <div class="row q-pa-md">
+  <div class="row q-pa-md flex-center">
     <div class="col-4">
       <q-toggle
         @click="change_settings('color_sec_active')"
@@ -70,7 +72,8 @@
         outlined
         v-model="color_sec_mode"
         :options="color_sec_mode_names"
-        label="Outlined"
+        color="secondary"
+        label="secondary color rule"
       />
     </div>
   </div>
