@@ -153,7 +153,7 @@ export default {
       },
       marker_value_to_arange: null,
       quarters_letters: ["A", "B", "C", "D"],
-      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
+      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"],
     };
   },
   mounted() {
