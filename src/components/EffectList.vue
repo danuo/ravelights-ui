@@ -1,5 +1,14 @@
 <template>
-  <div class="q-mt-xs q-mb-sm row reverse">
+  <div class="q-mt-xs row justify-between">
+    <q-btn-toggle
+      v-model="global_effects_enabled"
+      @click="set_settings('global_effects_enabled')"
+      style="height: 3em"
+      :options="[
+        { label: 'enabled', value: true },
+        { label: 'disabled', value: false },
+      ]"
+    />
     <q-btn
       label="clear effect queue"
       @click="clearEffectQueue()"
@@ -60,9 +69,18 @@ export default {
     return {
       effect_list: ref([]),
       timer: "",
+      global_effects_enabled: ref(true),
     };
   },
   mounted() {
+    fetch("/rest/settings")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.global_effects_enabled = response.global_effects_enabled;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.refresh_effect_list();
     this.$bus.on("refresh_effect_list", () => {
       this.delayed_execute(this.refresh_effect_list);
@@ -120,7 +138,7 @@ export default {
       }, 100);
     },
     startAutoUpdate() {
-      this.timer = setInterval(this.refresh_effect_list, 2000);
+      // this.timer = setInterval(this.refresh_effect_list, 2000);
     },
     stopAutoUpdate() {
       clearInterval(this.timer);
@@ -142,6 +160,23 @@ export default {
         .then((response) => {
           console.log(response);
         })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    set_settings(var_name) {
+      let requestBody = {
+        action: "set_settings",
+      };
+      requestBody[var_name] = this[var_name];
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {})
         .catch((err) => {
           console.log(err);
         });
