@@ -108,9 +108,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      this.effect_list = this.effect_list.filter(
-        (item) => item.name !== effect_name
-      );
+      if (operation == "remove") {
+        this.effect_list = this.effect_list.filter(
+          (item) => item.name !== effect_name
+        );
+      }
     },
     delayed_execute(func) {
       let timer = setTimeout(() => {
