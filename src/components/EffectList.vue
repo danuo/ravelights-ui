@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mt-xs row reverse">
+  <div class="q-mt-xs q-mb-sm row reverse">
     <q-btn
       label="clear effect queue"
       @click="clearEffectQueue()"
@@ -12,25 +12,39 @@
     <q-item v-for="item in this.effect_list" :key="item">
       <q-item-section>
         <div class="row">
-          <div class="col-8">
+          <div class="col-12">
             <q-item-label overline>{{ item.name }}</q-item-label>
             <q-markup-table flat dense square style="background-color: black">
               <tbody>
                 <tr>
-                  <td class="text-left">{{ item.mode }}</td>
-                  <td class="text-left">{{ item.limit_frames }}</td>
-                  <td class="text-left">{{ item.loop_length }}</td>
+                  <td class="text-left">mode: {{ item.mode }}</td>
+                  <td class="text-left">
+                    limit_frames: {{ item.limit_frames }}
+                  </td>
+                  <td class="text-left">loop_length: {{ item.loop_length }}</td>
                 </tr>
               </tbody>
+              trigger: {{ item.trigger }}
             </q-markup-table>
           </div>
-          <div class="col-4">
-            <q-btn
-              @click="remove_effect(item.name)"
-              label="remove"
-              color="grey"
-              style="width: 100%; height: 100%"
-            />
+          <div class="col-12">
+            <div class="q-gutter-xs">
+              <q-btn
+                @click="modify_effect('renew_trigger', item.name)"
+                label="trigger"
+                color="grey"
+              />
+              <q-btn
+                @click="modify_effect('alternate', item.name)"
+                label="altern."
+                color="grey"
+              />
+              <q-btn
+                @click="modify_effect('remove', item.name)"
+                label="remove"
+                color="grey"
+              />
+            </div>
           </div>
         </div>
       </q-item-section>
@@ -75,9 +89,10 @@ export default {
           console.log(err);
         });
     },
-    remove_effect(effect_name) {
+    modify_effect(operation, effect_name) {
       const requestBody = {
-        action: "remove_effect",
+        action: "modify_effect",
+        operation: operation,
         effect_name: effect_name,
       };
       const requestOptions = {
