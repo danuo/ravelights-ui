@@ -80,9 +80,9 @@
         >
           <q-tab-panel name="frames">
             <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                frames limit
-              </q-item-label>
+              <q-list>
+                <q-item-label caption> frames limit </q-item-label>
+              </q-list>
               <q-slider
                 v-model="limit_frames"
                 color="primary"
@@ -99,9 +99,10 @@
 
           <q-tab-panel name="quarters">
             <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                quarters limit
-              </q-item-label>
+              <q-list>
+                <q-item-label caption> quarters limit </q-item-label>
+              </q-list>
+
               <q-slider
                 v-model="limit_quarters"
                 color="primary"
@@ -117,70 +118,64 @@
           </q-tab-panel>
 
           <q-tab-panel name="loopquarters">
-            <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                frames limit [frames]
-              </q-item-label>
-              <q-slider
-                v-model="limit_frames"
-                color="primary"
-                selection-color="secondary"
-                track-size="15px"
-                thumb-size="30px"
-                :min="0"
-                :max="Object.keys(limit_frames_options).length - 1"
-                :marker-labels="limit_frames_options"
-                snap
-              />
-            </div>
-            <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                quarters limit [quarters]
-              </q-item-label>
-              <q-slider
-                v-model="limit_loopquarters"
-                color="primary"
-                selection-color="secondary"
-                track-size="15px"
-                thumb-size="30px"
-                :min="0"
-                :max="Object.keys(limit_loopquarters_options).length - 1"
-                :marker-labels="limit_loopquarters_options"
-                snap
-              />
-            </div>
-            <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                loop length [beats]
-              </q-item-label>
-              <q-slider
-                v-model="loop_length"
-                color="primary"
-                selection-color="secondary"
-                track-size="15px"
-                thumb-size="30px"
-                :min="0"
-                :max="Object.keys(loop_length_options).length - 1"
-                :marker-labels="loop_length_options"
-                snap
-              />
-            </div>
-            <div class="q-px-md q-py-md">
-              <q-item-label caption style="color: #676767">
-                loop limit [n times]
-              </q-item-label>
-              <q-slider
-                v-model="limit_loop"
-                color="primary"
-                selection-color="secondary"
-                track-size="15px"
-                thumb-size="30px"
-                :min="0"
-                :max="Object.keys(limit_loop_options).length - 1"
-                :marker-labels="limit_loop_options"
-                snap
-              />
-            </div>
+            <q-list>
+              <div class="q-px-md q-py-md">
+                <q-item-label caption> frames limit [frames] </q-item-label>
+                <q-slider
+                  v-model="limit_frames"
+                  color="primary"
+                  selection-color="secondary"
+                  track-size="15px"
+                  thumb-size="30px"
+                  :min="0"
+                  :max="Object.keys(limit_frames_options).length - 1"
+                  :marker-labels="limit_frames_options"
+                  snap
+                />
+              </div>
+              <div class="q-px-md q-py-md">
+                <q-item-label caption> quarters limit [quarters] </q-item-label>
+                <q-slider
+                  v-model="limit_loopquarters"
+                  color="primary"
+                  selection-color="secondary"
+                  track-size="15px"
+                  thumb-size="30px"
+                  :min="0"
+                  :max="Object.keys(limit_loopquarters_options).length - 1"
+                  :marker-labels="limit_loopquarters_options"
+                  snap
+                />
+              </div>
+              <div class="q-px-md q-py-md">
+                <q-item-label caption> loop length [beats] </q-item-label>
+                <q-slider
+                  v-model="loop_length"
+                  color="primary"
+                  selection-color="secondary"
+                  track-size="15px"
+                  thumb-size="30px"
+                  :min="0"
+                  :max="Object.keys(loop_length_options).length - 1"
+                  :marker-labels="loop_length_options"
+                  snap
+                />
+              </div>
+              <div class="q-px-md q-py-md">
+                <q-item-label caption> loop limit [n times] </q-item-label>
+                <q-slider
+                  v-model="limit_loop"
+                  color="primary"
+                  selection-color="secondary"
+                  track-size="15px"
+                  thumb-size="30px"
+                  :min="0"
+                  :max="Object.keys(limit_loop_options).length - 1"
+                  :marker-labels="limit_loop_options"
+                  snap
+                />
+              </div>
+            </q-list>
           </q-tab-panel>
         </q-tab-panels>
       </q-card>

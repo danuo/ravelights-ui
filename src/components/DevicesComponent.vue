@@ -3,7 +3,7 @@
     <q-list bordered separator>
       <q-item v-for="(e, idx) in devices.length" :key="idx">
         <q-item-section>
-          <q-item-label caption style="color: #676767">
+          <q-item-label caption>
             Device {{ idx }} | lights:{{ devices[idx].n_lights }} | leds:{{
               devices[idx].n_leds
             }}
