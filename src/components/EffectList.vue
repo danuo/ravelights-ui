@@ -138,7 +138,7 @@ export default {
       }, 100);
     },
     startAutoUpdate() {
-      // this.timer = setInterval(this.refresh_effect_list, 2000);
+      this.timer = setInterval(this.refresh_effect_list, 2000);
     },
     stopAutoUpdate() {
       clearInterval(this.timer);
