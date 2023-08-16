@@ -10,7 +10,7 @@
             >{{ button }}
           </q-item-label>
           <q-toggle
-            @click="handleClickChangeSettings(button)"
+            @click="set_settings(button)"
             v-model="apiResponse[button]"
             color="secondary"
           />
@@ -208,7 +208,7 @@ export default {
           console.log(err);
         });
     },
-    handleClickChangeSettings(var_name) {
+    set_settings(var_name) {
       let requestBody = {
         action: "set_settings",
       };

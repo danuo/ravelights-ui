@@ -1,5 +1,14 @@
 <template>
   <div class="q-mt-xs row justify-between">
+    <q-btn-toggle
+      v-model="global_effects_enabled"
+      @click="set_settings('global_effects_enabled')"
+      style="height: 3em"
+      :options="[
+        { label: 'enabled', value: true },
+        { label: 'disabled', value: false },
+      ]"
+    />
     <q-btn
       label="clear effect queue"
       @click="clearEffectQueue()"
@@ -12,25 +21,39 @@
     <q-item v-for="item in this.effect_list" :key="item">
       <q-item-section>
         <div class="row">
-          <div class="col-8">
+          <div class="col-12">
             <q-item-label overline>{{ item.name }}</q-item-label>
             <q-markup-table flat dense square style="background-color: black">
               <tbody>
                 <tr>
-                  <td class="text-left">{{ item.mode }}</td>
-                  <td class="text-left">{{ item.limit_frames }}</td>
-                  <td class="text-left">{{ item.loop_length }}</td>
+                  <td class="text-left">mode: {{ item.mode }}</td>
+                  <td class="text-left">
+                    limit_frames: {{ item.limit_frames }}
+                  </td>
+                  <td class="text-left">loop_length: {{ item.loop_length }}</td>
                 </tr>
               </tbody>
+              trigger: {{ item.trigger }}
             </q-markup-table>
           </div>
-          <div class="col-4">
-            <q-btn
-              @click="remove_effect(item.name)"
-              label="remove"
-              color="grey"
-              style="width: 100%; height: 100%"
-            />
+          <div class="col-12">
+            <div class="q-gutter-xs">
+              <q-btn
+                @click="modify_effect('renew_trigger', item.name)"
+                label="trigger"
+                color="grey"
+              />
+              <q-btn
+                @click="modify_effect('alternate', item.name)"
+                label="altern."
+                color="grey"
+              />
+              <q-btn
+                @click="modify_effect('remove', item.name)"
+                label="remove"
+                color="grey"
+              />
+            </div>
           </div>
         </div>
       </q-item-section>
@@ -46,9 +69,18 @@ export default {
     return {
       effect_list: ref([]),
       timer: "",
+      global_effects_enabled: ref(true),
     };
   },
   mounted() {
+    fetch("/rest/settings")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.global_effects_enabled = response.global_effects_enabled;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.refresh_effect_list();
     this.$bus.on("refresh_effect_list", () => {
       this.delayed_execute(this.refresh_effect_list);
@@ -75,9 +107,10 @@ export default {
           console.log(err);
         });
     },
-    remove_effect(effect_name) {
+    modify_effect(operation, effect_name) {
       const requestBody = {
-        action: "remove_effect",
+        action: "modify_effect",
+        operation: operation,
         effect_name: effect_name,
       };
       const requestOptions = {
@@ -93,9 +126,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      this.effect_list = this.effect_list.filter(
-        (item) => item.name !== effect_name
-      );
+      if (operation == "remove") {
+        this.effect_list = this.effect_list.filter(
+          (item) => item.name !== effect_name
+        );
+      }
     },
     delayed_execute(func) {
       let timer = setTimeout(() => {
@@ -125,6 +160,23 @@ export default {
         .then((response) => {
           console.log(response);
         })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    set_settings(var_name) {
+      let requestBody = {
+        action: "set_settings",
+      };
+      requestBody[var_name] = this[var_name];
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {})
         .catch((err) => {
           console.log(err);
         });

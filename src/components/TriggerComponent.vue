@@ -66,39 +66,41 @@
   </div>
 
   <!-- slider p -->
-  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
-    <q-slider
-      @change="set_trigger()"
-      v-model="p"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      snap
-      :min="0"
-      :max="1"
-      :step="0.1"
-      label-always
-      :label-value="p"
-    />
-  </div>
-
-  <!-- slider loop length -->
-  <div class="q-pa-xl q-gutter-sm" v-if="triggers !== null">
-    <q-slider
-      @change="set_trigger()"
-      v-model="loop_length_selection"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      :min="0"
-      :max="Object.keys(marker_arange_to_value).length - 2"
-      :marker-labels="marker_arange_to_value"
-      snap
-      label-always
-      label-value="trigger loop length"
-    />
+  <div class="q-px-md q-py-md" v-if="triggers !== null">
+    <q-list>
+      <div class="q-px-md q-py-md">
+        <q-item-label caption> p </q-item-label>
+        <q-slider
+          @change="set_trigger()"
+          v-model="p"
+          color="primary"
+          selection-color="secondary"
+          track-size="15px"
+          thumb-size="30px"
+          snap
+          :min="0"
+          :max="1"
+          :step="0.1"
+          :marker-labels="[0, 0.25, 0.5, 0.75, 1]"
+        />
+      </div>
+      <div class="q-px-md q-py-md">
+        <!-- slider loop length -->
+        <q-item-label caption> loop_length </q-item-label>
+        <q-slider
+          @change="set_trigger()"
+          v-model="loop_length_selection"
+          color="primary"
+          selection-color="secondary"
+          track-size="15px"
+          thumb-size="30px"
+          :min="0"
+          :max="Object.keys(marker_arange_to_value).length - 2"
+          :marker-labels="marker_arange_to_value"
+          snap
+        />
+      </div>
+    </q-list>
   </div>
 
   <!-- beat selector -->
@@ -153,7 +155,7 @@ export default {
       },
       marker_value_to_arange: null,
       quarters_letters: ["A", "B", "C", "D"],
-      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
+      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"],
     };
   },
   mounted() {
