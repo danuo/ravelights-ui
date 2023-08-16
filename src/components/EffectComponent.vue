@@ -1,4 +1,10 @@
 <template>
+  wip: effects_enabled
+  <q-toggle
+    @click="function () {}"
+    v-model="effects_enabled"
+    color="secondary"
+  />
   <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
       Frames Pattern Selection
@@ -210,6 +216,7 @@ export default {
   name: "EffectComponent",
   data() {
     return {
+      effects_enabled: true,
       apiResponse: null,
       available_effects: null,
       frames_pattern: 0,
@@ -250,8 +257,7 @@ export default {
         7: 16,
         8: 20,
         9: 40,
-        10: "match",
-        11: "inf",
+        10: "inf",
       },
       limit_quarters: 5,
       limit_loopquarters: 5,
@@ -264,7 +270,6 @@ export default {
         5: 8,
         6: 16,
         7: 32,
-        8: "match",
       },
       loop_length: 3,
       loop_length_options: {
