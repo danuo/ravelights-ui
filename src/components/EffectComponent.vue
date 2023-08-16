@@ -1,10 +1,4 @@
 <template>
-  wip: effects_enabled
-  <q-toggle
-    @click="function () {}"
-    v-model="effects_enabled"
-    color="secondary"
-  />
   <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
       Frames Pattern Selection
