@@ -1,14 +1,5 @@
-<!-- welche gen brauchen überhaupt trigger?
-* pattern * 3
-- vfilter
-* dimmer * 3
-* thinner * 3
-* pattern sec * 3
-* effects -> hat keine level
-
--->
-
 <template>
+  <h5 class="text-center q-ma-md">Load Triggers</h5>
   <div class="row q-col-gutter-xs" v-if="triggers !== null">
     <div v-for="idx in 2" :key="idx" class="col-6">
       <div class="grey-box">
@@ -53,20 +44,35 @@
     <q-space />
   </div>
 
-  <div class="q-my-lg" v-if="triggers !== null">
+  <div class="q-my-sm row justify-between">
     <q-btn-toggle
       v-model="timeline_level"
       toggle-color="primary"
       :options="[
-        { label: 'Primary', value: 1 },
-        { label: 'Seconday', value: 2 },
-        { label: 'Tertiary', value: 3 },
+        { label: 'a', value: 0 },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '2', value: 3 },
       ]"
+      size="lg"
     />
+
+    <q-btn-group>
+      <q-btn
+        label="renew_T"
+        icon="update"
+        @click="send_command('renew_trigger')"
+      />
+      <q-btn
+        label="on_t"
+        icon="visibility"
+        @click="send_command('on_trigger')"
+      />
+    </q-btn-group>
   </div>
 
   <!-- slider p -->
-  <div class="q-px-md q-py-md" v-if="triggers !== null">
+  <div class="q-px-md q-by-md" v-if="triggers !== null">
     <q-list>
       <div class="q-px-md q-py-md">
         <q-item-label caption> p </q-item-label>
@@ -311,6 +317,27 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    send_command(command) {
+      const data = {
+        action: "gen_command",
+        command: command,
+        gen_type: this.selected_type,
+        timeline_level: this.timeline_level,
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       };
       fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)

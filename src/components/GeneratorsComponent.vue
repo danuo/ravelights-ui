@@ -53,26 +53,31 @@
     </div>
   </div>
 
-  <div class="q-pa-xs">
-    <q-space />
-  </div>
-
   <!-- select generator level -->
-  <div class="q-mb-lg">
+  <div class="q-my-sm row justify-between">
     <q-btn-toggle
       v-model="timeline_level"
       toggle-color="primary"
       :options="[
-        { label: 'Primary', value: 1 },
-        { label: 'Seconday', value: 2 },
-        { label: 'Tertiary', value: 3 },
+        { label: 'auto', value: 0 },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '2', value: 3 },
       ]"
-      style="height: 3em"
+      size="lg"
     />
+
+    <q-btn-group>
+      <q-btn
+        label="alternate"
+        icon="update"
+        @click="send_command('alternate')"
+      />
+    </q-btn-group>
   </div>
 
   <!-- select keywords -->
-  <div class="q-mb-lg">
+  <div class="q-my-sm">
     <q-option-group
       v-model="activeFilters"
       :options="selectableKeywords"
@@ -217,6 +222,27 @@ export default {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    send_command(command) {
+      const data = {
+        action: "gen_command",
+        command: command,
+        gen_type: this.selected_type,
+        timeline_level: this.timeline_level,
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       };
       fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
