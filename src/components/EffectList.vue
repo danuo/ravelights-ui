@@ -32,27 +32,47 @@
                   </td>
                   <td class="text-left">loop_length: {{ item.loop_length }}</td>
                 </tr>
+                <tr>
+                  <td>draw_mode: {{ item.draw_mode }}</td>
+                </tr>
               </tbody>
               trigger: {{ item.trigger }}
             </q-markup-table>
           </div>
           <div class="col-12">
-            <div class="q-gutter-xs">
-              <q-btn
-                @click="modify_effect('renew_trigger', item.name)"
-                label="trigger"
-                color="grey"
-              />
-              <q-btn
-                @click="modify_effect('alternate', item.name)"
-                label="altern."
-                color="grey"
-              />
-              <q-btn
-                @click="modify_effect('remove', item.name)"
-                label="remove"
-                color="grey"
-              />
+            <div class="row">
+              <div class="col-3 q-pr-xs">
+                <q-btn
+                  @click="modify_effect('change_draw', item.name)"
+                  label="draw"
+                  color="grey"
+                  class="full-width"
+                />
+              </div>
+              <div class="col-3 q-pr-xs">
+                <q-btn
+                  @click="modify_effect('renew_trigger', item.name)"
+                  label="trigger"
+                  color="grey"
+                  class="full-width"
+                />
+              </div>
+              <div class="col-3 q-pr-xs">
+                <q-btn
+                  @click="modify_effect('alternate', item.name)"
+                  label="altern."
+                  color="grey"
+                  class="full-width"
+                />
+              </div>
+              <div class="col-3">
+                <q-btn
+                  @click="modify_effect('remove', item.name)"
+                  label="remove"
+                  color="grey"
+                  class="full-width"
+                />
+              </div>
             </div>
           </div>
         </div>
