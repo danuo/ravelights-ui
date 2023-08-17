@@ -5,12 +5,12 @@
       @click="changeIndex()"
       :toggle-color="use_manual_timeline ? 'primary' : 'dark'"
       :options="[
-        { label: '0', value: 0 },
+        { label: 'black', value: 0 },
         { label: '1', value: 1 },
         { label: '2', value: 2 },
         { label: '3', value: 3 },
       ]"
-      size="xl"
+      size="lg"
     />
     <q-btn-toggle
       v-model="use_manual_timeline"
