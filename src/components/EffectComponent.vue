@@ -40,7 +40,36 @@
       </div>
     </div>
   </div>
-
+  <div class="q-px-md q-pt-lg">
+    <q-item-label caption style="color: #474747">
+      Global Effect Draw mode
+    </q-item-label>
+    <q-btn-toggle
+      v-model="global_effect_draw_mode"
+      @click="change_settings('global_effect_draw_mode')"
+      toggle-color="primary"
+      :options="[
+        { label: 'overlay', value: 'overlay' },
+        { label: 'normal', value: 'normal' },
+      ]"
+      size="md"
+    />
+  </div>
+  <div class="q-px-md q-pt-lg">
+    <q-item-label caption style="color: #474747">
+      Effect Draw mode
+    </q-item-label>
+    <q-btn-toggle
+      v-model="effect_draw_mode"
+      @click="change_settings('effect_draw_mode')"
+      toggle-color="primary"
+      :options="[
+        { label: 'overlay', value: 'overlay' },
+        { label: 'normal', value: 'normal' },
+      ]"
+      size="md"
+    />
+  </div>
   <div class="q-px-xl q-py-xs">
     <q-item-label caption style="color: #474747"> Multi </q-item-label>
     <q-slider
@@ -205,8 +234,9 @@ export default {
   name: "EffectComponent",
   data() {
     return {
-      effects_enabled: true,
       apiResponse: null,
+      global_effect_draw_mode: "overlay",
+      effect_draw_mode: "overlay",
       available_effects: null,
       frames_pattern: 0,
       frames_pattern_options: [
@@ -290,6 +320,8 @@ export default {
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
         this.apiResponse = response;
+        this.global_effect_draw_mode = response.global_effect_draw_mode;
+        this.effect_draw_mode = response.effect_draw_mode;
       })
       .catch((err) => {
         console.log(err);
@@ -336,6 +368,25 @@ export default {
           console.log(err);
         });
       this.$bus.emit("refresh_effect_list");
+    },
+    change_settings(var_name) {
+      let requestBody = {
+        action: "set_settings",
+      };
+      requestBody[var_name] = this[var_name];
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
