@@ -1,16 +1,11 @@
 <template>
-  <!-- <q-badge color="grey-3" text-color="black" class="q-mb-sm">
-    {{ color }}
-    {{ selectedColorLevel }}
-  </q-badge> -->
-
   <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
         <q-btn
           v-for="(e, idx) in color_names.length"
           :key="idx"
-          @click="selectedColorLevel = idx"
+          @click="selectedColorLevel = idx + 1"
           :label="color_names[idx]"
           class="col"
           :style="get_button_styling(idx)"
