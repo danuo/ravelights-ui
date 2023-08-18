@@ -1,6 +1,4 @@
 <template>
-  <h5 class="text-center q-ma-md">Load Generators</h5>
-
   <!-- setting toggles -->
   <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
     <div class="col-12">

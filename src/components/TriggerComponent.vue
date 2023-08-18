@@ -1,5 +1,4 @@
 <template>
-  <h5 class="text-center q-ma-md">Load Triggers</h5>
   <div class="row q-col-gutter-xs" v-if="triggers !== null">
     <div v-for="idx in 2" :key="idx" class="col-6">
       <div class="grey-box">
