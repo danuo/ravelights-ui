@@ -93,7 +93,7 @@
       <q-btn
         @click="setGenerator(gen.generator_name)"
         :label="replace_underscores(gen['generator_name'])"
-        style="width: 100%; height: 100px"
+        style="width: 100%; height: 80px"
         class="q-pa-sm"
         :square="true"
         :color="
@@ -122,7 +122,7 @@ export default {
       meta: null,
       selectedGenerators: null,
       selected_type: "pattern",
-      timeline_level: 1,
+      timeline_level: 0,
       activeFilters: [],
       typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
       buttons: [
