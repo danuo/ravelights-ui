@@ -1,103 +1,133 @@
 <template>
   <!-- ---------------------------- pattern settings ---------------------------- -->
 
-  <div class="q-px-md q-pt-md q-pb-xs">
-    <q-item-label caption style="color: #474747">
-      Frames Pattern Selection
-    </q-item-label>
-  </div>
-  <div class="row q-col-gutter-xs">
-    <div
-      v-for="(e, gen_type_idx) in this.frames_pattern_options.length"
-      :key="gen_type_idx"
-      class="col-6"
-    >
-      <div
-        @click="this.frames_pattern = gen_type_idx"
-        :class="this.frames_pattern == gen_type_idx ? 'green-box' : 'grey-box'"
-      >
-        <div>{{ this.frames_pattern_options[gen_type_idx] }}</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="q-px-md q-py-xs">
-    <q-item-label caption style="color: #474747">
-      Quater Pattern Selection
-    </q-item-label>
-  </div>
-  <div class="row q-col-gutter-xs">
-    <div
-      v-for="(e, gen_type_idx) in this.quarters_pattern_options.length"
-      :key="gen_type_idx"
-      class="col-6"
-    >
-      <div
-        @click="this.quarters_pattern = gen_type_idx"
-        :class="
-          this.quarters_pattern == gen_type_idx ? 'green-box' : 'grey-box'
-        "
-      >
-        <div>{{ this.quarters_pattern_options[gen_type_idx] }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="q-px-xl q-py-xs">
-    <q-item-label caption style="color: #474747"> Multi </q-item-label>
-    <q-slider
-      v-model="multi"
-      color="primary"
-      selection-color="secondary"
-      track-size="15px"
-      thumb-size="30px"
-      snap
-      :min="0"
-      :max="Object.keys(multi_options).length - 1"
-      :marker-labels="multi_options"
-    />
-  </div>
-
   <!--  ------------------------------- draw modes ------------------------------- -->
 
-  <div class="q-px-md q-pt-lg row justify-between">
-    <div>
-      <q-item-label caption style="color: #474747">
-        Global Effect Draw mode
-      </q-item-label>
-      <q-btn-toggle
-        v-model="global_effect_draw_mode"
-        @click="change_settings('global_effect_draw_mode')"
-        toggle-color="primary"
-        :options="[
-          { label: 'overlay', value: 'overlay' },
-          { label: 'normal', value: 'normal' },
-        ]"
-        size="md"
-      />
-    </div>
-    <div>
-      <q-item-label caption style="color: #474747">
-        Effect Draw mode
-      </q-item-label>
-      <q-btn-toggle
-        v-model="effect_draw_mode"
-        @click="change_settings('effect_draw_mode')"
-        toggle-color="primary"
-        :options="[
-          { label: 'overlay', value: 'overlay' },
-          { label: 'normal', value: 'normal' },
-        ]"
-        size="md"
-      />
-    </div>
+  <div class="q-px-md q-pt-md q-pb-xs">
+    <q-item-label caption style="color: #474747">
+      Advanced Settings
+    </q-item-label>
   </div>
+  <div class="q-gutter-y-md q-pb-md">
+    <q-card flat bordered style="background-color: rgb(25, 6, 30)">
+      <q-tabs v-model="advanced_settings_mode" align="justify">
+        <q-tab name="draw_mode" label="draw_mode" />
+        <q-tab name="frame_patterns" label="frame patterns" />
+      </q-tabs>
 
+      <q-separator />
+
+      <q-tab-panels
+        v-model="advanced_settings_mode"
+        animated
+        style="background-color: rgb(8, 2, 10)"
+      >
+        <q-tab-panel name="draw_mode">
+          <div class="q-px-md row justify-between">
+            <div>
+              <q-item-label caption style="color: #474747">
+                Global Effect Draw mode
+              </q-item-label>
+              <q-btn-toggle
+                v-model="global_effect_draw_mode"
+                @click="change_settings('global_effect_draw_mode')"
+                toggle-color="primary"
+                :options="[
+                  { label: 'overlay', value: 'overlay' },
+                  { label: 'normal', value: 'normal' },
+                ]"
+                size="md"
+              />
+            </div>
+            <div>
+              <q-item-label caption style="color: #474747">
+                Effect Draw mode
+              </q-item-label>
+              <q-btn-toggle
+                v-model="effect_draw_mode"
+                @click="change_settings('effect_draw_mode')"
+                toggle-color="primary"
+                :options="[
+                  { label: 'overlay', value: 'overlay' },
+                  { label: 'normal', value: 'normal' },
+                ]"
+                size="md"
+              />
+            </div>
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="frame_patterns">
+          <div class="q-px-md q-pb-xs">
+            <q-item-label caption style="color: #474747">
+              Frames Pattern Selection
+            </q-item-label>
+          </div>
+          <div class="row q-col-gutter-xs">
+            <div
+              v-for="(e, gen_type_idx) in this.frames_pattern_options.length"
+              :key="gen_type_idx"
+              class="col-6"
+            >
+              <div
+                @click="this.frames_pattern = gen_type_idx"
+                :class="
+                  this.frames_pattern == gen_type_idx ? 'green-box' : 'grey-box'
+                "
+              >
+                <div>{{ this.frames_pattern_options[gen_type_idx] }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-px-md q-py-xs">
+            <q-item-label caption style="color: #474747">
+              Quater Pattern Selection
+            </q-item-label>
+          </div>
+          <div class="row q-col-gutter-xs">
+            <div
+              v-for="(e, gen_type_idx) in this.quarters_pattern_options.length"
+              :key="gen_type_idx"
+              class="col-6"
+            >
+              <div
+                @click="this.quarters_pattern = gen_type_idx"
+                :class="
+                  this.quarters_pattern == gen_type_idx
+                    ? 'green-box'
+                    : 'grey-box'
+                "
+              >
+                <div>{{ this.quarters_pattern_options[gen_type_idx] }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="q-mx-md q-mt-md">
+            <q-item-label caption style="color: #474747"> Multi </q-item-label>
+          </div>
+          <div class="q-px-lg">
+            <q-slider
+              v-model="multi"
+              color="primary"
+              selection-color="secondary"
+              track-size="15px"
+              thumb-size="30px"
+              snap
+              :min="0"
+              :max="Object.keys(multi_options).length - 1"
+              :marker-labels="multi_options"
+            />
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
+  </div>
   <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
       Effect Duration
     </q-item-label>
   </div>
-
   <div class="q-gutter-y-md q-pb-md">
     <q-card flat bordered style="background-color: rgb(25, 6, 30)">
       <q-tabs v-model="mode" align="justify">
@@ -318,6 +348,7 @@ export default {
         9: "inf",
       },
       mode: ref("quarters"),
+      advanced_settings_mode: ref("draw_mode"),
     };
   },
   mounted() {
