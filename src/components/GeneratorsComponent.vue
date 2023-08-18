@@ -56,7 +56,7 @@
         { label: 'auto', value: 0 },
         { label: '1', value: 1 },
         { label: '2', value: 2 },
-        { label: '2', value: 3 },
+        { label: '3', value: 3 },
       ]"
       size="lg"
     />
@@ -124,8 +124,8 @@ export default {
         { var_name: "global_vfilter", label: "global_vfilter" },
         { var_name: "global_dimmer", label: "global_dimmer" },
         { var_name: "global_thinner", label: "global_thinner" },
-        { var_name: "load_thinner_with_pat", label: "renew_thinner" },
-        { var_name: "load_dimmer_with_pat", label: "renew_dimmer" },
+        { var_name: "renew_thinner_from_manual", label: "renew_thinner" },
+        { var_name: "renew_dimmer_from_manual", label: "renew_dimmer" },
         { var_name: "renew_trigger_from_manual", label: "renew_triggers" },
       ],
       global_manual_timeline_level: ref(0),
