@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       selected_type: "pattern",
-      timeline_level: 1,
+      timeline_level: 0,
       triggers: null,
       marker_arange_to_value: {
         0: 1,
