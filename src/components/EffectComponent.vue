@@ -217,7 +217,7 @@
       <q-btn
         :label="replace_underscores(gen['generator_name'])"
         @click="setEffect(gen.generator_name)"
-        style="width: 100%; height: 100px"
+        style="width: 100%; height: 80px"
         class="q-pa-sm"
         :square="true"
         color="primary"
