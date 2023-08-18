@@ -16,68 +16,86 @@
       color="primary"
     />
   </div>
-
-  <q-list bordered separator v-if="this.effect_list.length > 0">
-    <q-item v-for="item in this.effect_list" :key="item">
-      <q-item-section>
-        <div class="row">
-          <div class="col-12">
-            <q-item-label overline>{{ item.name }}</q-item-label>
-            <q-markup-table flat dense square style="background-color: black">
-              <tbody>
-                <tr>
-                  <td class="text-left">mode: {{ item.mode }}</td>
-                  <td class="text-left">
-                    limit_frames: {{ item.limit_frames }}
-                  </td>
-                  <td class="text-left">loop_length: {{ item.loop_length }}</td>
-                </tr>
-                <tr>
-                  <td>draw_mode: {{ item.draw_mode }}</td>
-                </tr>
-              </tbody>
-              trigger: {{ item.trigger }}
-            </q-markup-table>
-          </div>
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('change_draw', item.name)"
-                  label="draw"
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('renew_trigger', item.name)"
-                  label="trigger"
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('alternate', item.name)"
-                  label="altern."
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3">
-                <q-btn
-                  @click="modify_effect('remove', item.name)"
-                  label="remove"
-                  color="grey"
-                  class="full-width"
-                />
+  <q-list bordered v-if="this.effect_list.length > 0">
+    <q-scroll-area style="height: 40vh">
+      <q-list padding>
+        <q-item v-for="item in this.effect_list" :key="item">
+          <div class="row full-width">
+            <div class="col-12">
+              <q-markup-table
+                flat
+                dense
+                style="background-color: rgba(86, 61, 124, 0.15)"
+                separator="none"
+              >
+                <thead style="background-color: #1e1a20">
+                  <tr>
+                    <th colspan="2">
+                      <div class="row no-wrap items-center">
+                        <div class="text-h6 text-white">
+                          {{ item.name.toUpperCase() }}
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-left">mode: {{ item.mode }}</td>
+                    <td class="text-left">
+                      limit_frames: {{ item.limit_frames }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>draw_mode: {{ item.draw_mode }}</td>
+                    <td>
+                      trigger:
+                      {{ item.trigger }}
+                    </td>
+                  </tr>
+                </tbody>
+              </q-markup-table>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('change_draw', item.name)"
+                    label="draw"
+                    color="grey"
+                    class="full-width full-height"
+                  />
+                </div>
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('renew_trigger', item.name)"
+                    label="trigger"
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('alternate', item.name)"
+                    label="altern."
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
+                <div class="col-3">
+                  <q-btn
+                    @click="modify_effect('remove', item.name)"
+                    label="remove"
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </q-item-section>
-    </q-item>
+        </q-item>
+      </q-list>
+    </q-scroll-area>
   </q-list>
 </template>
 
