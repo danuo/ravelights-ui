@@ -59,6 +59,10 @@ export default {
           use_manual_timeline: this.use_manual_timeline,
         }),
       };
+      this.$bus.emit(
+        "global_manual_timeline_level",
+        this.global_manual_timeline_level
+      );
       fetch("/rest/settings", requestOptions)
         .then((responsePromise) => responsePromise)
         .then((response) => {
