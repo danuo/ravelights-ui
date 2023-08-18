@@ -1,5 +1,10 @@
 <template>
-  <div class="q-mt-xs row justify-between">
+  <div class="q-mt-md">
+    <q-item-label caption style="color: #474747">
+      Global Effect Enabled
+    </q-item-label>
+  </div>
+  <div class="row justify-between">
     <q-btn-toggle
       v-model="global_effects_enabled"
       @click="set_settings('global_effects_enabled')"
