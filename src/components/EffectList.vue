@@ -1,5 +1,10 @@
 <template>
-  <div class="q-mt-xs row justify-between">
+  <div class="q-mt-md">
+    <q-item-label caption style="color: #474747">
+      Global Effect Enabled
+    </q-item-label>
+  </div>
+  <div class="row justify-between">
     <q-btn-toggle
       v-model="global_effects_enabled"
       @click="set_settings('global_effects_enabled')"
@@ -16,68 +21,86 @@
       color="primary"
     />
   </div>
-
-  <q-list bordered separator v-if="this.effect_list.length > 0">
-    <q-item v-for="item in this.effect_list" :key="item">
-      <q-item-section>
-        <div class="row">
-          <div class="col-12">
-            <q-item-label overline>{{ item.name }}</q-item-label>
-            <q-markup-table flat dense square style="background-color: black">
-              <tbody>
-                <tr>
-                  <td class="text-left">mode: {{ item.mode }}</td>
-                  <td class="text-left">
-                    limit_frames: {{ item.limit_frames }}
-                  </td>
-                  <td class="text-left">loop_length: {{ item.loop_length }}</td>
-                </tr>
-                <tr>
-                  <td>draw_mode: {{ item.draw_mode }}</td>
-                </tr>
-              </tbody>
-              trigger: {{ item.trigger }}
-            </q-markup-table>
-          </div>
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('change_draw', item.name)"
-                  label="draw"
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('renew_trigger', item.name)"
-                  label="trigger"
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3 q-pr-xs">
-                <q-btn
-                  @click="modify_effect('alternate', item.name)"
-                  label="altern."
-                  color="grey"
-                  class="full-width"
-                />
-              </div>
-              <div class="col-3">
-                <q-btn
-                  @click="modify_effect('remove', item.name)"
-                  label="remove"
-                  color="grey"
-                  class="full-width"
-                />
+  <q-list bordered>
+    <q-scroll-area style="height: 40vh">
+      <q-list padding>
+        <q-item v-for="item in this.effect_list" :key="item">
+          <div class="row full-width">
+            <div class="col-12">
+              <q-markup-table
+                flat
+                dense
+                style="background-color: rgba(86, 61, 124, 0.15)"
+                separator="none"
+              >
+                <thead style="background-color: #1e1a20">
+                  <tr>
+                    <th colspan="2">
+                      <div class="row no-wrap items-center">
+                        <div class="text-h6 text-white">
+                          {{ item.name.toUpperCase() }}
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-left">mode: {{ item.mode }}</td>
+                    <td class="text-left">
+                      limit_frames: {{ item.limit_frames }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>draw_mode: {{ item.draw_mode }}</td>
+                    <td>
+                      trigger:
+                      {{ item.trigger }}
+                    </td>
+                  </tr>
+                </tbody>
+              </q-markup-table>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('change_draw', item.name)"
+                    label="draw"
+                    color="grey"
+                    class="full-width full-height"
+                  />
+                </div>
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('renew_trigger', item.name)"
+                    label="trigger"
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
+                <div class="col-3 q-pr-xs">
+                  <q-btn
+                    @click="modify_effect('alternate', item.name)"
+                    label="altern."
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
+                <div class="col-3">
+                  <q-btn
+                    @click="modify_effect('remove', item.name)"
+                    label="remove"
+                    color="grey"
+                    class="full-width"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </q-item-section>
-    </q-item>
+        </q-item>
+      </q-list>
+    </q-scroll-area>
   </q-list>
 </template>
 
@@ -87,7 +110,8 @@ import { ref } from "vue";
 export default {
   setup() {
     return {
-      effect_list: ref([]),
+      effect_lists: ref([[]]),
+      effect_target_level: ref(0),
       timer: "",
       global_effects_enabled: ref(true),
     };
@@ -105,6 +129,9 @@ export default {
     this.$bus.on("refresh_effect_list", () => {
       this.delayed_execute(this.refresh_effect_list);
     });
+    this.$bus.on("effect_target_level", (effect_target_level) => {
+      this.effect_target_level = effect_target_level;
+    });
   },
   activated() {
     console.log("activated");
@@ -115,12 +142,27 @@ export default {
     console.log("deactivated");
     this.stopAutoUpdate();
   },
+  computed: {
+    effect_list: {
+      get: function () {
+        return this.effect_lists[this.effect_target_level];
+      },
+      set: function (newValue) {
+        this.effect_lists[this.effect_target_level] = newValue;
+      },
+    },
+  },
   methods: {
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
     refresh_effect_list() {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          this.effect_list = response;
+          this.effect_lists = response;
         })
         .catch((err) => {
           this.stopAutoUpdate();
@@ -132,6 +174,7 @@ export default {
         action: "modify_effect",
         operation: operation,
         effect_name: effect_name,
+        timeline_level: this.effect_target_level,
       };
       const requestOptions = {
         method: "PUT",
@@ -151,11 +194,6 @@ export default {
           (item) => item.name !== effect_name
         );
       }
-    },
-    delayed_execute(func) {
-      let timer = setTimeout(() => {
-        func();
-      }, 100);
     },
     startAutoUpdate() {
       this.timer = setInterval(this.refresh_effect_list, 2000);

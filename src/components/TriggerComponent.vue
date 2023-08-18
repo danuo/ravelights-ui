@@ -1,5 +1,4 @@
 <template>
-  <h5 class="text-center q-ma-md">Load Triggers</h5>
   <div class="row q-col-gutter-xs" v-if="triggers !== null">
     <div v-for="idx in 2" :key="idx" class="col-6">
       <div class="grey-box">
@@ -144,13 +143,14 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
   name: "TriggerComponent",
   data() {
     return {
-      selected_type: "pattern",
-      timeline_level: 1,
-      triggers: null,
+      selected_type: ref("pattern"),
+      timeline_level: ref(0),
+      triggers: ref(null),
       marker_arange_to_value: {
         0: 1,
         1: 2,
@@ -159,22 +159,18 @@ export default {
         4: 16,
         5: 32,
       },
-      marker_value_to_arange: null,
-      quarters_letters: ["A", "B", "C", "D"],
-      typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"],
+      marker_value_to_arange: ref(null),
+      quarters_letters: ref(["A", "B", "C", "D"]),
+      typ: ref(["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"]),
+      global_manual_timeline_level: ref(0),
     };
   },
   mounted() {
-    console.log("fetch rest");
-    fetch("/rest/settings")
-      .then((responsePromise) => responsePromise.json())
-      .then((response) => {
-        this.triggers = response.triggers;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetch_settings();
     this.marker_value_to_arange = this.invert_dict(this.marker_arange_to_value);
+    this.$bus.on("global_manual_timeline_level", (value) => {
+      this.global_manual_timeline_level = value;
+    });
   },
   computed: {
     beats_array: {
@@ -266,6 +262,22 @@ export default {
     },
   },
   methods: {
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
+    fetch_settings() {
+      fetch("/rest/settings")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.triggers = response.triggers;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     get_beats_list(beats_array, loop_length) {
       let result = [];
       for (let i = 0; i < loop_length; i++) {
@@ -326,6 +338,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.delayed_execute(this.fetch_settings);
     },
     send_command(command) {
       const data = {

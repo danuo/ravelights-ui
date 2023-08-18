@@ -1,5 +1,6 @@
 <template>
-  <h5 class="text-center q-ma-xs">Active Timeline</h5>
+  <h6 class="text-weight-regular text-center q-ma-xs">Active Timeline</h6>
+
   <q-list bordered separator v-if="names !== null">
     <q-item>
       <q-item-section>
@@ -31,7 +32,7 @@
     </q-item>
   </q-list>
 
-  <h5 class="text-center q-ma-xs">Load Timelines</h5>
+  <h6 class="text-weight-regular text-center q-ma-xs">Load Timeline</h6>
 
   <q-list bordered separator v-if="names !== null">
     <q-item v-for="(e, idx) in names.length" :key="idx">
@@ -88,11 +89,18 @@ export default {
     fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.names = response.meta.timelines.names;
-        this.descriptions = response.meta.timelines.descriptions;
-        this.svgs = response.meta.timelines.svgs;
-        this.colors = response.meta.timelines.colors;
         this.active_timeline_index = response.active_timeline_index;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.names = response.available_timelines_svg.names;
+        this.descriptions = response.available_timelines_svg.descriptions;
+        this.svgs = response.available_timelines_svg.svgs;
+        this.colors = response.available_timelines_svg.colors;
       })
       .catch((err) => {
         console.log(err);

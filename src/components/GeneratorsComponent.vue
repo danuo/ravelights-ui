@@ -1,17 +1,15 @@
 <template>
-  <h5 class="text-center q-ma-md">Load Generators</h5>
-
   <!-- setting toggles -->
-  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
+  <div class="row q-col-gutter-xs" v-if="selected !== null">
     <div class="col-12">
       <div class="grey-box row">
         <div class="col-4" v-for="button in buttons" :key="button">
           <q-item-label caption style="color: #474747"
-            >{{ button }}
+            >{{ button.label }}
           </q-item-label>
           <q-toggle
-            @click="set_settings(button)"
-            v-model="apiResponse[button]"
+            @click="set_settings(button.var_name)"
+            v-model="apiResponse[button.var_name]"
             color="secondary"
           />
         </div>
@@ -30,11 +28,7 @@
           {{ typ[gen_type_idx] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
-          {{
-            replace_underscores(
-              selectedGenerators[typ[gen_type_idx]][gen_index]
-            )
-          }}
+          {{ replace_underscores(selected[typ[gen_type_idx]][gen_index]) }}
         </div>
       </div>
     </div>
@@ -47,7 +41,7 @@
           {{ typ[4] }}
         </q-item-label>
         <div v-for="gen_index in 3" :key="gen_index">
-          {{ replace_underscores(selectedGenerators[typ[4]][gen_index]) }}
+          {{ replace_underscores(selected[typ[4]][gen_index]) }}
         </div>
       </div>
     </div>
@@ -88,23 +82,23 @@
   </div>
 
   <!-- generator list -->
-  <div class="row q-col-gutter-xs" v-if="selectedGenerators !== null">
+  <div class="row q-col-gutter-xs" v-if="selected !== null">
     <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
       <q-btn
         @click="setGenerator(gen.generator_name)"
         :label="replace_underscores(gen['generator_name'])"
-        style="width: 100%; height: 100px"
+        style="width: 100%; height: 80px"
         class="q-pa-sm"
         :square="true"
         :color="
           gen.generator_name ==
-          selectedGenerators[selected_type][timeline_level]
+          selected[selected_type][effective_timeline_level]
             ? 'secondary'
             : 'primary'
         "
         :text-color="
           gen['generator_name'] ==
-          selectedGenerators[selected_type][timeline_level]
+          selected[selected_type][effective_timeline_level]
             ? 'black'
             : 'white'
         "
@@ -114,48 +108,44 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
   name: "ActiveGenerators",
   data() {
     return {
-      apiResponse: null,
-      meta: null,
-      selectedGenerators: null,
-      selected_type: "pattern",
-      timeline_level: 1,
-      activeFilters: [],
+      apiResponse: ref(null),
+      meta: ref(null),
+      selected: ref(null),
+      selected_type: ref("pattern"),
+      timeline_level: ref(0),
+      activeFilters: ref([]),
       typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
       buttons: [
-        "global_vfilter",
-        "global_dimmer",
-        "global_thinner",
-        "load_thinner_with_pat",
-        "load_dimmer_with_pat",
-        "load_triggers_with_gen",
+        { var_name: "global_vfilter", label: "global_vfilter" },
+        { var_name: "global_dimmer", label: "global_dimmer" },
+        { var_name: "global_thinner", label: "global_thinner" },
+        { var_name: "load_thinner_with_pat", label: "renew_thinner" },
+        { var_name: "load_dimmer_with_pat", label: "renew_dimmer" },
+        { var_name: "renew_trigger_from_manual", label: "renew_triggers" },
       ],
+      global_manual_timeline_level: ref(0),
     };
   },
   mounted() {
-    fetch("/rest/settings")
-      .then((responsePromise) => responsePromise.json())
-      .then((response) => {
-        this.apiResponse = response;
-        this.selectedGenerators = response.selected;
-        console.log(this.apiResponse);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    fetch("/rest/meta")
-      .then((responsePromise) => responsePromise.json())
-      .then((response) => {
-        this.meta = response;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetch_settings();
+    this.fetch_meta();
+    this.$bus.on("global_manual_timeline_level", (value) => {
+      this.global_manual_timeline_level = value;
+    });
   },
   computed: {
+    effective_timeline_level() {
+      if (this.timeline_level == 0) {
+        return this.global_manual_timeline_level;
+      } else {
+        return this.timeline_level;
+      }
+    },
     filteredGenerators() {
       if (this.meta == null) {
         return [];
@@ -183,6 +173,35 @@ export default {
     },
   },
   methods: {
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
+    fetch_settings() {
+      fetch("/rest/settings")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.apiResponse = response;
+          this.selected = response.selected;
+          this.global_manual_timeline_level =
+            response.global_manual_timeline_level;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log("run fetch settings");
+    },
+    fetch_meta() {
+      fetch("/rest/meta")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.meta = response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     isIncludedInFilter(generatorCategories) {
       return this.activeFilters.every((filter) => {
         return generatorCategories.includes(filter);
@@ -192,8 +211,7 @@ export default {
       return input_string.replace(/_/g, " ");
     },
     setGenerator(generatorName) {
-      this.selectedGenerators[this.selected_type][this.timeline_level] =
-        generatorName;
+      this.selected[this.selected_type][this.timeline_level] = generatorName;
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -212,6 +230,7 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.delayed_execute(this.fetch_settings);
     },
     set_settings(var_name) {
       let requestBody = {
