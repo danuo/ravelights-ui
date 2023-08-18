@@ -2,7 +2,22 @@
   <!-- ---------------------------- pattern settings ---------------------------- -->
 
   <!--  ------------------------------- draw modes ------------------------------- -->
-
+  <div class="q-px-md q-pt-sm">
+    <q-item-label caption style="color: #474747"> Target level </q-item-label>
+    <q-btn-toggle
+      v-model="effect_target_level"
+      @click="change_effect_target_level()"
+      spread
+      toggle-color="primary"
+      :options="[
+        { label: 'all', value: 0 },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+      ]"
+      size="md"
+    />
+  </div>
   <div class="q-px-md q-pt-sm q-pb-xs">
     <q-item-label caption style="color: #474747">
       Advanced Settings
@@ -33,8 +48,8 @@
                 @click="change_settings('global_effect_draw_mode')"
                 toggle-color="primary"
                 :options="[
-                  { label: 'overlay', value: 'overlay' },
                   { label: 'normal', value: 'normal' },
+                  { label: 'overlay', value: 'overlay' },
                 ]"
                 size="md"
               />
@@ -48,8 +63,8 @@
                 @click="change_settings('effect_draw_mode')"
                 toggle-color="primary"
                 :options="[
-                  { label: 'overlay', value: 'overlay' },
                   { label: 'normal', value: 'normal' },
+                  { label: 'overlay', value: 'overlay' },
                 ]"
                 size="md"
               />
@@ -270,8 +285,9 @@ export default {
   data() {
     return {
       apiResponse: null,
-      global_effect_draw_mode: "overlay",
-      effect_draw_mode: "overlay",
+      effect_target_level: ref(0),
+      global_effect_draw_mode: ref("normal"),
+      effect_draw_mode: ref("normal"),
       available_effects: null,
       frames_pattern: 0,
       frames_pattern_options: [
@@ -382,6 +398,7 @@ export default {
         body: JSON.stringify({
           action: "set_effect",
           effect_name: effectName,
+          timeline_level: this.effect_target_level,
           mode: this.mode,
           limit_frames: this.limit_frames_options[this.limit_frames],
           limit_quarters: this.limit_frames_options[this.limit_quarters],
@@ -423,6 +440,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    change_effect_target_level() {
+      this.$bus.emit("effect_target_level", this.effect_target_level);
     },
   },
 };

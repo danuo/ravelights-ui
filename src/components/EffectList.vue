@@ -110,7 +110,8 @@ import { ref } from "vue";
 export default {
   setup() {
     return {
-      effect_list: ref([]),
+      effect_lists: ref([[]]),
+      effect_target_level: ref(0),
       timer: "",
       global_effects_enabled: ref(true),
     };
@@ -128,6 +129,9 @@ export default {
     this.$bus.on("refresh_effect_list", () => {
       this.delayed_execute(this.refresh_effect_list);
     });
+    this.$bus.on("effect_target_level", (effect_target_level) => {
+      this.effect_target_level = effect_target_level;
+    });
   },
   activated() {
     console.log("activated");
@@ -138,12 +142,22 @@ export default {
     console.log("deactivated");
     this.stopAutoUpdate();
   },
+  computed: {
+    effect_list: {
+      get: function () {
+        return this.effect_lists[this.effect_target_level];
+      },
+      set: function (newValue) {
+        this.effect_lists[this.effect_target_level] = newValue;
+      },
+    },
+  },
   methods: {
     refresh_effect_list() {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          this.effect_list = response;
+          this.effect_lists = response;
         })
         .catch((err) => {
           this.stopAutoUpdate();
@@ -155,6 +169,7 @@ export default {
         action: "modify_effect",
         operation: operation,
         effect_name: effect_name,
+        timeline_level: this.effect_target_level,
       };
       const requestOptions = {
         method: "PUT",
