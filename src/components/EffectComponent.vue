@@ -3,12 +3,12 @@
 
   <!--  ------------------------------- draw modes ------------------------------- -->
 
-  <div class="q-px-md q-pt-md q-pb-xs">
+  <div class="q-px-md q-pt-sm q-pb-xs">
     <q-item-label caption style="color: #474747">
       Advanced Settings
     </q-item-label>
   </div>
-  <div class="q-gutter-y-md q-pb-md">
+  <div class="q-gutter-y-md">
     <q-card flat bordered style="background-color: rgb(25, 6, 30)">
       <q-tabs v-model="advanced_settings_mode" align="justify">
         <q-tab name="draw_mode" label="draw_mode" />
@@ -123,7 +123,7 @@
       </q-tab-panels>
     </q-card>
   </div>
-  <div class="q-px-md q-pt-md q-pb-xs">
+  <div class="q-px-md q-pt-sm q-pb-xs">
     <q-item-label caption style="color: #474747">
       Effect Duration
     </q-item-label>
