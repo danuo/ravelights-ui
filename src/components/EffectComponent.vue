@@ -1,4 +1,6 @@
 <template>
+  <!-- ---------------------------- pattern settings ---------------------------- -->
+
   <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
       Frames Pattern Selection
@@ -40,36 +42,6 @@
       </div>
     </div>
   </div>
-  <div class="q-px-md q-pt-lg">
-    <q-item-label caption style="color: #474747">
-      Global Effect Draw mode
-    </q-item-label>
-    <q-btn-toggle
-      v-model="global_effect_draw_mode"
-      @click="change_settings('global_effect_draw_mode')"
-      toggle-color="primary"
-      :options="[
-        { label: 'overlay', value: 'overlay' },
-        { label: 'normal', value: 'normal' },
-      ]"
-      size="md"
-    />
-  </div>
-  <div class="q-px-md q-pt-lg">
-    <q-item-label caption style="color: #474747">
-      Effect Draw mode
-    </q-item-label>
-    <q-btn-toggle
-      v-model="effect_draw_mode"
-      @click="change_settings('effect_draw_mode')"
-      toggle-color="primary"
-      :options="[
-        { label: 'overlay', value: 'overlay' },
-        { label: 'normal', value: 'normal' },
-      ]"
-      size="md"
-    />
-  </div>
   <div class="q-px-xl q-py-xs">
     <q-item-label caption style="color: #474747"> Multi </q-item-label>
     <q-slider
@@ -85,9 +57,44 @@
     />
   </div>
 
+  <!--  ------------------------------- draw modes ------------------------------- -->
+
+  <div class="q-px-md q-pt-lg row justify-between">
+    <div>
+      <q-item-label caption style="color: #474747">
+        Global Effect Draw mode
+      </q-item-label>
+      <q-btn-toggle
+        v-model="global_effect_draw_mode"
+        @click="change_settings('global_effect_draw_mode')"
+        toggle-color="primary"
+        :options="[
+          { label: 'overlay', value: 'overlay' },
+          { label: 'normal', value: 'normal' },
+        ]"
+        size="md"
+      />
+    </div>
+    <div>
+      <q-item-label caption style="color: #474747">
+        Effect Draw mode
+      </q-item-label>
+      <q-btn-toggle
+        v-model="effect_draw_mode"
+        @click="change_settings('effect_draw_mode')"
+        toggle-color="primary"
+        :options="[
+          { label: 'overlay', value: 'overlay' },
+          { label: 'normal', value: 'normal' },
+        ]"
+        size="md"
+      />
+    </div>
+  </div>
+
   <div class="q-px-md q-pt-md q-pb-xs">
     <q-item-label caption style="color: #474747">
-      Effect Timing Mode
+      Effect Duration
     </q-item-label>
   </div>
 
