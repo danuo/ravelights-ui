@@ -89,11 +89,18 @@ export default {
     fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.names = response.meta.timelines.names;
-        this.descriptions = response.meta.timelines.descriptions;
-        this.svgs = response.meta.timelines.svgs;
-        this.colors = response.meta.timelines.colors;
         this.active_timeline_index = response.active_timeline_index;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    fetch("/rest/meta")
+      .then((responsePromise) => responsePromise.json())
+      .then((response) => {
+        this.names = response.available_timelines_svg.names;
+        this.descriptions = response.available_timelines_svg.descriptions;
+        this.svgs = response.available_timelines_svg.svgs;
+        this.colors = response.available_timelines_svg.colors;
       })
       .catch((err) => {
         console.log(err);
