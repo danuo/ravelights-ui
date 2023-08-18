@@ -153,6 +153,11 @@ export default {
     },
   },
   methods: {
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
     refresh_effect_list() {
       fetch("/rest/effect")
         .then((responsePromise) => responsePromise.json())
@@ -189,11 +194,6 @@ export default {
           (item) => item.name !== effect_name
         );
       }
-    },
-    delayed_execute(func) {
-      let timer = setTimeout(() => {
-        func();
-      }, 100);
     },
     startAutoUpdate() {
       this.timer = setInterval(this.refresh_effect_list, 2000);
