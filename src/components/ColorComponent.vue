@@ -82,7 +82,7 @@ export default {
       color: [[1.0, 0, 0]],
       color_names: [],
       color_transition_speeds: [""],
-      selectedColorLevel: 0,
+      selectedColorLevel: 1,
       color_transition_speed: "",
       palette: [],
       color_sec_active: true,
@@ -118,11 +118,11 @@ export default {
   computed: {
     color_str: {
       get() {
-        let color_float = this.color[this.selectedColorLevel];
+        let color_float = this.color[this.selectedColorLevel - 1];
         return this.floatToRgb(color_float);
       },
       set(color_str) {
-        this.color[this.selectedColorLevel] = this.rgbToFloat(color_str);
+        this.color[this.selectedColorLevel - 1] = this.rgbToFloat(color_str);
       },
     },
   },
@@ -160,7 +160,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "set_color",
-          color: this.color[this.selectedColorLevel],
+          color: this.color[this.selectedColorLevel - 1],
           level: this.selectedColorLevel,
         }),
       };
@@ -196,7 +196,7 @@ export default {
       out_list.push(";");
       out_list.push("background-color: ");
       out_list.push(
-        this.selectedColorLevel == idx
+        this.selectedColorLevel == idx + 1
           ? this.floatToRgb(this.color[idx])
           : "#000"
       );
