@@ -6,9 +6,8 @@
         <q-route-tab to="/perform" name="Perform" icon="live_tv" />
         <q-route-tab to="/trigger" name="Trigger" icon="pattern" />
         <q-route-tab to="/effects" name="Effects" icon="stream" />
-        <q-route-tab to="/color" name="Color" icon="palette" />
-        <q-route-tab to="/timelines" name="Timelines" icon="movie" />
         <q-route-tab to="/devices" name="Devices" icon="widgets" />
+        <q-route-tab to="/timelines" name="Timelines" icon="movie" />
         <q-route-tab
           to="/autopilot"
           name="Autopilot"

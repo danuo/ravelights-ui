@@ -13,10 +13,6 @@ const routes = [
         component: () => import("src/pages/EffectPage.vue"),
       },
       {
-        path: "/color",
-        component: () => import("src/pages/ColorPage.vue"),
-      },
-      {
         path: "/bpm",
         component: () => import("src/pages/BPMPage.vue"),
       },

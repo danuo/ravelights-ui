@@ -1,80 +1,31 @@
 <template>
-  <div class="q-mt-xs q-col-gutter-xs">
-    <div class="row">
-      <div class="col-6">
-        <q-input v-model.number="api_response['bpm_base']" outlined />
-      </div>
-      <div class="col-3">
-        <q-btn
-          v-model="api_response['bpm_base']"
-          @click="change_bpm(0.1)"
-          style="width: 100%; height: 70px"
-          :square="true"
-          color="primary"
-          icon="expand_less"
-          size="25px"
-        />
-      </div>
-      <div class="col-3">
-        <q-btn
-          v-model="api_response['bpm_base']"
-          @click="change_bpm(-0.1)"
-          style="width: 100%; height: 70px"
-          color="primary"
-          icon="expand_more"
-          size="25px"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <q-btn
-          @click="sync"
-          label="sync"
-          style="width: 100%; height: 70px"
-          color="primary"
-          size="20px"
-        />
-      </div>
-      <div class="col-3">
-        <q-btn
-          @click="change_sync(0.1)"
-          style="width: 100%; height: 70px"
-          color="primary"
-          icon="navigate_before"
-          size="25px"
-        />
-      </div>
-      <div class="col-3">
-        <q-btn
-          @click="change_sync(-0.1)"
-          style="width: 100%; height: 70px"
-          color="primary"
-          icon="navigate_next"
-          size="25px"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="q-px-none q-mt-lg q-mb-md" v-if="api_response !== null">
-    <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
-    <div class="row flex-center" style="width: 100%">
-      <q-slider
-        @change="change_settings_bpm_multiplier()"
-        v-model="bpm_multiplier_placeholder"
-        color="secondary"
-        selection-color="secondary"
-        track-size="15px"
-        thumb-size="30px"
-        :min="0"
-        :max="2"
-        :marker-labels="bpm_multiplier_mapping"
-        snap
-        style="width: 66%"
-      />
-    </div>
-  </div>
+  <q-list bordered separator>
+    <q-item v-for="slider in controls_global_sliders" :key="slider.name">
+      <!-- is slider -->
+      <q-item-section v-if="slider.type == 'slider'">
+        <q-item-label caption> {{ slider.var_name }} </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-12">
+            <q-slider
+              @change="change_settings(slider.var_name)"
+              v-model="api_response[slider.var_name]"
+              color="primary"
+              selection-color="secondary"
+              track-size="15px"
+              thumb-size="30px"
+              :markers="slider.markers"
+              :min="slider.range_min"
+              :max="slider.range_max"
+              :step="slider.step"
+              snap
+              label-always
+              :label-value="api_response[slider.var_name]"
+            />
+          </div>
+        </div>
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <style>

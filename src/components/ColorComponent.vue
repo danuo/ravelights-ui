@@ -37,9 +37,7 @@
     :palette="palette"
   />
 
-  <h5 class="text-center q-ma-xs">Color Settings</h5>
-
-  <div class="q-ma-lg row flex-center">
+  <div class="q-mt-lg row flex-center">
     <q-item-label caption style="color: #474747">
       Select Color Transition Speed
     </q-item-label>
@@ -63,7 +61,7 @@
     </div>
     <div class="col-8">
       <q-select
-        @update:model-value="set_settings('color_sec_mode')"
+        @update:model-value="(val) => set_settings_value('color_sec_mode', val)"
         outlined
         v-model="color_sec_mode"
         :options="color_sec_mode_names"
@@ -75,20 +73,20 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
   name: "ColorComponent",
   data() {
     return {
       color: [[1.0, 0, 0]],
-      color_names: [],
+      color_names: ref([]),
+      color_transition_speed: ref(""),
       color_transition_speeds: [""],
-      selectedColorLevel: 1,
-      color_transition_speed: "",
+      selectedColorLevel: ref(1),
       palette: [],
-      color_sec_active: true,
-      color_sec_mode: "",
+      color_sec_active: ref(true),
+      color_sec_mode: ref(""),
       color_sec_mode_names: [""],
-      temp_toggle: true,
     };
   },
   mounted() {
@@ -154,6 +152,23 @@ export default {
           console.log(err);
         });
     },
+    set_settings_value(var_name, value) {
+      let requestBody = {
+        action: "set_settings",
+      };
+      requestBody[var_name] = value;
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     set_color_put() {
       const requestOptions = {
         method: "PUT",
@@ -202,7 +217,6 @@ export default {
       );
       out_list.push(";");
       let final_str = out_list.join(" ");
-      // console.log(final_str);
       return final_str;
     },
     generateColorTransitionSpeedOptions() {
