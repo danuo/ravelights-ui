@@ -5,11 +5,11 @@
       <div class="grey-box row">
         <div class="col-4" v-for="button in buttons" :key="button">
           <q-item-label caption style="color: #474747"
-            >{{ button }}
+            >{{ button.label }}
           </q-item-label>
           <q-toggle
-            @click="set_settings(button)"
-            v-model="apiResponse[button]"
+            @click="set_settings(button.var_name)"
+            v-model="apiResponse[button.var_name]"
             color="secondary"
           />
         </div>
@@ -112,24 +112,25 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
   name: "ActiveGenerators",
   data() {
     return {
-      apiResponse: null,
-      meta: null,
-      selectedGenerators: null,
-      selected_type: "pattern",
-      timeline_level: 0,
-      activeFilters: [],
+      apiResponse: ref(null),
+      meta: ref(null),
+      selectedGenerators: ref(null),
+      selected_type: ref("pattern"),
+      timeline_level: ref(0),
+      activeFilters: ref([]),
       typ: ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner", "effect"],
       buttons: [
-        "global_vfilter",
-        "global_dimmer",
-        "global_thinner",
-        "load_thinner_with_pat",
-        "load_dimmer_with_pat",
-        "load_triggers_with_gen",
+        { var_name: "global_vfilter", label: "global_vfilter" },
+        { var_name: "global_dimmer", label: "global_dimmer" },
+        { var_name: "global_thinner", label: "global_thinner" },
+        { var_name: "load_thinner_with_pat", label: "renew_thinner" },
+        { var_name: "load_dimmer_with_pat", label: "renew_dimmer" },
+        { var_name: "renew_trigger_from_manual", label: "renew_triggers" },
       ],
     };
   },
