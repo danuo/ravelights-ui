@@ -16,7 +16,7 @@
       color="primary"
     />
   </div>
-  <q-list bordered v-if="this.effect_list.length > 0">
+  <q-list bordered>
     <q-scroll-area style="height: 40vh">
       <q-list padding>
         <q-item v-for="item in this.effect_list" :key="item">
