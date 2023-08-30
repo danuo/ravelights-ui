@@ -12,6 +12,9 @@
         />
       </div>
     </div>
+    <div class="q-my-sm row justify-end">
+      <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
+    </div>
   </div>
 
   <div class="q-py-md row flex-center" style="width: 100%">
@@ -121,18 +124,7 @@ export default {
   },
   mounted() {
     this.get_color();
-    fetch("/rest/settings")
-      .then((responsePromise) => responsePromise.json())
-      .then((response) => {
-        this.color_transition_speed = response.color_transition_speed;
-        this.color_sec_active = response.color_sec_active;
-        this.color_sec_mode = response.color_sec_mode;
-        this.color_sec_mode_names = response.color_sec_mode_names;
-        this.color_mapping = response.color_mapping;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetch_settings();
     fetch("/rest/meta")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
@@ -155,6 +147,42 @@ export default {
     },
   },
   methods: {
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
+    fetch_settings() {
+      fetch("/rest/settings")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.color_transition_speed = response.color_transition_speed;
+          this.color_sec_active = response.color_sec_active;
+          this.color_sec_mode = response.color_sec_mode;
+          this.color_sec_mode_names = response.color_sec_mode_names;
+          this.color_mapping = response.color_mapping;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    reset_color_mappings() {
+      let requestBody = {
+        action: "reset_color_mappings",
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => response)
+        .catch((err) => {
+          console.log(err);
+        });
+      this.delayed_execute(this.fetch_settings);
+    },
     set_settings(var_name) {
       let requestBody = {
         action: "set_settings",
