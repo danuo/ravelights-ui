@@ -1,24 +1,20 @@
 <template>
-  test
-  <div class="row">
-    <div class="col-4" style="background-color: #474747">L1 Prim</div>
-    <div class="col-8" style="background-color: #474747">
-      <q-btn-toggle
-        spread
-        v-model="test"
-        :options="[
-          { label: 'A', value: 'A' },
-          { label: 'B', value: 'B' },
-          { label: 'C', value: 'C' },
-        ]"
-        size="lg"
-      />
+  <div v-if="this.color_mapping !== null">
+    <div class="row" v-for="item in this.button_list" :key="item">
+      <div class="col-4" style="background-color: #474747">
+        Level {{ item[0] }} {{ item[1] }}
+      </div>
+      <div class="col-8">
+        <q-btn-toggle
+          spread
+          v-model="this.color_mapping[item[0]][item[1]]"
+          :options="this.color_mapping_options"
+          size="lg"
+        />
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-4" style="background-color: #474747">L1 Sec</div>
-    <div class="col-8" style="background-color: #474747">right</div>
-  </div>
+
   <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
@@ -101,6 +97,20 @@ export default {
       colors: ref({ A: [0, 0, 0], B: [0, 0, 0], C: [0, 0, 0] }),
       color_keys: ref(["A", "B", "C"]),
       color_names: ref(["Color A", "Color B", "Color C"]),
+      color_mapping: null,
+      color_mapping_options: [
+        { label: "A", value: "A" },
+        { label: "B", value: "B" },
+        { label: "C", value: "C" },
+      ],
+      button_list: [
+        [1, "prim"],
+        [1, "sec"],
+        [2, "prim"],
+        [2, "sec"],
+        [3, "prim"],
+        [3, "sec"],
+      ],
       color_transition_speed: ref(""),
       color_transition_speeds: [""],
       selected_color_key: ref("A"),
@@ -119,6 +129,7 @@ export default {
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
         this.color_sec_mode_names = response.color_sec_mode_names;
+        this.color_mapping = response.color_mapping;
       })
       .catch((err) => {
         console.log(err);
