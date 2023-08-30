@@ -28,13 +28,6 @@
   </q-list>
 </template>
 
-<style>
-.q-field__control {
-  height: 70px !important;
-  font-size: 25px;
-}
-</style>
-
 <script>
 export default {
   name: "BpmComponent",

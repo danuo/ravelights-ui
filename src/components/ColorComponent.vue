@@ -5,7 +5,7 @@
         <q-btn
           v-for="(e, idx) in color_names.length"
           :key="idx"
-          @click="selectedColorLevel = idx + 1"
+          @click="selected_color_key = this.color_keys[idx]"
           :label="color_names[idx]"
           class="col"
           :style="get_button_styling(idx)"
@@ -37,36 +37,52 @@
     :palette="palette"
   />
 
-  <div class="q-mt-lg row flex-center">
-    <q-item-label caption style="color: #474747">
-      Select Color Transition Speed
-    </q-item-label>
-    <q-btn-toggle
-      v-model="color_transition_speed"
-      @click="set_settings('color_transition_speed')"
-      toggle-color="primary"
-      :options="generateColorTransitionSpeedOptions()"
-    />
-  </div>
-
-  <div class="row q-pa-md flex-center">
-    <div class="col-4">
-      <q-toggle
-        @click="set_settings('color_sec_active')"
-        v-model="color_sec_active"
-        size="40px"
-        color="secondary"
-        label="Activate Rule"
-      />
+  <div v-if="this.color_mapping !== null" class="q-py-lg">
+    <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
+      <div class="col-3">Color {{ item }} sec rule</div>
+      <div class="col-9">
+        <q-select
+          @update:model-value="
+            (val) => {
+              color_sec_mode[item] = val;
+              set_settings('color_sec_mode');
+              console.log('test');
+            }
+          "
+          dense
+          outlined
+          v-model="color_sec_mode[item]"
+          :options="color_sec_mode_names"
+          color="secondary"
+        />
+      </div>
     </div>
-    <div class="col-8">
-      <q-select
-        @update:model-value="(val) => set_settings_value('color_sec_mode', val)"
-        outlined
-        v-model="color_sec_mode"
-        :options="color_sec_mode_names"
-        color="secondary"
-        label="secondary color rule"
+    <div class="row items-center" v-for="item in this.button_list" :key="item">
+      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
+      <div class="col-9">
+        <q-btn-toggle
+          spread
+          dense
+          v-model="this.color_mapping[item[0]][item[1]]"
+          :options="this.color_mapping_options"
+          size="lg"
+          @click="set_settings('color_mapping')"
+        />
+      </div>
+    </div>
+
+    <div class="q-my-sm row justify-end">
+      <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
+    </div>
+    <div class="row flex-center">
+      <q-item-label caption style="color: #474747">
+        Select Color Transition Speed
+      </q-item-label>
+      <q-btn-toggle
+        v-model="color_transition_speed"
+        @click="set_settings('color_transition_speed')"
+        toggle-color="primary"
+        :options="generateColorTransitionSpeedOptions()"
       />
     </div>
   </div>
@@ -78,31 +94,34 @@ export default {
   name: "ColorComponent",
   data() {
     return {
-      color: [[1.0, 0, 0]],
-      color_names: ref([]),
+      colors: ref({ A: [0, 0, 0], B: [0, 0, 0], C: [0, 0, 0] }),
+      color_keys: ref(["A", "B", "C"]),
+      color_names: ref(["Color A", "Color B", "Color C"]),
+      color_mapping: null,
+      color_mapping_options: [
+        { label: "A", value: "A" },
+        { label: "B", value: "B" },
+        { label: "C", value: "C" },
+      ],
+      button_list: [
+        [1, "prim"],
+        [1, "sec"],
+        [2, "prim"],
+        [2, "sec"],
+        [3, "prim"],
+        [3, "sec"],
+      ],
       color_transition_speed: ref(""),
       color_transition_speeds: [""],
-      selectedColorLevel: ref(1),
+      selected_color_key: ref("A"),
       palette: [],
-      color_sec_active: ref(true),
-      color_sec_mode: ref(""),
+      color_sec_mode: ref({ B: "", C: "" }),
       color_sec_mode_names: [""],
     };
   },
   mounted() {
     this.get_color();
-    fetch("/rest/settings")
-      .then((responsePromise) => responsePromise.json())
-      .then((response) => {
-        this.color_names = response.color_names;
-        this.color_transition_speed = response.color_transition_speed;
-        this.color_sec_active = response.color_sec_active;
-        this.color_sec_mode = response.color_sec_mode;
-        this.color_sec_mode_names = response.color_sec_mode_names;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetch_settings();
     fetch("/rest/meta")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
@@ -116,24 +135,49 @@ export default {
   computed: {
     color_str: {
       get() {
-        let color_float = this.color[this.selectedColorLevel - 1];
+        let color_float = this.colors[this.selected_color_key];
         return this.floatToRgb(color_float);
       },
       set(color_str) {
-        this.color[this.selectedColorLevel - 1] = this.rgbToFloat(color_str);
+        this.colors[this.selected_color_key] = this.rgbToFloat(color_str);
       },
     },
   },
   methods: {
-    get_color() {
-      fetch("/rest/color")
+    delayed_execute(func) {
+      let timer = setTimeout(() => {
+        func();
+      }, 100);
+    },
+    fetch_settings() {
+      fetch("/rest/settings")
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
-          this.color = response;
+          this.color_transition_speed = response.color_transition_speed;
+          this.color_sec_mode = response.color_sec_mode;
+          this.color_sec_mode_names = response.color_sec_mode_names;
+          this.color_mapping = response.color_mapping;
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    reset_color_mappings() {
+      let requestBody = {
+        action: "reset_color_mappings",
+      };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      };
+      fetch("/rest/settings", requestOptions)
+        .then((responsePromise) => responsePromise)
+        .then((response) => response)
+        .catch((err) => {
+          console.log(err);
+        });
+      this.delayed_execute(this.fetch_settings);
     },
     set_settings(var_name) {
       let requestBody = {
@@ -152,19 +196,12 @@ export default {
           console.log(err);
         });
     },
-    set_settings_value(var_name, value) {
-      let requestBody = {
-        action: "set_settings",
-      };
-      requestBody[var_name] = value;
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      };
-      fetch("/rest/settings", requestOptions)
-        .then((responsePromise) => responsePromise)
-        .then((response) => {})
+    get_color() {
+      fetch("/rest/color")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.colors = response;
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -175,16 +212,15 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "set_color",
-          color: this.color[this.selectedColorLevel - 1],
-          level: this.selectedColorLevel,
+          color: this.colors[this.selected_color_key],
+          color_key: this.selected_color_key,
         }),
       };
       fetch("/rest/color", requestOptions)
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log("color_put");
-          this.color = response;
-          console.log(response);
+          this.colors = response;
         })
         .catch((err) => {
           console.log(err);
@@ -203,16 +239,17 @@ export default {
       return [r, g, b];
     },
     get_button_styling(idx) {
+      const key = this.color_keys[idx];
       let out_list = [];
       out_list.push("height: 60px;");
       out_list.push("padding-top: 16px;");
       out_list.push("border-bottom: 8px solid ");
-      out_list.push(this.floatToRgb(this.color[idx]));
+      out_list.push(this.floatToRgb(this.colors[key]));
       out_list.push(";");
       out_list.push("background-color: ");
       out_list.push(
-        this.selectedColorLevel == idx + 1
-          ? this.floatToRgb(this.color[idx])
+        this.selected_color_key == key
+          ? this.floatToRgb(this.colors[key])
           : "#000"
       );
       out_list.push(";");
