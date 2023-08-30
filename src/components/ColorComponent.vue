@@ -25,7 +25,7 @@
         <q-btn
           v-for="(e, idx) in color_names.length"
           :key="idx"
-          @click="selectedColorLevel = idx + 1"
+          @click="selected_color_key = this.color_keys[idx]"
           :label="color_names[idx]"
           class="col"
           :style="get_button_styling(idx)"
@@ -98,11 +98,12 @@ export default {
   name: "ColorComponent",
   data() {
     return {
-      color: [[1.0, 0, 0]],
-      color_names: ref([]),
+      colors: ref({ A: [0, 0, 0], B: [0, 0, 0], C: [0, 0, 0] }),
+      color_keys: ref(["A", "B", "C"]),
+      color_names: ref(["Color A", "Color B", "Color C"]),
       color_transition_speed: ref(""),
       color_transition_speeds: [""],
-      selectedColorLevel: ref(1),
+      selected_color_key: ref("A"),
       palette: [],
       color_sec_active: ref(true),
       color_sec_mode: ref(""),
@@ -114,7 +115,6 @@ export default {
     fetch("/rest/settings")
       .then((responsePromise) => responsePromise.json())
       .then((response) => {
-        this.color_names = response.color_names;
         this.color_transition_speed = response.color_transition_speed;
         this.color_sec_active = response.color_sec_active;
         this.color_sec_mode = response.color_sec_mode;
@@ -136,25 +136,15 @@ export default {
   computed: {
     color_str: {
       get() {
-        let color_float = this.color[this.selectedColorLevel - 1];
+        let color_float = this.colors[this.selected_color_key];
         return this.floatToRgb(color_float);
       },
       set(color_str) {
-        this.color[this.selectedColorLevel - 1] = this.rgbToFloat(color_str);
+        this.colors[this.selected_color_key] = this.rgbToFloat(color_str);
       },
     },
   },
   methods: {
-    get_color() {
-      fetch("/rest/color")
-        .then((responsePromise) => responsePromise.json())
-        .then((response) => {
-          this.color = response;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     set_settings(var_name) {
       let requestBody = {
         action: "set_settings",
@@ -189,22 +179,31 @@ export default {
           console.log(err);
         });
     },
+    get_color() {
+      fetch("/rest/color")
+        .then((responsePromise) => responsePromise.json())
+        .then((response) => {
+          this.colors = response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     set_color_put() {
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "set_color",
-          color: this.color[this.selectedColorLevel - 1],
-          level: this.selectedColorLevel,
+          color: this.colors[this.selected_color_key],
+          color_key: this.selected_color_key,
         }),
       };
       fetch("/rest/color", requestOptions)
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           console.log("color_put");
-          this.color = response;
-          console.log(response);
+          this.colors = response;
         })
         .catch((err) => {
           console.log(err);
@@ -223,16 +222,17 @@ export default {
       return [r, g, b];
     },
     get_button_styling(idx) {
+      const key = this.color_keys[idx];
       let out_list = [];
       out_list.push("height: 60px;");
       out_list.push("padding-top: 16px;");
       out_list.push("border-bottom: 8px solid ");
-      out_list.push(this.floatToRgb(this.color[idx]));
+      out_list.push(this.floatToRgb(this.colors[key]));
       out_list.push(";");
       out_list.push("background-color: ");
       out_list.push(
-        this.selectedColorLevel == idx + 1
-          ? this.floatToRgb(this.color[idx])
+        this.selected_color_key == key
+          ? this.floatToRgb(this.colors[key])
           : "#000"
       );
       out_list.push(";");
