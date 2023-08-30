@@ -10,6 +10,7 @@
           v-model="this.color_mapping[item[0]][item[1]]"
           :options="this.color_mapping_options"
           size="lg"
+          @click="set_settings('color_mapping')"
         />
       </div>
     </div>
