@@ -1,17 +1,5 @@
 <template>
   <div v-if="this.color_mapping !== null" class="q-py-lg">
-    <div class="row items-center" v-for="item in this.button_list" :key="item">
-      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
-      <div class="col-9">
-        <q-btn-toggle
-          spread
-          v-model="this.color_mapping[item[0]][item[1]]"
-          :options="this.color_mapping_options"
-          size="lg"
-          @click="set_settings('color_mapping')"
-        />
-      </div>
-    </div>
     <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
       <div class="col-3">Color {{ item }} sec rule</div>
       <div class="col-9">
@@ -23,6 +11,7 @@
               console.log('test');
             }
           "
+          dense
           outlined
           v-model="color_sec_mode[item]"
           :options="color_sec_mode_names"
@@ -30,6 +19,20 @@
         />
       </div>
     </div>
+    <div class="row items-center" v-for="item in this.button_list" :key="item">
+      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
+      <div class="col-9">
+        <q-btn-toggle
+          spread
+          dense
+          v-model="this.color_mapping[item[0]][item[1]]"
+          :options="this.color_mapping_options"
+          size="lg"
+          @click="set_settings('color_mapping')"
+        />
+      </div>
+    </div>
+
     <div class="q-my-sm row justify-end">
       <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
     </div>

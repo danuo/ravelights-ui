@@ -1,7 +1,7 @@
 <template>
   <div class="q-mt-xs q-col-gutter-xs">
     <div class="row">
-      <div class="col-6">
+      <div class="col-6" id="bpm_input">
         <q-input v-model.number="api_response['bpm_base']" outlined />
       </div>
       <div class="col-3">
@@ -78,7 +78,7 @@
 </template>
 
 <style>
-.q-field__control {
+#bpm_input .q-field__control {
   height: 70px !important;
   font-size: 25px;
 }
