@@ -1,4 +1,24 @@
 <template>
+  test
+  <div class="row">
+    <div class="col-4" style="background-color: #474747">L1 Prim</div>
+    <div class="col-8" style="background-color: #474747">
+      <q-btn-toggle
+        spread
+        v-model="test"
+        :options="[
+          { label: 'A', value: 'A' },
+          { label: 'B', value: 'B' },
+          { label: 'C', value: 'C' },
+        ]"
+        size="lg"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4" style="background-color: #474747">L1 Sec</div>
+    <div class="col-8" style="background-color: #474747">right</div>
+  </div>
   <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
