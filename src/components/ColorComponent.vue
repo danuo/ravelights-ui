@@ -1,43 +1,4 @@
 <template>
-  <div v-if="this.color_mapping !== null" class="q-py-lg">
-    <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
-      <div class="col-3">Color {{ item }} sec rule</div>
-      <div class="col-9">
-        <q-select
-          @update:model-value="
-            (val) => {
-              color_sec_mode[item] = val;
-              set_settings('color_sec_mode');
-              console.log('test');
-            }
-          "
-          dense
-          outlined
-          v-model="color_sec_mode[item]"
-          :options="color_sec_mode_names"
-          color="secondary"
-        />
-      </div>
-    </div>
-    <div class="row items-center" v-for="item in this.button_list" :key="item">
-      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
-      <div class="col-9">
-        <q-btn-toggle
-          spread
-          dense
-          v-model="this.color_mapping[item[0]][item[1]]"
-          :options="this.color_mapping_options"
-          size="lg"
-          @click="set_settings('color_mapping')"
-        />
-      </div>
-    </div>
-
-    <div class="q-my-sm row justify-end">
-      <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
-    </div>
-  </div>
-
   <div class="q-py-md row flex-center" style="width: 100%">
     <div class="q-gutter-y-md" style="width: 75%">
       <q-btn-group class="row" style="width: 100%">
@@ -76,16 +37,54 @@
     :palette="palette"
   />
 
-  <div class="q-mt-lg row flex-center">
-    <q-item-label caption style="color: #474747">
-      Select Color Transition Speed
-    </q-item-label>
-    <q-btn-toggle
-      v-model="color_transition_speed"
-      @click="set_settings('color_transition_speed')"
-      toggle-color="primary"
-      :options="generateColorTransitionSpeedOptions()"
-    />
+  <div v-if="this.color_mapping !== null" class="q-py-lg">
+    <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
+      <div class="col-3">Color {{ item }} sec rule</div>
+      <div class="col-9">
+        <q-select
+          @update:model-value="
+            (val) => {
+              color_sec_mode[item] = val;
+              set_settings('color_sec_mode');
+              console.log('test');
+            }
+          "
+          dense
+          outlined
+          v-model="color_sec_mode[item]"
+          :options="color_sec_mode_names"
+          color="secondary"
+        />
+      </div>
+    </div>
+    <div class="row items-center" v-for="item in this.button_list" :key="item">
+      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
+      <div class="col-9">
+        <q-btn-toggle
+          spread
+          dense
+          v-model="this.color_mapping[item[0]][item[1]]"
+          :options="this.color_mapping_options"
+          size="lg"
+          @click="set_settings('color_mapping')"
+        />
+      </div>
+    </div>
+
+    <div class="q-my-sm row justify-end">
+      <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
+    </div>
+    <div class="row flex-center">
+      <q-item-label caption style="color: #474747">
+        Select Color Transition Speed
+      </q-item-label>
+      <q-btn-toggle
+        v-model="color_transition_speed"
+        @click="set_settings('color_transition_speed')"
+        toggle-color="primary"
+        :options="generateColorTransitionSpeedOptions()"
+      />
+    </div>
   </div>
 </template>
 
