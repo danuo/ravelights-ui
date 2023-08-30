@@ -1,10 +1,8 @@
 <template>
-  <div v-if="this.color_mapping !== null">
-    <div class="row" v-for="item in this.button_list" :key="item">
-      <div class="col-4" style="background-color: #474747">
-        Level {{ item[0] }} {{ item[1] }}
-      </div>
-      <div class="col-8">
+  <div v-if="this.color_mapping !== null" class="q-py-lg">
+    <div class="row items-center" v-for="item in this.button_list" :key="item">
+      <div class="col-3 text-center">Level {{ item[0] }} {{ item[1] }}</div>
+      <div class="col-9">
         <q-btn-toggle
           spread
           v-model="this.color_mapping[item[0]][item[1]]"
