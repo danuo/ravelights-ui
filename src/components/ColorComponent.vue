@@ -1,7 +1,7 @@
 <template>
   <div v-if="this.color_mapping !== null" class="q-py-lg">
     <div class="row items-center" v-for="item in this.button_list" :key="item">
-      <div class="col-3 text-center">Level {{ item[0] }} {{ item[1] }}</div>
+      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
       <div class="col-9">
         <q-btn-toggle
           spread
@@ -9,6 +9,24 @@
           :options="this.color_mapping_options"
           size="lg"
           @click="set_settings('color_mapping')"
+        />
+      </div>
+    </div>
+    <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
+      <div class="col-3">Color {{ item }} sec rule</div>
+      <div class="col-9">
+        <q-select
+          @update:model-value="
+            (val) => {
+              color_sec_mode[item] = val;
+              set_settings('color_sec_mode');
+              console.log('test');
+            }
+          "
+          outlined
+          v-model="color_sec_mode[item]"
+          :options="color_sec_mode_names"
+          color="secondary"
         />
       </div>
     </div>
@@ -66,28 +84,6 @@
       :options="generateColorTransitionSpeedOptions()"
     />
   </div>
-
-  <div class="row q-pa-md flex-center">
-    <div class="col-4">
-      <q-toggle
-        @click="set_settings('color_sec_active')"
-        v-model="color_sec_active"
-        size="40px"
-        color="secondary"
-        label="Activate Rule"
-      />
-    </div>
-    <div class="col-8">
-      <q-select
-        @update:model-value="(val) => set_settings_value('color_sec_mode', val)"
-        outlined
-        v-model="color_sec_mode"
-        :options="color_sec_mode_names"
-        color="secondary"
-        label="secondary color rule"
-      />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -117,8 +113,7 @@ export default {
       color_transition_speeds: [""],
       selected_color_key: ref("A"),
       palette: [],
-      color_sec_active: ref(true),
-      color_sec_mode: ref(""),
+      color_sec_mode: ref({ B: "", C: "" }),
       color_sec_mode_names: [""],
     };
   },
@@ -157,7 +152,6 @@ export default {
         .then((responsePromise) => responsePromise.json())
         .then((response) => {
           this.color_transition_speed = response.color_transition_speed;
-          this.color_sec_active = response.color_sec_active;
           this.color_sec_mode = response.color_sec_mode;
           this.color_sec_mode_names = response.color_sec_mode_names;
           this.color_mapping = response.color_mapping;
@@ -188,23 +182,6 @@ export default {
         action: "set_settings",
       };
       requestBody[var_name] = this[var_name];
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      };
-      fetch("/rest/settings", requestOptions)
-        .then((responsePromise) => responsePromise)
-        .then((response) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    set_settings_value(var_name, value) {
-      let requestBody = {
-        action: "set_settings",
-      };
-      requestBody[var_name] = value;
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
