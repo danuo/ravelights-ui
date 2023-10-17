@@ -4,10 +4,6 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import BpmComponent from "src/components/BpmComponent.vue";
-export default {
-  name: "PerformPage",
-  components: { BpmComponent },
-};
 </script>

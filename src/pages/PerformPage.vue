@@ -5,11 +5,7 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import GeneratorsComponent from "src/components/GeneratorsComponent.vue";
-export default {
-  name: "PerformPage",
-  components: { ManualTimelineComponent, GeneratorsComponent },
-};
 </script>

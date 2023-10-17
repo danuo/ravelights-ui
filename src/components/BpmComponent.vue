@@ -1,5 +1,8 @@
 <template>
-  <div class="q-mt-xs q-col-gutter-xs" v-if="settings !== null">
+  <div
+    class="q-mt-xs q-col-gutter-xs"
+    v-if="Object.keys(appStore.settings).length > 0"
+  >
     <div class="row">
       <div class="col-6" id="bpm_input">
         <q-input v-model.number="settings.bpm_base" outlined />
