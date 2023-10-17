@@ -15,6 +15,10 @@ const routes = [
         path: "/perform",
         component: () => import("src/pages/PerformPage.vue"),
       },
+      {
+        path: "/timeline",
+        component: () => import("src/pages/TimelinePage.vue"),
+      },
     ],
   },
 
