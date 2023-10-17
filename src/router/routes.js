@@ -16,8 +16,20 @@ const routes = [
         component: () => import("src/pages/PerformPage.vue"),
       },
       {
+        path: "/trigger",
+        component: () => import("src/pages/TriggerPage.vue"),
+      },
+      {
         path: "/timeline",
         component: () => import("src/pages/TimelinePage.vue"),
+      },
+      {
+        path: "/autopilot",
+        component: () => import("src/pages/AutopilotPage.vue"),
+      },
+      {
+        path: "/devices",
+        component: () => import("src/pages/DevicesPage.vue"),
       },
     ],
   },
