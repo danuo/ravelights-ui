@@ -11,5 +11,9 @@
     "javascriptreact",
     "typescript",
     "vue"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "titleBar.inactiveBackground": "#024500"
+    "titleBar.activeBackground": "#0e7600"
+  }
 }
