@@ -20,6 +20,10 @@ const routes = [
         component: () => import("src/pages/TriggerPage.vue"),
       },
       {
+        path: "/effect",
+        component: () => import("src/pages/EffectPage.vue"),
+      },
+      {
         path: "/timeline",
         component: () => import("src/pages/TimelinePage.vue"),
       },

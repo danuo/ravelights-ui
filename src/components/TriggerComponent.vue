@@ -149,7 +149,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, triggers } = storeToRefs(appStore);
+const { triggers } = storeToRefs(appStore);
 
 const selected_type = ref("pattern");
 const timeline_level = ref(0);
@@ -165,33 +165,51 @@ const marker_value_to_arange = invert_dict(marker_arange_to_value);
 const quarters_letters = ["A", "B", "C", "D"];
 const typ = ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"];
 
+const effective_timeline_level = computed({
+  get() {
+    if (timeline_level.value == 0) {
+      return appStore.settings.global_manual_timeline_level;
+    } else {
+      return timeline_level.value;
+    }
+  },
+});
+
 const beats_array = computed({
   get() {
     if (appStore.triggers !== null) {
-      return triggers.value[selected_type.value][timeline_level.value]
+      return triggers.value[selected_type.value][effective_timeline_level.value]
         .beats_array;
     } else {
       return [true];
     }
   },
   set(value) {
-    triggers.value[selected_type.value][timeline_level.value].beats_array =
-      value;
+    triggers.value[selected_type.value][
+      effective_timeline_level.value
+    ].beats_array = value;
   },
 });
 
 const quarters_array = computed({
   get() {
     if (triggers !== null) {
-      return triggers.value[selected_type.value][timeline_level.value]
+      return triggers.value[selected_type.value][effective_timeline_level.value]
         .quarters_array;
     } else {
       return [true];
     }
   },
   set(value) {
-    triggers.value[selected_type.value][timeline_level.value].quarters_array =
-      value;
+    triggers.value[selected_type.value][
+      effective_timeline_level.value
+    ].quarters_array = value;
+  },
+});
+
+const loop_length = computed({
+  get() {
+    return marker_arange_to_value[loop_length_selection.value];
   },
 });
 
@@ -199,7 +217,8 @@ const loop_length_selection = computed({
   get() {
     if (triggers !== null) {
       let loop_length =
-        triggers.value[selected_type.value][timeline_level.value].loop_length;
+        triggers.value[selected_type.value][effective_timeline_level.value]
+          .loop_length;
       return marker_value_to_arange[loop_length];
     } else {
       return 8;
@@ -207,50 +226,25 @@ const loop_length_selection = computed({
   },
   set(loop_length_sel) {
     let loop_length_value = marker_arange_to_value[loop_length_sel];
-    triggers.value[selected_type.value][timeline_level.value].loop_length =
-      loop_length_value;
+    triggers.value[selected_type.value][
+      effective_timeline_level.value
+    ].loop_length = loop_length_value;
   },
 });
 
 const p = computed({
   get() {
     if (triggers !== null) {
-      return triggers.value[selected_type.value][timeline_level.value].p;
+      return triggers.value[selected_type.value][effective_timeline_level.value]
+        .p;
     } else {
       return 1.0;
     }
   },
   set(value) {
-    triggers.value[selected_type.value][timeline_level.value].p = value;
+    triggers.value[selected_type.value][effective_timeline_level.value].p =
+      value;
   },
-});
-
-const loop_length = computed(
-  () => marker_arange_to_value[loop_length_selection]
-);
-
-const beats_list = computed(() => get_beats_list(beats_array, loop_length));
-
-const quarters_str = computed(() =>
-  this.get_quarters_str(this.quarters_array, this.loop_length)
-);
-
-const repr = computed(() => [
-  beats_list,
-  quarters_str,
-  marker_arange_to_value[loop_length_selection],
-  p,
-]);
-
-const out_dict = computed(() => {
-  return {
-    beats_array: beats_array,
-    quarters_array: quarters_array,
-    loop_length: loop_length,
-    p: p,
-    selected_type: selected_type.value,
-    timeline_level: timeline_level.value,
-  };
 });
 
 function get_beats_list(beats_array, loop_length) {
@@ -263,7 +257,7 @@ function get_beats_list(beats_array, loop_length) {
   return result;
 }
 
-function get_quarters_str(quarters_array, loop_length) {
+function get_quarters_str(quarters_array) {
   let string = "";
   for (let i = 0; i < 4; i++) {
     if (quarters_array[i]) {
@@ -276,20 +270,14 @@ function get_quarters_str(quarters_array, loop_length) {
 function repr_ui(trigger) {
   return [
     get_beats_list(trigger.beats_array, trigger.loop_length),
-    get_quarters_str(trigger.quarters_array, trigger.loop_length),
+    get_quarters_str(trigger.quarters_array),
     trigger.loop_length,
     trigger.p,
   ];
 }
 
 function get_trigger(a, b) {
-  console.log("here");
-  console.log(triggers.value);
-  console.log(a);
-  console.log(b);
-  let test = triggers.value[a][b];
-  console.log(test);
-  return test;
+  return triggers.value[a][b];
 }
 
 function invert_dict(dict) {
@@ -306,10 +294,10 @@ function invert_dict(dict) {
 
 function set_trigger() {
   let body = {
-    ...triggers.value[selected_type.value][timeline_level.value],
+    ...triggers.value[selected_type.value][effective_timeline_level.value],
     action: "set_trigger",
     gen_type: selected_type.value,
-    timeline_level: timeline_level.value,
+    timeline_level: effective_timeline_level.value,
   };
   axiosPut("/rest/settings", body);
 }
@@ -319,7 +307,7 @@ function send_command(command) {
     action: "gen_command",
     command: command,
     gen_type: selected_type.value,
-    timeline_level: timeline_level.value,
+    timeline_level: effective_timeline_level.value,
   };
   axiosPut("/rest/settings", body);
 }

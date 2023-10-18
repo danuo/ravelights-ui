@@ -5,6 +5,7 @@
         <q-route-tab to="/bpm" name="BPM" icon="alarm" />
         <q-route-tab to="/perform" name="Perform" icon="live_tv" />
         <q-route-tab to="/trigger" name="Trigger" icon="pattern" />
+        <q-route-tab to="/effect" name="Effect" icon="stream" />
         <q-route-tab to="/devices" name="Devices" icon="widgets" />
         <q-route-tab to="/timeline" name="Timeline" icon="movie" />
         <q-route-tab

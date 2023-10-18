@@ -26,13 +26,14 @@ const axiosGet = async (url) => {
 };
 
 const getData = async () => {
-  let [settings, triggers, meta, devices] = await Promise.all([
+  let [settings, triggers, meta, devices, effect] = await Promise.all([
     axiosGet("/rest/settings"),
     axiosGet("/rest/triggers"),
     axiosGet("/rest/meta"),
     axiosGet("/rest/devices"),
+    axiosGet("/rest/effect"),
   ]);
-  return [settings, triggers, meta, devices];
+  return [settings, triggers, meta, devices, effect];
 };
 
 export const useAppStore = defineStore("app-store", {
@@ -42,15 +43,18 @@ export const useAppStore = defineStore("app-store", {
       triggers: {},
       meta: {},
       devices: {},
+      effect: {},
+      effect_target_level: 0,
     };
   },
   actions: {
     async refreshData() {
-      let [settings, triggers, meta, devices] = await getData();
+      let [settings, triggers, meta, devices, effect] = await getData();
       this.settings = settings;
       this.triggers = triggers;
       this.meta = meta;
       this.devices = devices;
+      this.effect = effect;
     },
   },
 });

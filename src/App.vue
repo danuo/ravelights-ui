@@ -13,7 +13,7 @@ appStore.refreshData();
 
 if (Object.keys(appStore.settings).length === 0) {
   console.warn("cannot connect to ravelights-python");
-  router.push("/");
+  // router.push("/");
 }
 
 // todo: move this elsewhere
