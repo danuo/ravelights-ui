@@ -9,7 +9,7 @@ import { useRouter } from "vue-router";
 const appStore = useAppStore();
 const router = useRouter();
 
-appStore.refreshData();
+appStore.initAllData();
 
 if (Object.keys(appStore.settings).length === 0) {
   console.warn("cannot connect to ravelights-python");
@@ -20,11 +20,10 @@ if (Object.keys(appStore.settings).length === 0) {
 initEventSource();
 
 function initEventSource() {
-  let eventSource = new EventSource("/feed");
+  let eventSource = new EventSource("/sse");
   eventSource.onmessage = (event) => {
     console.log("feed event received");
-    console.log(event);
-    appStore.refreshData();
+    appStore.updateData(event.data);
   };
 }
 </script>

@@ -25,17 +25,6 @@ const axiosGet = async (url) => {
   }
 };
 
-const getData = async () => {
-  let [settings, triggers, meta, devices, effect] = await Promise.all([
-    axiosGet("/rest/settings"),
-    axiosGet("/rest/triggers"),
-    axiosGet("/rest/meta"),
-    axiosGet("/rest/devices"),
-    axiosGet("/rest/effect"),
-  ]);
-  return [settings, triggers, meta, devices, effect];
-};
-
 export const useAppStore = defineStore("app-store", {
   state: () => {
     return {
@@ -48,13 +37,48 @@ export const useAppStore = defineStore("app-store", {
     };
   },
   actions: {
-    async refreshData() {
-      let [settings, triggers, meta, devices, effect] = await getData();
+    async initAllData() {
+      let [settings, triggers, meta, devices, effect] = await Promise.all([
+        axiosGet("/rest/settings"),
+        axiosGet("/rest/triggers"),
+        axiosGet("/rest/meta"),
+        axiosGet("/rest/devices"),
+        axiosGet("/rest/effect"),
+      ]);
       this.settings = settings;
       this.triggers = triggers;
       this.meta = meta;
       this.devices = devices;
       this.effect = effect;
+    },
+    async updateData(key) {
+      switch (key) {
+        case "settings":
+          console.log("refresh settings");
+          let settings = await axiosGet("/rest/settings");
+          this.settings = settings;
+          break;
+        case "triggers":
+          console.log("refresh triggers");
+          let triggers = await axiosGet("/rest/triggers");
+          this.triggers = triggers;
+          break;
+        case "meta":
+          console.log("refresh meta");
+          let meta = await axiosGet("/rest/meta");
+          this.meta = meta;
+          break;
+        case "devices":
+          console.log("refresh devices");
+          let devices = await axiosGet("/rest/devices");
+          this.devices = devices;
+          break;
+        case "effect":
+          console.log("refresh effect");
+          let effect = await axiosGet("/rest/effect");
+          this.effect = effect;
+          break;
+      }
     },
   },
 });

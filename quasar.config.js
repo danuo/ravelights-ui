@@ -84,7 +84,7 @@ module.exports = configure(function (/* ctx */) {
       port: 80,
       // https: true
       proxy: {
-        "/feed": {
+        "/sse": {
           target: "http://127.0.0.1:5000",
         },
         "/rest": {
