@@ -1,6 +1,6 @@
 <template>
   <!-- setting toggles -->
-  <div v-if="appStore.settings !== null">
+  <div v-if="Object.keys(appStore.settings).length > 0">
     <div class="row q-col-gutter-xs">
       <div class="col-12">
         <div class="grey-box row">
@@ -9,7 +9,7 @@
               >{{ button.label }}
             </q-item-label>
             <q-toggle
-              @click="changeSettings(button.var_name)"
+              @click="set_settings(button.var_name)"
               v-model="settings[button.var_name]"
               color="secondary"
             />
@@ -68,7 +68,7 @@
         <q-btn
           label="alternate"
           icon="update"
-          @click="send_command('alternate')"
+          @click="send_gen_command('alternate')"
         />
       </q-btn-group>
     </div>
@@ -77,7 +77,7 @@
     <div class="q-my-sm">
       <q-option-group
         v-model="activeFilters"
-        :options="selectableKeywords"
+        :options="available_keywords"
         type="checkbox"
         inline
         dense
@@ -86,9 +86,9 @@
 
     <!-- generator list -->
     <div class="row q-col-gutter-xs">
-      <div class="col-4" v-for="gen in filteredGenerators" :key="gen">
+      <div class="col-4" v-for="gen in filtered_generators" :key="gen">
         <q-btn
-          @click="setGenerator(gen.generator_name)"
+          @click="set_generator(gen.generator_name)"
           :label="replace_underscores(gen['generator_name'])"
           style="width: 100%; height: 80px"
           class="q-pa-sm"
@@ -117,7 +117,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, meta } = storeToRefs(appStore);
+const { settings } = storeToRefs(appStore);
 
 const selected_type = ref("pattern");
 const activeFilters = ref([]);
@@ -151,13 +151,13 @@ const effective_timeline_level = computed({
   },
 });
 
-function isIncludedInFilter(generatorCategories) {
+function is_in_filters(generatorCategories) {
   return activeFilters.value.every((filter) => {
     return generatorCategories.includes(filter);
   });
 }
 
-const filteredGenerators = computed({
+const filtered_generators = computed({
   get() {
     if (appStore.meta == null) {
       return [];
@@ -166,13 +166,13 @@ const filteredGenerators = computed({
       selected_type.value == "pattern_sec" ? "pattern" : selected_type.value;
     return appStore.meta.available_generators[effective_selected_type].filter(
       (generator) => {
-        return isIncludedInFilter(generator["generator_keywords"]);
+        return is_in_filters(generator["generator_keywords"]);
       }
     );
   },
 });
 
-const selectableKeywords = computed({
+const available_keywords = computed({
   get() {
     let filterOptions = [];
     if (appStore.meta == null) {
@@ -192,8 +192,8 @@ function replace_underscores(input_string) {
   return input_string.replace(/_/g, " ");
 }
 
-function setGenerator(generatorName) {
-  settings.value.selected[selected_type.value][effective_timeline_level] =
+function set_generator(generatorName) {
+  settings.value.selected[selected_type.value][effective_timeline_level.value] =
     generatorName;
   let body = {
     action: "set_generator",
@@ -204,18 +204,18 @@ function setGenerator(generatorName) {
   axiosPut("/rest/settings", body);
 }
 
-function changeSettings(var_name) {
+function set_settings(var_name) {
   let body = { action: "set_settings" };
   body[var_name] = appStore.settings[var_name];
   axiosPut("/rest/settings", body);
 }
 
-function send_command(command) {
+function send_gen_command(command) {
   let body = {
     action: "gen_command",
     command: command,
-    gen_type: selected_type,
-    timeline_level: appStore.settings.timeline_level,
+    gen_type: selected_type.value,
+    timeline_level: effective_timeline_level.value,
   };
   axiosPut("/rest/settings", body);
 }

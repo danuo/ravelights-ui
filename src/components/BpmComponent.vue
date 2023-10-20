@@ -9,7 +9,7 @@
       </div>
       <div class="col-3">
         <q-btn
-          @click="changeBpm(0.1)"
+          @click="set_bpm(0.1)"
           style="width: 100%; height: 70px"
           :square="true"
           color="primary"
@@ -19,7 +19,7 @@
       </div>
       <div class="col-3">
         <q-btn
-          @click="changeBpm(-0.1)"
+          @click="set_bpm(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="expand_more"
@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-6">
         <q-btn
-          @click="sync()"
+          @click="set_sync()"
           label="sync"
           style="width: 100%; height: 70px"
           color="primary"
@@ -39,7 +39,7 @@
       </div>
       <div class="col-3">
         <q-btn
-          @click="changeSync(0.1)"
+          @click="adjust_sync(0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_before"
@@ -48,7 +48,7 @@
       </div>
       <div class="col-3">
         <q-btn
-          @click="changeSync(-0.1)"
+          @click="adjust_sync(-0.1)"
           style="width: 100%; height: 70px"
           color="primary"
           icon="navigate_next"
@@ -62,7 +62,7 @@
     <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
     <div class="row flex-center" style="width: 100%">
       <q-slider
-        @change="changeSettings('bpm_multiplier')"
+        @change="set_settings('bpm_multiplier')"
         v-model="bpm_multiplier_sliderval"
         color="secondary"
         selection-color="secondary"
@@ -115,26 +115,26 @@ const bpm_multiplier_sliderval = computed({
   },
 });
 
-function sync() {
+function set_sync() {
   let body = { action: "set_sync" };
   axiosPut("/rest/settings", body);
 }
 
-function changeSync(value) {
+function adjust_sync(value) {
   let body = { action: "adjust_sync", value: value };
   axiosPut("/rest/settings", body);
 }
 
-function changeSettings(var_name) {
+function set_settings(var_name) {
   let body = { action: "set_settings" };
   body[var_name] = appStore.settings[var_name];
   axiosPut("/rest/settings", body);
 }
 
-function changeBpm(value) {
+function set_bpm(value) {
   settings.value.bpm_base = parseFloat(
     (appStore.settings.bpm_base + value).toFixed(2)
   );
-  changeSettings("bpm_base");
+  set_settings("bpm_base");
 }
 </script>

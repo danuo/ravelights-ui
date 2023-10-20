@@ -16,7 +16,7 @@
     />
     <q-btn
       label="clear effect queue"
-      @click="clearEffectQueue()"
+      @click="clear_effect_queue()"
       style="height: 3em"
       color="primary"
     />
@@ -137,7 +137,7 @@ function modify_effect(operation, effect_name) {
   }
 }
 
-function clearEffectQueue() {
+function clear_effect_queue() {
   let body = { action: "clear_effect_queue" };
   axiosPut("/rest/settings", body);
 }

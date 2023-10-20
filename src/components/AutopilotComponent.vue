@@ -10,7 +10,7 @@
         <div class="row q-pa-md">
           <div class="col-3">
             <q-toggle
-              @click="handleClick"
+              @click="setSettingsAutopilot"
               v-model="settings.settings_autopilot[button.name_toggle]"
               size="40px"
               color="secondary"
@@ -18,7 +18,7 @@
           </div>
           <div class="col-9">
             <q-slider
-              @change="handleClick"
+              @change="setSettingsAutopilot"
               v-model="settings.settings_autopilot[button.name_slider]"
               color="primary"
               selection-color="secondary"
@@ -43,7 +43,7 @@
           <div class="col-3"></div>
           <div class="col-9">
             <q-slider
-              @change="handleClick"
+              @change="setSettingsAutopilot"
               v-model="settings.settings_autopilot[button.name_slider]"
               color="primary"
               selection-color="secondary"
@@ -67,7 +67,7 @@
         <div class="row q-pa-md">
           <div class="col-3">
             <q-toggle
-              @click="handleClick"
+              @click="setSettingsAutopilot"
               v-model="settings.settings_autopilot[button.name_toggle]"
               color="secondary"
             />
@@ -85,12 +85,11 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { settings, meta } = storeToRefs(appStore);
 
-function handleClick() {
+function setSettingsAutopilot() {
   let body = {
     action: "set_settings_autopilot",
     ...settings.value.settings_autopilot,
   };
-  console.log(body);
   axiosPut("/rest/settings", body);
 }
 </script>

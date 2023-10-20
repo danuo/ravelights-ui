@@ -75,7 +75,7 @@
             <div class="column">
               <div class="col">
                 <q-btn
-                  @click="setTimeline(idx, true)"
+                  @click="set_timeline(idx, true)"
                   label="load full"
                   style="width: 100%; height: 50px"
                   :color="
@@ -88,7 +88,7 @@
               </div>
               <div class="col">
                 <q-btn
-                  @click="setTimeline(idx, false)"
+                  @click="set_timeline(idx, false)"
                   label="load placements"
                   style="width: 100%; height: 50px"
                   color="black"
@@ -109,7 +109,7 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { settings, meta } = storeToRefs(appStore);
 
-function setTimeline(timeline_index, set_full) {
+function set_timeline(timeline_index, set_full) {
   settings.value.active_timeline_index = timeline_index;
   let body = {
     action: "set_timeline",

@@ -2,7 +2,7 @@
   <div class="q-mt-xs row justify-between" v-if="settings !== null">
     <q-btn-toggle
       v-model="settings.global_manual_timeline_level"
-      @click="changeIndex()"
+      @click="set_manual_timeline_index()"
       :toggle-color="settings.use_manual_timeline ? 'primary' : 'dark'"
       :options="[
         { label: 'black', value: 0 },
@@ -14,7 +14,7 @@
     />
     <q-btn-toggle
       v-model="settings.use_manual_timeline"
-      @click="changeMode()"
+      @click="set_manual_timeline_mode()"
       toggle-color="primary"
       :options="[
         { label: 'manual', value: true },
@@ -31,7 +31,7 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { settings } = storeToRefs(appStore);
 
-function changeIndex() {
+function set_manual_timeline_index() {
   settings.value.use_manual_timeline = true;
   let body = {
     action: "set_settings",
@@ -41,7 +41,7 @@ function changeIndex() {
   };
   axiosPut("/rest/settings", body);
 }
-function changeMode() {
+function set_manual_timeline_mode() {
   let body = {
     action: "set_settings",
     use_manual_timeline: appStore.settings.use_manual_timeline,

@@ -11,9 +11,7 @@
           <div class="q-gutter-y-md">
             <q-btn-toggle
               v-model="devices[idx]['device_manual_timeline_level']"
-              @click="
-                change_device_settings(idx, 'device_manual_timeline_level')
-              "
+              @click="set_device_settings(idx, 'device_manual_timeline_level')"
               spread
               :options="[
                 { label: 'black', value: 0 },
@@ -28,7 +26,7 @@
           <div class="q-px-md q-py-md">
             <q-item-label caption> device_triggerskip </q-item-label>
             <q-slider
-              @change="change_device_settings(idx, 'device_triggerskip')"
+              @change="set_device_settings(idx, 'device_triggerskip')"
               v-model="devices[idx]['device_triggerskip']"
               color="primary"
               selection-color="secondary"
@@ -43,7 +41,7 @@
             />
             <q-item-label caption> device_frameskip </q-item-label>
             <q-slider
-              @change="change_device_settings(idx, 'device_frameskip')"
+              @change="set_device_settings(idx, 'device_frameskip')"
               v-model="devices[idx]['device_frameskip']"
               color="primary"
               selection-color="secondary"
@@ -58,7 +56,7 @@
             />
             <q-item-label caption> device_brightness </q-item-label>
             <q-slider
-              @change="change_device_settings(idx, 'device_brightness')"
+              @change="set_device_settings(idx, 'device_brightness')"
               v-model="devices[idx]['device_brightness']"
               color="primary"
               selection-color="secondary"
@@ -86,7 +84,7 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { devices } = storeToRefs(appStore);
 
-function change_device_settings(device_id, var_name) {
+function set_device_settings(device_id, var_name) {
   let body = {
     action: "set_device_settings",
     device_id: device_id,

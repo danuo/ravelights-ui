@@ -80,5 +80,12 @@ export const useAppStore = defineStore("app-store", {
           break;
       }
     },
+    async initSSE() {
+      let eventSource = new EventSource("/sse");
+      eventSource.onmessage = (event) => {
+        console.info("feed event received");
+        this.updateData(event.data);
+      };
+    },
   },
 });

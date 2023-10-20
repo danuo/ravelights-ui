@@ -1,89 +1,91 @@
 <template>
-  <div class="q-py-md row flex-center" style="width: 100%">
-    <div class="q-gutter-y-md" style="width: 75%">
-      <q-btn-group class="row" style="width: 100%">
-        <q-btn
-          v-for="(e, idx) in color_names.length"
-          :key="idx"
-          @click="selected_color_key = color_keys[idx]"
-          :label="color_names[idx]"
-          class="col"
-          :style="get_button_styling(idx)"
-        />
-      </q-btn-group>
-    </div>
-  </div>
-
-  <q-color
-    @change="set_color_put"
-    v-model="color_str"
-    default-value="#000"
-    default-view="tune"
-    format-model="rgb"
-    no-header-tabs
-    size="huge"
-    :no-footer="true"
-  />
-  <q-color
-    @change="set_color_put"
-    v-model="color_str"
-    default-value="#000"
-    default-view="palette"
-    format-model="rgb"
-    no-header
-    no-header-tabs
-    size="huge"
-    :no-footer="true"
-    :palette="meta.controls_color_palette"
-  />
-
-  <div v-if="Object.keys(appStore.settings).length > 0" class="q-py-lg">
-    <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
-      <div class="col-3">Color {{ item }} sec rule</div>
-      <div class="col-9">
-        <q-select
-          @update:model-value="
-            (val) => {
-              color_sec_mode[item] = val;
-              set_settings('color_sec_mode');
-              console.log('test');
-            }
-          "
-          dense
-          outlined
-          v-model="settings.color_sec_mode[item]"
-          :options="meta.color_sec_mode_names"
-          color="secondary"
-        />
+  <div v-if="Object.keys(appStore.settings).length > 0">
+    <div class="q-py-md row flex-center" style="width: 100%">
+      <div class="q-gutter-y-md" style="width: 75%">
+        <q-btn-group class="row" style="width: 100%">
+          <q-btn
+            v-for="(e, idx) in color_names.length"
+            :key="idx"
+            @click="selected_color_key = color_keys[idx]"
+            :label="color_names[idx]"
+            class="col"
+            :style="get_button_styling(idx)"
+          />
+        </q-btn-group>
       </div>
     </div>
-    <div class="row items-center" v-for="item in button_list" :key="item">
-      <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
-      <div class="col-9">
+
+    <q-color
+      @change="set_color_put"
+      v-model="color_str"
+      default-value="#000"
+      default-view="tune"
+      format-model="rgb"
+      no-header-tabs
+      size="huge"
+      :no-footer="true"
+    />
+    <q-color
+      @change="set_color_put"
+      v-model="color_str"
+      default-value="#000"
+      default-view="palette"
+      format-model="rgb"
+      no-header
+      no-header-tabs
+      size="huge"
+      :no-footer="true"
+      :palette="meta.controls_color_palette"
+    />
+
+    <div class="q-py-lg">
+      <div class="row items-center" v-for="item in ['B', 'C']" :key="item">
+        <div class="col-3">Color {{ item }} sec rule</div>
+        <div class="col-9">
+          <q-select
+            @update:model-value="
+              (val) => {
+                color_sec_mode[item] = val;
+                set_settings('color_sec_mode');
+                console.log('test');
+              }
+            "
+            dense
+            outlined
+            v-model="settings.color_sec_mode[item]"
+            :options="meta.color_sec_mode_names"
+            color="secondary"
+          />
+        </div>
+      </div>
+      <div class="row items-center" v-for="item in button_list" :key="item">
+        <div class="col-3">Level {{ item[0] }} {{ item[1] }}</div>
+        <div class="col-9">
+          <q-btn-toggle
+            spread
+            dense
+            v-model="settings.color_mapping[item[0]][item[1]]"
+            :options="color_mapping_options"
+            size="lg"
+            @click="set_settings('color_mapping')"
+          />
+        </div>
+      </div>
+
+      <div class="q-my-sm row justify-end">
+        <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
+      </div>
+      <div class="row flex-center">
+        <q-item-label caption style="color: #474747">
+          Select Color Transition Speed
+        </q-item-label>
         <q-btn-toggle
-          spread
-          dense
-          v-model="settings.color_mapping[item[0]][item[1]]"
-          :options="color_mapping_options"
-          size="lg"
-          @click="set_settings('color_mapping')"
+          v-model="settings.color_transition_speed"
+          @click="set_settings('color_transition_speed')"
+          toggle-color="primary"
+          :options="gen_speed_options()"
         />
       </div>
-    </div>
-
-    <div class="q-my-sm row justify-end">
-      <q-btn label="reset" icon="update" @click="reset_color_mappings()" />
-    </div>
-    <div class="row flex-center">
-      <q-item-label caption style="color: #474747">
-        Select Color Transition Speed
-      </q-item-label>
-      <q-btn-toggle
-        v-model="settings.color_transition_speed"
-        @click="set_settings('color_transition_speed')"
-        toggle-color="primary"
-        :options="generateColorTransitionSpeedOptions()"
-      />
     </div>
   </div>
 </template>
@@ -117,10 +119,10 @@ const button_list = [
 const color_str = computed({
   get() {
     let color_float = settings.value.colors[selected_color_key.value];
-    return floatToRgb(color_float);
+    return float_to_rgb(color_float);
   },
   set(color_str) {
-    settings.value.colors[selected_color_key.value] = rgbToFloat(color_str);
+    settings.value.colors[selected_color_key.value] = rgb_to_float(color_str);
   },
 });
 
@@ -144,13 +146,13 @@ function set_color_put() {
   axiosPut("/rest/settings", body);
 }
 
-function floatToRgb(floatList) {
+function float_to_rgb(floatList) {
   return `rgb(${Math.round(floatList[0] * 255)}, ${Math.round(
     floatList[1] * 255
   )}, ${Math.round(floatList[2] * 255)})`;
 }
 
-function rgbToFloat(rgb) {
+function rgb_to_float(rgb) {
   var parts = rgb.substring(4, rgb.length - 1).split(",");
   var r = parseInt(parts[0]) / 255;
   var g = parseInt(parts[1]) / 255;
@@ -164,12 +166,12 @@ function get_button_styling(idx) {
   out_list.push("height: 60px;");
   out_list.push("padding-top: 16px;");
   out_list.push("border-bottom: 8px solid ");
-  out_list.push(floatToRgb(settings.value.colors[key]));
+  out_list.push(float_to_rgb(settings.value.colors[key]));
   out_list.push(";");
   out_list.push("background-color: ");
   out_list.push(
     selected_color_key.value == key
-      ? floatToRgb(settings.value.colors[key])
+      ? float_to_rgb(settings.value.colors[key])
       : "#000"
   );
   out_list.push(";");
@@ -177,7 +179,7 @@ function get_button_styling(idx) {
   return final_str;
 }
 
-function generateColorTransitionSpeedOptions() {
+function gen_speed_options() {
   return meta.value.color_transition_speeds.map((speed_str) => ({
     label: speed_str.toUpperCase(),
     value: speed_str,

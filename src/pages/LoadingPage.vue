@@ -8,20 +8,19 @@
 import { useAppStore } from "stores/app-store";
 import { useRouter } from "vue-router";
 
-const appStore = useAppStore();
 const router = useRouter();
+const appStore = useAppStore();
+
+var forwardToRoute = "/perform";
 
 const interval = setInterval(function () {
-  // method to be executed;
-  if (Object.keys(appStore.settings).length === 0) {
-    console.warn("cannot connect to ravelights-python");
-    appStore.refreshData();
-  } else {
-    console.log("yee");
-    console.log(appStore.settings);
+  appStore.initAllData();
+  if (Object.keys(appStore.settings).length > 0) {
+    appStore.initSSE();
+    router.push(forwardToRoute);
     clearInterval(interval);
-    // redirect
-    router.push("/perform");
+  } else {
+    console.warn("cannot connect to REST-API");
   }
-}, 1000);
+}, 1500);
 </script>
