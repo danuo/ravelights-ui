@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 const config = {
-  timeout: 300, // time in ms
+  timeout: 600, // time in ms
 };
 
 export const axiosPut = async (url, inData) => {
