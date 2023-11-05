@@ -31,7 +31,8 @@ const maxHeight = 500;
 
 function startDrag(e) {
   isDragging = true;
-  initialY = e.clientY;
+  // initialY = e.clientY;
+  initialY = e.clientX;
   initialHeight = root.value.clientHeight;
   root.value.style["background-color"] = "red";
   root.value.style.cursor = "grabbing";
@@ -40,7 +41,8 @@ function startDrag(e) {
 function onDrag(e) {
   if (!isDragging) return;
 
-  const deltaY = e.clientY - initialY;
+  // const deltaY = e.clientY - initialY;
+  const deltaY = (e.clientX - initialY) * 0.5;
   const newHeight = Math.min(
     maxHeight,
     Math.max(minHeight, initialHeight + deltaY)
