@@ -1,5 +1,12 @@
 <template>
-  <div ref="root" class="container" @mousedown="startDrag"></div>
+  <div
+    ref="root"
+    class="container"
+    @mousedown="startDrag"
+    @mousemove="onDrag"
+    @mouseleave="endDrag"
+    @mouseup="endDrag"
+  ></div>
 </template>
 
 <style>
@@ -21,14 +28,6 @@ let initialHeight = 0;
 
 const minHeight = 50;
 const maxHeight = 500;
-
-document.addEventListener("mouseup", () => {
-  endDrag();
-});
-
-document.addEventListener("mousemove", (e) => {
-  onDrag(e);
-});
 
 function startDrag(e) {
   isDragging = true;
