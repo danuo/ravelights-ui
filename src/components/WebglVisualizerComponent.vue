@@ -19,7 +19,7 @@
 </style>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const root = ref(null);
 let isDragging = false;
@@ -28,6 +28,14 @@ let initialHeight = 0;
 
 const minHeight = 50;
 const maxHeight = 500;
+
+onMounted(() => {
+  console.log("onMounted");
+});
+
+onUnmounted(() => {
+  console.log("onUnmounted");
+});
 
 function startDrag(e) {
   isDragging = true;
