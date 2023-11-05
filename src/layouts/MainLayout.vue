@@ -17,6 +17,7 @@
     </q-header>
 
     <q-page-container>
+      <WebglVisualizerComponent></WebglVisualizerComponent>
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />
@@ -25,3 +26,7 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<script setup>
+import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
+</script>
