@@ -7,6 +7,7 @@
     @mouseleave="endDrag"
     @mouseup="endDrag"
   ></div>
+  <div ref="spacer" id="spacer"></div>
 </template>
 
 <style>
@@ -17,6 +18,11 @@
   cursor: grab;
   position: fixed;
   z-index: 10;
+}
+#spacer {
+  width: 100%;
+  height: 200px;
+  position: relative;
 }
 </style>
 
@@ -37,6 +43,7 @@ import { io } from "socket.io-client";
 import { axiosGet } from "stores/app-store";
 
 const canvas = ref(null);
+const spacer = ref(null);
 let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
@@ -79,6 +86,7 @@ function onDrag(e) {
   );
 
   canvas.value.style.height = newHeight + "px";
+  spacer.value.style.height = newHeight + "px";
   renderer.setSize(window.innerWidth, newHeight);
 }
 
