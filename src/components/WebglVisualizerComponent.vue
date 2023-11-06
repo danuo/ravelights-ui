@@ -90,9 +90,7 @@ function endDrag() {
 
 let scene, camera, renderer;
 let NLEDS, NLIGHTS, SIZE, texture, data;
-const socket = io("ws://127.0.0.1:5000", {
-  autoConnect: false,
-});
+const socket = io({ autoConnect: false });
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
