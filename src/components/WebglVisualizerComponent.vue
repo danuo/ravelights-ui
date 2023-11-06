@@ -13,8 +13,10 @@
 #container {
   width: 100%;
   height: 200px;
-  background-color: blue;
+  background-color: black;
   cursor: grab;
+  position: fixed;
+  z-index: 10;
 }
 </style>
 
@@ -62,7 +64,7 @@ function startDrag(e) {
   // initialY = e.clientY;
   initialY = e.clientX;
   initialHeight = root.value.clientHeight;
-  root.value.style["background-color"] = "red";
+  // root.value.style["background-color"] = "red";
   root.value.style.cursor = "grabbing";
 }
 
@@ -82,7 +84,7 @@ function onDrag(e) {
 
 function endDrag() {
   isDragging = false;
-  root.value.style["background-color"] = "blue";
+  // root.value.style["background-color"] = "blue";
   root.value.style.cursor = "grab";
 }
 
@@ -198,6 +200,7 @@ async function initThree() {
     let array = new Uint8Array(in_data);
     data.set(array);
     texture.needsUpdate = true;
+    // renderer.setClearColor(0x000, 1);
     render();
   });
 }
