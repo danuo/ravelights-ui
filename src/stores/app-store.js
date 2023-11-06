@@ -15,7 +15,7 @@ export const axiosPut = async (url, inData) => {
   }
 };
 
-const axiosGet = async (url) => {
+export const axiosGet = async (url) => {
   try {
     const response = await axios.get(url, config);
     return response.data;
