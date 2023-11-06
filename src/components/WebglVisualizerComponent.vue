@@ -1,7 +1,7 @@
 <template>
   <div
-    ref="root"
-    id="container"
+    ref="canvas"
+    id="canvas"
     @mousedown="startDrag"
     @mousemove="onDrag"
     @mouseleave="endDrag"
@@ -10,7 +10,7 @@
 </template>
 
 <style>
-#container {
+#canvas {
   width: 100%;
   height: 200px;
   background-color: black;
@@ -36,7 +36,7 @@ import {
 import { io } from "socket.io-client";
 import { axiosGet } from "stores/app-store";
 
-const root = ref(null);
+const canvas = ref(null);
 let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
@@ -63,9 +63,9 @@ function startDrag(e) {
   isDragging = true;
   // initialY = e.clientY;
   initialY = e.clientX;
-  initialHeight = root.value.clientHeight;
-  // root.value.style["background-color"] = "red";
-  root.value.style.cursor = "grabbing";
+  initialHeight = canvas.value.clientHeight;
+  // canvas.value.style["background-color"] = "red";
+  canvas.value.style.cursor = "grabbing";
 }
 
 function onDrag(e) {
@@ -78,14 +78,14 @@ function onDrag(e) {
     Math.max(minHeight, initialHeight + deltaY)
   );
 
-  root.value.style.height = newHeight + "px";
+  canvas.value.style.height = newHeight + "px";
   renderer.setSize(window.innerWidth, newHeight);
 }
 
 function endDrag() {
   isDragging = false;
-  // root.value.style["background-color"] = "blue";
-  root.value.style.cursor = "grab";
+  // canvas.value.style["background-color"] = "blue";
+  canvas.value.style.cursor = "grab";
 }
 
 // three
@@ -118,11 +118,10 @@ function sum(array) {
 }
 
 function initWebGL() {
-  const container = document.getElementById("container");
   renderer = new WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
-  container.appendChild(renderer.domElement);
+  canvas.value.appendChild(renderer.domElement);
 
   scene = new Scene();
   camera = new Camera();
