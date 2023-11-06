@@ -1,4 +1,9 @@
 <template>
+  <div ref="vis_control" id="vis_control">
+    <div class="vis_button" @click="decrease"></div>
+    <div class="vis_button" @click="increase"></div>
+  </div>
+
   <div
     ref="canvas"
     id="canvas"
@@ -11,6 +16,18 @@
 </template>
 
 <style>
+.vis_button {
+  width: 50%;
+  height: 200px;
+  cursor: pointer;
+}
+#vis_control {
+  width: 100%;
+  height: auto;
+  position: fixed;
+  z-index: 20;
+  display: flex;
+}
 #canvas {
   width: 100%;
   height: 200px;
@@ -42,6 +59,7 @@ import {
 import { io } from "socket.io-client";
 import { axiosGet } from "stores/app-store";
 
+const vis_control = ref(null);
 const canvas = ref(null);
 const spacer = ref(null);
 let isDragging = false;
@@ -66,6 +84,32 @@ onUnmounted(() => {
   socket.disconnect();
 });
 
+function increase() {
+  const initialHeight = canvas.value.clientHeight;
+  const deltaY = 50;
+  const newHeight = Math.min(
+    maxHeight,
+    Math.max(minHeight, initialHeight + deltaY)
+  );
+  vis_control.value.style.height = newHeight + "px";
+  canvas.value.style.height = newHeight + "px";
+  spacer.value.style.height = newHeight + "px";
+  renderer.setSize(window.innerWidth, newHeight);
+}
+
+function decrease() {
+  const initialHeight = canvas.value.clientHeight;
+  const deltaY = -50;
+  const newHeight = Math.min(
+    maxHeight,
+    Math.max(minHeight, initialHeight + deltaY)
+  );
+  vis_control.value.style.height = newHeight + "px";
+  canvas.value.style.height = newHeight + "px";
+  spacer.value.style.height = newHeight + "px";
+  renderer.setSize(window.innerWidth, newHeight);
+}
+
 function startDrag(e) {
   isDragging = true;
   // initialY = e.clientY;
@@ -85,6 +129,7 @@ function onDrag(e) {
     Math.max(minHeight, initialHeight + deltaY)
   );
 
+  vis_control.value.style.height = newHeight + "px";
   canvas.value.style.height = newHeight + "px";
   spacer.value.style.height = newHeight + "px";
   renderer.setSize(window.innerWidth, newHeight);
