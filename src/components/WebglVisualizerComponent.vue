@@ -243,7 +243,6 @@ async function initThree() {
   SIZE = sum(NLEDS);
 
   data = new Uint8Array(4 * SIZE);
-  data.fill(128);
 
   texture = initTexture(data, SIZE);
   initWebGL(NLEDS, NLIGHTS, SIZE, texture);
@@ -252,7 +251,6 @@ async function initThree() {
     let array = new Uint8Array(in_data);
     data.set(array);
     texture.needsUpdate = true;
-    // renderer.setClearColor(0x000, 1);
     render();
   });
 }
