@@ -201,8 +201,8 @@ function initWebGL() {
     // flipped with vars
     uvAttribute.setXY(0, 0, xStart);
     uvAttribute.setXY(1, 1, xStart);
-    uvAttribute.setXY(2, 0, xEnd);
-    uvAttribute.setXY(3, 1, xEnd);
+    uvAttribute.setXY(2, 0, xEnd - 1 / 10000);
+    uvAttribute.setXY(3, 1, xEnd - 1 / 10000);
 
     // planeGeometry.uvsNeedUpdate = true;
     let material = new MeshBasicMaterial({ map: texture });
