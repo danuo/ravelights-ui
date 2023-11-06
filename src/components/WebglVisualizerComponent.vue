@@ -118,7 +118,7 @@ function sum(array) {
 }
 
 function initWebGL() {
-  renderer = new WebGLRenderer({ antialias: true });
+  renderer = new WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
   canvas.value.appendChild(renderer.domElement);
