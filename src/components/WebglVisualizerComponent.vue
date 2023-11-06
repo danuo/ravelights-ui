@@ -19,7 +19,7 @@
 </style>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, onBeforeMount } from "vue";
 import {
   DataTexture,
   PlaneGeometry,
@@ -31,6 +31,9 @@ import {
   Mesh,
 } from "three";
 
+import { io } from "socket.io-client";
+import { axiosGet } from "stores/app-store";
+
 const root = ref(null);
 let isDragging = false;
 let initialY = 0;
@@ -39,13 +42,19 @@ let initialHeight = 0;
 const minHeight = 50;
 const maxHeight = 500;
 
+onBeforeMount(() => {
+  console.log("onBeforeMount");
+  initThree();
+});
+
 onMounted(() => {
   console.log("onMounted");
-  initWebsocket();
+  socket.connect();
 });
 
 onUnmounted(() => {
   console.log("onUnmounted");
+  socket.disconnect();
 });
 
 function startDrag(e) {
@@ -80,7 +89,10 @@ function endDrag() {
 // three
 
 let scene, camera, renderer;
-let NLEDS, NLIGHTS, SIZE, texture;
+let NLEDS, NLIGHTS, SIZE, texture, data;
+const socket = io("ws://127.0.0.1:5000", {
+  autoConnect: false,
+});
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
@@ -170,27 +182,25 @@ function deviceConfigToNLEDS(deviceConfig) {
   return n_lights;
 }
 
-async function initWebsocket() {
-  // const apiData = await fetchData();
-  // const deviceConfig = apiData.device_config;
-  // const NLEDS = deviceConfigToNLEDS(deviceConfig);
+async function initThree() {
+  const apiData = await axiosGet("/rest/settings");
+  const deviceConfig = apiData.device_config;
+  NLEDS = deviceConfigToNLEDS(deviceConfig);
 
-  NLEDS = [144, 144, 144, 144, 144, 144, 144, 144, 144];
   NLIGHTS = NLEDS.length;
   SIZE = sum(NLEDS);
 
-  const data = new Uint8Array(4 * SIZE);
+  data = new Uint8Array(4 * SIZE);
   data.fill(128);
 
   texture = initTexture(data, SIZE);
   initWebGL(NLEDS, NLIGHTS, SIZE, texture);
 
-  // const socket = io();
-  // socket.on("message", (in_data) => {
-  //   let array = new Uint8Array(in_data);
-  //   data.set(array);
-  //   texture.needsUpdate = true;
-  //   render();
-  // });
+  socket.on("message", (in_data) => {
+    let array = new Uint8Array(in_data);
+    data.set(array);
+    texture.needsUpdate = true;
+    render();
+  });
 }
 </script>
