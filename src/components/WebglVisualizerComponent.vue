@@ -20,7 +20,16 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import * as THREE from "three";
+import {
+  DataTexture,
+  PlaneGeometry,
+  RGBAFormat,
+  Scene,
+  Camera,
+  WebGLRenderer,
+  MeshBasicMaterial,
+  Mesh,
+} from "three";
 
 const root = ref(null);
 let isDragging = false;
@@ -74,7 +83,7 @@ let scene, camera, renderer;
 let NLEDS, NLIGHTS, SIZE, texture;
 
 function initTexture(data, SIZE) {
-  const texture = new THREE.DataTexture(data, 1, SIZE, THREE.RGBAFormat);
+  const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
   texture.needsUpdate = true;
   return texture;
 }
@@ -98,13 +107,13 @@ function sum(array) {
 
 function initWebGL() {
   const container = document.getElementById("container");
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
   container.appendChild(renderer.domElement);
 
-  scene = new THREE.Scene();
-  camera = new THREE.Camera();
+  scene = new Scene();
+  camera = new Camera();
 
   // Create two PlaneGeometries
   let spacings = [0];
@@ -120,7 +129,7 @@ function initWebGL() {
   const positions = linspace(-spread, spread, NLIGHTS);
 
   for (let i = 0; i < NLIGHTS; i++) {
-    let planeGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 1, 1);
+    let planeGeometry = new PlaneGeometry(planeWidth, planeHeight, 1, 1);
     let uvAttribute = planeGeometry.getAttribute("uv");
     const xStart = spacings[i];
     const xEnd = spacings[i + 1];
@@ -132,8 +141,8 @@ function initWebGL() {
     uvAttribute.setXY(3, 1, xEnd);
 
     // planeGeometry.uvsNeedUpdate = true;
-    let material = new THREE.MeshBasicMaterial({ map: texture });
-    let mesh = new THREE.Mesh(planeGeometry, material);
+    let material = new MeshBasicMaterial({ map: texture });
+    let mesh = new Mesh(planeGeometry, material);
 
     mesh.position.x = positions[i];
     scene.add(mesh);
