@@ -49,7 +49,7 @@
 
 <script setup>
 const props = defineProps(["visualizerEnabled"]);
-import { ref, onBeforeMount, watchEffect } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import {
   DataTexture,
   PlaneGeometry,
@@ -78,8 +78,7 @@ const socket = io({ autoConnect: false });
 const minHeight = 50;
 const maxHeight = 500;
 
-onBeforeMount(() => {
-  console.log("onBeforeMount");
+onMounted(() => {
   initThree();
 });
 
