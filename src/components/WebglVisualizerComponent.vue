@@ -49,7 +49,7 @@
 
 <script setup>
 const props = defineProps(["visualizerEnabled"]);
-import { ref, onMounted, onUnmounted, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watchEffect } from "vue";
 import {
   DataTexture,
   PlaneGeometry,
@@ -71,6 +71,10 @@ let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
 
+let scene, camera, renderer;
+let NLEDS, NLIGHTS, SIZE, texture, data;
+const socket = io({ autoConnect: false });
+
 const minHeight = 50;
 const maxHeight = 500;
 
@@ -79,14 +83,12 @@ onBeforeMount(() => {
   initThree();
 });
 
-onMounted(() => {
-  console.log("onMounted");
-  socket.connect();
-});
-
-onUnmounted(() => {
-  console.log("onUnmounted");
-  socket.disconnect();
+watchEffect(() => {
+  if (props.visualizerEnabled) {
+    socket.connect();
+  } else {
+    socket.disconnect();
+  }
 });
 
 // function increase() {
@@ -149,10 +151,6 @@ function endDrag() {
 }
 
 // three
-
-let scene, camera, renderer;
-let NLEDS, NLIGHTS, SIZE, texture, data;
-const socket = io({ autoConnect: false });
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
