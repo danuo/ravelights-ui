@@ -5,6 +5,7 @@
   </div> -->
 
   <div
+    v-show="props.visualizerEnabled"
     ref="canvas"
     id="canvas"
     @mousedown="startDrag"
@@ -15,7 +16,7 @@
     @mouseup="endDrag"
     @touchend="endDrag"
   ></div>
-  <div ref="spacer" id="spacer"></div>
+  <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div>
 </template>
 
 <style>
@@ -47,6 +48,7 @@
 </style>
 
 <script setup>
+const props = defineProps(["visualizerEnabled"]);
 import { ref, onMounted, onUnmounted, onBeforeMount } from "vue";
 import {
   DataTexture,
@@ -253,6 +255,7 @@ async function initThree() {
   initWebGL(NLEDS, NLIGHTS, SIZE, texture);
 
   socket.on("message", (in_data) => {
+    console.log("ws updated");
     let array = new Uint8Array(in_data);
     data.set(array);
     texture.needsUpdate = true;
