@@ -253,7 +253,6 @@ async function initThree() {
   initWebGL(NLEDS, NLIGHTS, SIZE, texture);
 
   socket.on("message", (in_data) => {
-    console.log("ws updated");
     let array = new Uint8Array(in_data);
     data.set(array);
     texture.needsUpdate = true;
