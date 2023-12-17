@@ -1,8 +1,8 @@
 {
-  "name": "chromalights-ui",
+  "name": "ravelights-ui",
   "version": "0.0.1",
-  "description": "UI for chromalights-python",
-  "productName": "ChromaLights UI",
+  "description": "UI for ravelights-python",
+  "productName": "RaveLights UI",
   "author": "Daniel <d.brummerloh@gmail.com>",
   "private": true,
   "scripts": {
