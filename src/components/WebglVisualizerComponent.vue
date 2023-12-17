@@ -5,6 +5,7 @@
   </div> -->
 
   <div
+    v-show="props.visualizerEnabled"
     ref="canvas"
     id="canvas"
     @mousedown="startDrag"
@@ -15,7 +16,7 @@
     @mouseup="endDrag"
     @touchend="endDrag"
   ></div>
-  <div ref="spacer" id="spacer"></div>
+  <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div>
 </template>
 
 <style>
@@ -47,11 +48,13 @@
 </style>
 
 <script setup>
-import { ref, onMounted, onUnmounted, onBeforeMount } from "vue";
+const props = defineProps(["visualizerEnabled"]);
+import { ref, onMounted, watchEffect } from "vue";
 import {
   DataTexture,
   PlaneGeometry,
   RGBAFormat,
+  sRGBEncoding,
   Scene,
   Camera,
   WebGLRenderer,
@@ -69,22 +72,23 @@ let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
 
+let scene, camera, renderer;
+let NLEDS, NLIGHTS, SIZE, texture, data;
+const socket = io({ autoConnect: false });
+
 const minHeight = 50;
 const maxHeight = 500;
 
-onBeforeMount(() => {
-  console.log("onBeforeMount");
+onMounted(() => {
   initThree();
 });
 
-onMounted(() => {
-  console.log("onMounted");
-  socket.connect();
-});
-
-onUnmounted(() => {
-  console.log("onUnmounted");
-  socket.disconnect();
+watchEffect(() => {
+  if (props.visualizerEnabled) {
+    socket.connect();
+  } else {
+    socket.disconnect();
+  }
 });
 
 // function increase() {
@@ -115,7 +119,6 @@ onUnmounted(() => {
 
 function startDrag(e) {
   const clientX = e.clientX || e.changedTouches[0].clientX;
-  console.log(clientX);
   isDragging = true;
   initialY = clientX;
   initialHeight = canvas.value.clientHeight;
@@ -148,12 +151,9 @@ function endDrag() {
 
 // three
 
-let scene, camera, renderer;
-let NLEDS, NLIGHTS, SIZE, texture, data;
-const socket = io({ autoConnect: false });
-
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
+  texture.encoding = sRGBEncoding;
   texture.needsUpdate = true;
   return texture;
 }
@@ -179,6 +179,8 @@ function initWebGL() {
   renderer = new WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
+  renderer.gammaOutput = true;
+  renderer.gammaFactor = 2.2;
   canvas.value.appendChild(renderer.domElement);
 
   scene = new Scene();

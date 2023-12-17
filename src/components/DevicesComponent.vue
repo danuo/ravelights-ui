@@ -90,7 +90,6 @@ function set_device_settings(device_id, var_name) {
     device_id: device_id,
   };
   body[var_name] = appStore.devices[device_id][var_name];
-  console.log(body);
   axiosPut("/rest/settings", body);
 }
 </script>

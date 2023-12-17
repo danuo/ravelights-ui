@@ -19,7 +19,7 @@
 
     <q-page-container>
       <WebglVisualizerComponent
-        v-if="visualizerEnabled"
+        :visualizerEnabled="visualizerEnabled"
       ></WebglVisualizerComponent>
       <router-view v-slot="{ Component }">
         <keep-alive>
