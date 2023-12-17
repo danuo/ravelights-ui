@@ -54,6 +54,7 @@ import {
   DataTexture,
   PlaneGeometry,
   RGBAFormat,
+  sRGBEncoding,
   Scene,
   Camera,
   WebGLRenderer,
@@ -152,6 +153,7 @@ function endDrag() {
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
+  texture.encoding = sRGBEncoding;
   texture.needsUpdate = true;
   return texture;
 }
@@ -177,6 +179,8 @@ function initWebGL() {
   renderer = new WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
+  renderer.gammaOutput = true;
+  renderer.gammaFactor = 2.2;
   canvas.value.appendChild(renderer.domElement);
 
   scene = new Scene();
