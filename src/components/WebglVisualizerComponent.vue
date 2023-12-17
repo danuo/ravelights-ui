@@ -118,7 +118,6 @@ watchEffect(() => {
 
 function startDrag(e) {
   const clientX = e.clientX || e.changedTouches[0].clientX;
-  console.log(clientX);
   isDragging = true;
   initialY = clientX;
   initialHeight = canvas.value.clientHeight;

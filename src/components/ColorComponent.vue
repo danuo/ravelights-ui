@@ -47,7 +47,6 @@
               (val) => {
                 color_sec_mode[item] = val;
                 set_settings('color_sec_mode');
-                console.log('test');
               }
             "
             dense
