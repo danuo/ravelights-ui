@@ -16,7 +16,6 @@
     @mouseup="endDrag"
     @touchend="endDrag"
   ></div>
-  <!-- <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div> -->
 </template>
 
 <style>
@@ -37,13 +36,6 @@
   height: 200px;
   background-color: black;
   cursor: grab;
-  /* position: fixed; */
-  /* z-index: 10; */
-}
-#spacer {
-  width: 100%;
-  height: 200px;
-  position: relative;
 }
 </style>
 
@@ -67,7 +59,6 @@ import { axiosGet } from "stores/app-store";
 
 // const vis_control = ref(null);
 const canvas = ref(null);
-const spacer = ref(null);
 let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
@@ -139,7 +130,6 @@ function onDrag(e) {
 
   // vis_control.value.style.height = newHeight + "px";
   canvas.value.style.height = newHeight + "px";
-  spacer.value.style.height = newHeight + "px";
   renderer.setSize(window.innerWidth, newHeight);
 }
 
