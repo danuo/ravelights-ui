@@ -1,12 +1,9 @@
 const routes = [
   {
     path: "/",
+    redirect: "/perform",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      {
-        path: "/",
-        component: () => import("src/pages/LoadingPage.vue"),
-      },
       {
         path: "/bpm",
         component: () => import("src/pages/BpmPage.vue"),
