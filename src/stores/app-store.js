@@ -34,6 +34,7 @@ export const useAppStore = defineStore("app-store", {
       devices: {},
       effect: {},
       effect_target_level: 0,
+      advanced_mode: false,
     };
   },
   actions: {
