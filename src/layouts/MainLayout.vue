@@ -15,15 +15,15 @@
           icon="motion_photos_auto"
         />
       </q-tabs>
-    </q-header>
-
-    <q-page-container>
-      <div id="stickie">
+      <div class="black-bg">
         <WebglVisualizerComponent
           :visualizerEnabled="visualizerEnabled"
         ></WebglVisualizerComponent>
         <ManualTimelineComponent></ManualTimelineComponent>
       </div>
+    </q-header>
+
+    <q-page-container>
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />
@@ -46,9 +46,17 @@ import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vu
 </script>
 
 <style>
+div.q-tabs__content > button {
+  height: 100%;
+  background-color: black;
+}
+
+.black-bg {
+  background-color: black;
+}
+
 #stickie {
   width: 100%;
-  background-color: black;
   top: 0;
   position: sticky;
   z-index: 10;
