@@ -16,7 +16,7 @@
     @mouseup="endDrag"
     @touchend="endDrag"
   ></div>
-  <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div>
+  <!-- <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div> -->
 </template>
 
 <style>
@@ -37,8 +37,8 @@
   height: 200px;
   background-color: black;
   cursor: grab;
-  position: fixed;
-  z-index: 10;
+  /* position: fixed; */
+  /* z-index: 10; */
 }
 #spacer {
   width: 100%;

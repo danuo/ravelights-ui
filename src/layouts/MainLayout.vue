@@ -18,9 +18,12 @@
     </q-header>
 
     <q-page-container>
-      <WebglVisualizerComponent
-        :visualizerEnabled="visualizerEnabled"
-      ></WebglVisualizerComponent>
+      <div id="stickie">
+        <WebglVisualizerComponent
+          :visualizerEnabled="visualizerEnabled"
+        ></WebglVisualizerComponent>
+        <ManualTimelineComponent></ManualTimelineComponent>
+      </div>
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />
@@ -38,6 +41,16 @@ const visualizerEnabled = ref(true);
 function toggleVisualizer() {
   visualizerEnabled.value = !visualizerEnabled.value;
 }
-
+import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
 </script>
+
+<style>
+#stickie {
+  width: 100%;
+  background-color: black;
+  top: 0;
+  position: sticky;
+  z-index: 10;
+}
+</style>
