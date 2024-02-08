@@ -29,7 +29,9 @@
           <div v-for="gen_index in 3" :key="gen_index">
             {{
               replace_underscores(
-                settings.selected[typ[gen_type_idx]][gen_index]
+                settings.selected[selected_device_index][typ[gen_type_idx]][
+                  gen_index
+                ]
               )
             }}
           </div>
@@ -44,7 +46,11 @@
             {{ typ[4] }}
           </q-item-label>
           <div v-for="gen_index in 3" :key="gen_index">
-            {{ replace_underscores(settings.selected[typ[4]][gen_index]) }}
+            {{
+              replace_underscores(
+                settings.selected[selected_device_index][typ[4]][gen_index]
+              )
+            }}
           </div>
         </div>
       </div>
@@ -95,13 +101,17 @@
           :square="true"
           :color="
             gen.generator_name ==
-            settings.selected[selected_type][effective_timeline_level]
+            settings.selected[selected_device_index][selected_type][
+              effective_timeline_level
+            ]
               ? 'secondary'
               : 'primary'
           "
           :text-color="
             gen['generator_name'] ==
-            settings.selected[selected_type][effective_timeline_level]
+            settings.selected[selected_device_index][selected_type][
+              effective_timeline_level
+            ]
               ? 'black'
               : 'white'
           "
@@ -117,7 +127,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings } = storeToRefs(appStore);
+const { settings, selected_device_index } = storeToRefs(appStore);
 
 const selected_type = ref("pattern");
 const activeFilters = ref([]);
@@ -193,10 +203,12 @@ function replace_underscores(input_string) {
 }
 
 function set_generator(generatorName) {
-  settings.value.selected[selected_type.value][effective_timeline_level.value] =
-    generatorName;
+  settings.value.selected[selected_device_index.value][selected_type.value][
+    effective_timeline_level.value
+  ] = generatorName;
   let body = {
     action: "set_generator",
+    device_index: selected_device_index.value,
     gen_type: selected_type.value,
     gen_name: generatorName,
     timeline_level: effective_timeline_level.value,
@@ -213,6 +225,7 @@ function set_settings(var_name) {
 function send_gen_command(command) {
   let body = {
     action: "gen_command",
+    device_index: selected_device_index.value,
     command: command,
     gen_type: selected_type.value,
     timeline_level: effective_timeline_level.value,
