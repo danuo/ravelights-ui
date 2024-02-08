@@ -73,6 +73,17 @@
               snap
             />
           </div>
+
+          <template v-if="idx != 0">
+            <q-item-label caption> linked_to </q-item-label>
+            <q-btn-toggle
+              v-model="devices[idx]['linked_to']"
+              @click="set_device_settings(idx, 'linked_to')"
+              :options="getLinkedOptions(idx)"
+              :clearable="true"
+              size="lg"
+            />
+          </template>
         </q-item-section>
       </q-item>
     </q-list>
@@ -84,14 +95,31 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { devices, advanced } = storeToRefs(appStore);
+const { devices, advanced_mode } = storeToRefs(appStore);
 
-function set_device_settings(device_id, var_name) {
+function set_device_settings(device_index, var_name) {
   let body = {
     action: "set_device_settings",
-    device_id: device_id,
+    device_index: device_index,
   };
-  body[var_name] = appStore.devices[device_id][var_name];
+  body[var_name] = appStore.devices[device_index][var_name];
   axiosPut("/rest/settings", body);
+}
+
+function getLinkedOptions(current_device_index) {
+  let result = [];
+  for (
+    let target_device_index = 0;
+    target_device_index < current_device_index;
+    target_device_index++
+  ) {
+    if (this.devices[target_device_index].linked_to == null) {
+      result.push({
+        label: "D" + target_device_index.toString(),
+        value: target_device_index,
+      });
+    }
+  }
+  return result;
 }
 </script>
