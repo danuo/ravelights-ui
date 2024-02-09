@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mt-xs-pm" v-if="settings !== null">
+  <div class="q-mt-xs q-mx-xs" v-if="settings !== null">
     <q-btn-toggle
       v-model="settings.global_manual_timeline_level"
       @click="set_manual_timeline_index()"
