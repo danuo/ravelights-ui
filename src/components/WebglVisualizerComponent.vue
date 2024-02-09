@@ -46,7 +46,7 @@ import {
   DataTexture,
   PlaneGeometry,
   RGBAFormat,
-  sRGBEncoding,
+  SRGBColorSpace,
   Scene,
   Camera,
   WebGLRenderer,
@@ -143,7 +143,7 @@ function endDrag() {
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
-  texture.encoding = sRGBEncoding;
+  texture.colorSpace = SRGBColorSpace;
   texture.needsUpdate = true;
   return texture;
 }
