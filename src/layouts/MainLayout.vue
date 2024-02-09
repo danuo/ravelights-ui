@@ -8,7 +8,7 @@
           @click="toggleFloatingMenu"
           push
           square
-          color="secondary"
+          color="black"
         />
         <q-route-tab to="/bpm" name="BPM" icon="alarm" />
         <q-route-tab to="/perform" name="Perform" icon="view_timeline" />
