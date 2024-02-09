@@ -11,9 +11,15 @@
           color="black"
           style="width: 60px"
         />
-        <q-route-tab to="/bpm" name="BPM" icon="palette" />
-        <q-route-tab to="/audio" name="Audio" icon="mic" />
         <q-route-tab to="/perform" name="Perform" icon="live_tv" />
+        <q-route-tab
+          to="/effect"
+          name="Effect"
+          icon="stream"
+          v-if="advanced_mode"
+        />
+        <q-route-tab to="/color" name="Color" icon="palette" />
+        <q-route-tab to="/audio" name="Audio" icon="mic" />
         <q-route-tab to="/devices" name="Devices" icon="widgets" />
         <q-route-tab to="/timeline" name="Timeline" icon="movie" />
         <q-route-tab
@@ -25,12 +31,6 @@
           to="/trigger"
           name="Trigger"
           icon="pattern"
-          v-if="advanced_mode"
-        />
-        <q-route-tab
-          to="/effect"
-          name="Effect"
-          icon="stream"
           v-if="advanced_mode"
         />
       </q-tabs>

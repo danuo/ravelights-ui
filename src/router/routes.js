@@ -5,8 +5,8 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "/bpm",
-        component: () => import("src/pages/BpmPage.vue"),
+        path: "/color",
+        component: () => import("src/pages/ColorPage.vue"),
       },
       {
         path: "/audio",
