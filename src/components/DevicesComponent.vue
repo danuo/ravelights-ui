@@ -106,17 +106,17 @@ function set_device_settings(device_index, var_name) {
   axiosPut("/rest/settings", body);
 }
 
-function getLinkedOptions(current_device_index) {
+function getLinkedOptions(current_index) {
   let result = [];
   for (
-    let target_device_index = 0;
-    target_device_index < current_device_index;
-    target_device_index++
+    let linked_to_index = 0;
+    linked_to_index < current_index;
+    linked_to_index++
   ) {
-    if (this.devices[target_device_index].linked_to == null) {
+    if (this.devices[linked_to_index].linked_to == null) {
       result.push({
-        label: "D" + target_device_index.toString(),
-        value: target_device_index,
+        label: "D" + linked_to_index.toString(),
+        value: linked_to_index,
       });
     }
   }

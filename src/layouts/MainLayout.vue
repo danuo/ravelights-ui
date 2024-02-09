@@ -39,6 +39,7 @@
           :visualizerEnabled="enable_visualizer"
         ></WebglVisualizerComponent>
         <ManualTimelineComponent></ManualTimelineComponent>
+        <ManualDeviceComponent></ManualDeviceComponent>
       </div>
     </q-header>
 
@@ -63,6 +64,7 @@ const { enable_floating_menu, enable_visualizer, advanced_mode } =
 function toggleFloatingMenu() {
   enable_floating_menu.value = !enable_floating_menu.value;
 }
+import ManualDeviceComponent from "src/components/ManualDeviceComponent.vue";
 import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
 import FloatingMenuComponent from "src/components/FloatingMenuComponent.vue";
