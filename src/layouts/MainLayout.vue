@@ -1,8 +1,9 @@
 <template>
+  <FloatingMenuComponent></FloatingMenuComponent>
   <q-layout view="hHh lpR fFf">
     <q-header class="bg-primary text-white" height-hint="50">
       <q-tabs align="left" style="height: 6em">
-        <q-btn flat icon="live_tv" @click="toggleVisualizer" />
+        <q-btn flat icon="live_tv" @click="toggleFloatingMenu" />
         <q-route-tab to="/bpm" name="BPM" icon="alarm" />
         <q-route-tab to="/perform" name="Perform" icon="view_timeline" />
         <q-route-tab to="/trigger" name="Trigger" icon="pattern" />
@@ -17,7 +18,7 @@
       </q-tabs>
       <div class="black-bg">
         <WebglVisualizerComponent
-          :visualizerEnabled="visualizerEnabled"
+          :visualizerEnabled="enable_visualizer"
         ></WebglVisualizerComponent>
         <ManualTimelineComponent></ManualTimelineComponent>
       </div>
@@ -34,15 +35,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useAppStore } from "stores/app-store";
+import { storeToRefs } from "pinia";
 
-const visualizerEnabled = ref(true);
+const appStore = useAppStore();
+const { enable_floating_menu, enable_visualizer } = storeToRefs(appStore);
 
-function toggleVisualizer() {
-  visualizerEnabled.value = !visualizerEnabled.value;
+function toggleFloatingMenu() {
+  enable_floating_menu.value = !enable_floating_menu.value;
+  console.log(enable_floating_menu.value);
 }
 import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
+import FloatingMenuComponent from "src/components/FloatingMenuComponent.vue";
 </script>
 
 <style>

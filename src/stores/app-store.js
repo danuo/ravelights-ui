@@ -36,6 +36,8 @@ export const useAppStore = defineStore("app-store", {
       effect_target_level: 0,
       advanced_mode: false,
       selected_device_index: 0,
+      enable_floating_menu: false,
+      enable_visualizer: true,
     };
   },
   actions: {
