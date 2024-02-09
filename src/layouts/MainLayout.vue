@@ -1,8 +1,8 @@
 <template>
   <FloatingMenuComponent></FloatingMenuComponent>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-primary text-white" height-hint="50">
-      <q-tabs align="left" style="height: 6em">
+    <q-header class="bg-primary text-white">
+      <q-tabs align="left" style="height: 60px">
         <q-btn
           icon="live_tv"
           @click="toggleFloatingMenu"
