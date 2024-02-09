@@ -9,6 +9,10 @@ const routes = [
         component: () => import("src/pages/BpmPage.vue"),
       },
       {
+        path: "/audio",
+        component: () => import("src/pages/AudioPage.vue"),
+      },
+      {
         path: "/perform",
         component: () => import("src/pages/PerformPage.vue"),
       },
