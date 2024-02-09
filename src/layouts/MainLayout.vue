@@ -62,7 +62,6 @@ const { enable_floating_menu, enable_visualizer, advanced_mode } =
 
 function toggleFloatingMenu() {
   enable_floating_menu.value = !enable_floating_menu.value;
-  console.log(enable_floating_menu.value);
 }
 import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
