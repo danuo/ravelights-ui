@@ -92,4 +92,6 @@ function setSettingsAutopilot() {
   };
   axiosPut("/rest/settings", body);
 }
+
+export { setSettingsAutopilot };
 </script>
