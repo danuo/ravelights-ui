@@ -1,7 +1,6 @@
 <template>
   <q-page padding>
     <BpmComponent />
-    <AutopilotComponent />
   </q-page>
 </template>
 
