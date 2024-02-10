@@ -1,13 +1,12 @@
 <template>
   <div
     v-ripple
-    class="relative-position container flex flex-center non-selectable"
+    class="container relative-position non-selectable flex items-center justify-start q-pa-md"
     :class="{ active: active }"
     @click="callback"
   >
-    <q-icon size="sm" name="font_download" />
+    <q-icon size="sm" :name="icon" />
     {{ label }}
-    <q-radio v-model="fake_model" val="teal" color="teal" />
   </div>
 </template>
 
@@ -27,8 +26,9 @@ console.log(fake_model.value);
 console.log(props.active);
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .container {
+  gap: 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 1.5s;
@@ -37,11 +37,11 @@ console.log(props.active);
   font-weight: 400;
   border-style: solid;
   border-width: 3px;
-  border-color: rgb(31, 41, 55);
+  border-color: $border-grey;
   background-color: black;
 }
 
 .container.active {
-  border-color: rgb(109, 40, 217);
+  border-color: $purple;
 }
 </style>
