@@ -3,6 +3,21 @@
     <q-space />
   </div>
   <q-list bordered separator>
+    <q-item>
+      <q-item-section>
+        <q-item-label caption> Enable Autopilot </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-3">
+            <q-toggle
+              @click="set_settings('enable_autopilot')"
+              v-model="settings.enable_autopilot"
+              color="secondary"
+            />
+          </div>
+        </div>
+      </q-item-section>
+    </q-item>
+
     <q-item v-for="button in meta.controls_autopilot" :key="button.name">
       <!-- is toggle slider -->
       <q-item-section v-if="button.type == 'toggle_slider'">
@@ -84,6 +99,12 @@ import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
 const { settings, meta } = storeToRefs(appStore);
+
+function set_settings(var_name) {
+  let body = { action: "set_settings" };
+  body[var_name] = settings.value[var_name];
+  axiosPut("/rest/settings", body);
+}
 
 function setSettingsAutopilot() {
   let body = {
