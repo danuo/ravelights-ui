@@ -14,7 +14,7 @@
               label="autopilot"
               icon="music_video"
               :callback="toggleAutopilot"
-              :active="settings.settings_autopilot['autopilot']"
+              :active="settings.enable_autopilot"
             ></MenuButtonComponent>
           </div>
           <div class="col-6">
@@ -38,16 +38,17 @@ const { settings, enable_floating_menu } = storeToRefs(appStore);
 
 import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
 
+function set_settings(var_name) {
+  let body = { action: "set_settings" };
+  body[var_name] = settings.value[var_name];
+  axiosPut("/rest/settings", body);
+}
+
 function toggleAutopilot() {
   console.log("toggleAutopilot");
-  console.log(settings.value.settings_autopilot["autopilot"]);
-  settings.value.settings_autopilot["autopilot"] =
-    !settings.value.settings_autopilot["autopilot"];
-  let body = {
-    action: "set_settings_autopilot",
-    ...settings.value.settings_autopilot,
-  };
-  axiosPut("/rest/settings", body);
+  console.log(settings.value.enable_autopilot);
+  settings.value.enable_autopilot = !settings.value.enable_autopilot;
+  set_settings("enable_autopilot");
 }
 
 function toggleVisualizer() {
