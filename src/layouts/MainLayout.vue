@@ -37,7 +37,7 @@
         <WebglVisualizerComponent
           :visualizerEnabled="enable_visualizer"
         ></WebglVisualizerComponent>
-        <ManualTimelineComponent></ManualTimelineComponent>
+        <!-- <ManualTimelineComponent></ManualTimelineComponent> -->
         <ManualDeviceComponent></ManualDeviceComponent>
       </div>
     </q-header>

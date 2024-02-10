@@ -28,7 +28,39 @@
             ></MenuButtonComponent>
           </div>
         </div>
-        <q-option-group v-model="group" :options="options" color="primary" />
+
+        <div class="column" id="device-selector">
+          <div class="relative-position">
+            <q-radio
+              v-model="demo_radio"
+              :val="0"
+              v-ripple
+              class="non-selectable"
+              label="Line"
+              color="secondary"
+            />
+          </div>
+          <div class="relative-position">
+            <q-radio
+              v-model="demo_radio"
+              :val="1"
+              v-ripple
+              class="non-selectable"
+              label="Rectangle"
+              color="secondary"
+            />
+          </div>
+          <div class="relative-position">
+            <q-radio
+              v-model="demo_radio"
+              :val="2"
+              v-ripple
+              class="non-selectable"
+              label="Ellipse"
+              color="secondary"
+            />
+          </div>
+        </div>
       </div>
     </q-dialog>
   </div>
@@ -36,6 +68,8 @@
 
 <script setup>
 import { ref } from "vue";
+
+const demo_radio = ref(0);
 
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
@@ -65,53 +99,37 @@ function toggleAutopilot() {
   settings.value.enable_autopilot = !settings.value.enable_autopilot;
   set_settings("enable_autopilot");
 }
-
-const group = ref("op1");
-const options = [
-  {
-    label: "Option 1",
-    value: "op1",
-  },
-  {
-    label: "Option 2",
-    value: "op2",
-  },
-  {
-    label: "Option 3",
-    value: "op3",
-  },
-];
 </script>
 
 <style lang="scss" scoped>
-.my-rounded {
-  border-radius: 30px;
-}
+$radius-menu: 15px;
+$radius-button: 8px;
 
 .floating-menu {
-  border-top-left-radius: 15px !important;
-  border-top-right-radius: 15px !important;
+  border-top-left-radius: $radius-menu !important;
+  border-top-right-radius: $radius-menu !important;
   border-top: solid 3px $purple !important;
   border-left: solid 3px $purple !important;
   border-right: solid 3px $purple !important;
   background-color: black;
 }
 
-div.q-option-group > :deep(div) {
-  background-color: red !important;
+div#device-selector div.q-radio {
+  border: solid 2px $grey-10 !important;
+  height: 60px;
+  width: 100%;
+}
+div#device-selector div.q-radio[aria-checked="true"] {
+  border: solid 3px $purple !important;
 }
 
-div.q-option-group > :deep(div:first-child) {
-  border-top-left-radius: 15px !important;
-  border-top-right-radius: 15px !important;
-  border: solid 3px $purple !important;
-  background-color: blue !important;
+div#device-selector div:first-child div.q-radio {
+  border-top-left-radius: $radius-button !important;
+  border-top-right-radius: $radius-button !important;
 }
 
-div.q-option-group > :deep(div:last-child) {
-  border-bottom-left-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;
-  border: solid 3px $purple !important;
-  background-color: blue !important;
+div#device-selector div:last-child div.q-radio {
+  border-bottom-left-radius: $radius-button !important;
+  border-bottom-right-radius: $radius-button !important;
 }
 </style>
