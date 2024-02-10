@@ -6,7 +6,6 @@
         <q-btn
           icon="settings"
           @click="toggleFloatingMenu"
-          push
           square
           color="black"
           style="width: 60px"
