@@ -2,8 +2,7 @@
   <div class="q-pa-md q-gutter-sm">
     <q-dialog v-model="enable_floating_menu" seamless position="bottom">
       <div class="floating-menu q-pa-sm">
-        <!-- <q-card class="bg-black shadow-up-10 my-rounded" style="width: 350px"> -->
-        <div class="row q-col-gutter-sm">
+        <div class="row q-col-gutter-sm q-pb-sm">
           <div class="col-6">
             <MenuButtonComponent
               label="Visualizer"
@@ -22,18 +21,22 @@
           </div>
           <div class="col-6">
             <MenuButtonComponent
-              label="audio analysis"
-              icon="music_video"
+              label="Audio Analysis"
+              icon="mic"
+              :callback="toggleAudioAnalysis"
+              :active="settings.enable_audio_analysis"
             ></MenuButtonComponent>
           </div>
         </div>
-        <!-- </q-card> -->
+        <q-option-group v-model="group" :options="options" color="primary" />
       </div>
     </q-dialog>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
+
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
@@ -49,16 +52,35 @@ function set_settings(var_name) {
   axiosPut("/rest/settings", body);
 }
 
+function toggleAudioAnalysis() {
+  settings.value.enable_audio_analysis = !settings.value.enable_audio_analysis;
+  set_settings("enable_audio_analysis");
+}
+
 function toggleVisualizer() {
   enable_visualizer.value = !enable_visualizer.value;
 }
 
 function toggleAutopilot() {
-  console.log("toggleAutopilot");
-  console.log(settings.value.enable_autopilot);
   settings.value.enable_autopilot = !settings.value.enable_autopilot;
   set_settings("enable_autopilot");
 }
+
+const group = ref("op1");
+const options = [
+  {
+    label: "Option 1",
+    value: "op1",
+  },
+  {
+    label: "Option 2",
+    value: "op2",
+  },
+  {
+    label: "Option 3",
+    value: "op3",
+  },
+];
 </script>
 
 <style lang="scss" scoped>
@@ -72,6 +94,24 @@ function toggleAutopilot() {
   border-top: solid 3px $purple !important;
   border-left: solid 3px $purple !important;
   border-right: solid 3px $purple !important;
-  background-color: grey;
+  background-color: black;
+}
+
+div.q-option-group > :deep(div) {
+  background-color: red !important;
+}
+
+div.q-option-group > :deep(div:first-child) {
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  border: solid 3px $purple !important;
+  background-color: blue !important;
+}
+
+div.q-option-group > :deep(div:last-child) {
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+  border: solid 3px $purple !important;
+  background-color: blue !important;
 }
 </style>

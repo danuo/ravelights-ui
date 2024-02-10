@@ -37,11 +37,13 @@ console.log(props.active);
   font-weight: 400;
   border-style: solid;
   border-width: 3px;
-  border-color: $border-grey;
+  border-color: $grey-10;
+  color: $grey-7;
   background-color: black;
 }
 
 .container.active {
+  color: white;
   border-color: $purple;
 }
 </style>
