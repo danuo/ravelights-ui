@@ -4,7 +4,7 @@
     :ui-ver="UI_API_VERSION"
     :server-ver="SERVER_API_VERSION"
   ></ApiWarningComponent>
-  <router-view />
+  <router-view v-if="dataReceived" />
 </template>
 
 <script setup>
@@ -19,8 +19,9 @@ const appStore = useAppStore();
 
 const UI_API_VERSION = "1"; // set required version here
 
-const SERVER_API_VERSION = ref(UI_API_VERSION);
+const SERVER_API_VERSION = ref(null);
 const showPopup = ref(false);
+const dataReceived = ref(false);
 initAppStore();
 
 async function initAppStore() {
@@ -28,10 +29,12 @@ async function initAppStore() {
   if (Object.keys(appStore.settings).length === 0) {
     console.warn("cannot connect to REST-API");
     router.push("/");
+    showPopup.value = true;
   } else {
     appStore.initSSE();
     SERVER_API_VERSION.value = appStore.meta["API_VERSION"];
     checkApiVersion();
+    dataReceived.value = true;
   }
 }
 
