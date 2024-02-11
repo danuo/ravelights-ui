@@ -1,8 +1,8 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-dialog v-model="enable_floating_menu" seamless position="bottom">
-      <div class="floating-menu q-pa-sm">
-        <div class="row q-col-gutter-sm q-pb-sm">
+      <div class="floating-menu q-pa-md">
+        <div class="row q-col-gutter-md q-pb-md">
           <div class="col-6">
             <MenuButtonComponent
               label="Visualizer"
@@ -33,33 +33,18 @@
         </div>
 
         <div class="column" id="device-selector">
-          <div class="relative-position">
+          <div
+            class="relative-position"
+            v-for="device_index in get_device_list_options"
+            :key="device_index"
+          >
             <q-radio
-              v-model="demo_radio"
-              :val="0"
+              v-model="settings.target_device_index"
+              @click="set_settings('target_device_index')"
+              :val="device_index"
               v-ripple
-              class="non-selectable"
-              label="Line"
-              color="secondary"
-            />
-          </div>
-          <div class="relative-position">
-            <q-radio
-              v-model="demo_radio"
-              :val="1"
-              v-ripple
-              class="non-selectable"
-              label="Rectangle"
-              color="secondary"
-            />
-          </div>
-          <div class="relative-position">
-            <q-radio
-              v-model="demo_radio"
-              :val="2"
-              v-ripple
-              class="non-selectable"
-              label="Ellipse"
+              class="non-selectable q-pa-sm"
+              :label="'Device ' + device_index + ' | ' + 'Device Name'"
               color="secondary"
             />
           </div>
@@ -70,15 +55,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
-const demo_radio = ref(0);
+import { computed, watchEffect } from "vue";
 
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, enable_floating_menu, enable_visualizer } =
+const { settings, devices, enable_floating_menu, enable_visualizer } =
   storeToRefs(appStore);
 
 import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
@@ -102,6 +85,26 @@ function toggleAutopilot() {
   settings.value.enable_autopilot = !settings.value.enable_autopilot;
   set_settings("enable_autopilot");
 }
+
+const get_device_list_options = computed(() => {
+  let device_indices = [];
+  for (let i = 0; i < devices.value.length; i++) {
+    if (devices.value[i].linked_to == null) {
+      device_indices.push(i);
+    }
+  }
+  return device_indices;
+});
+
+watchEffect(() => {
+  // make sure the selected device can actually be controlled
+  if (
+    !get_device_list_options.value.includes(settings.value.target_device_index)
+  ) {
+    settings.value.target_device_index = 0;
+    set_settings("target_device_index");
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -118,11 +121,13 @@ $radius-button: 8px;
 }
 
 div#device-selector div.q-radio {
-  border: solid 2px $grey-10 !important;
+  box-sizing: border-box;
+  border: solid 3px $grey-10 !important;
   height: 60px;
   width: 100%;
 }
 div#device-selector div.q-radio[aria-checked="true"] {
+  box-sizing: border-box;
   border: solid 3px $purple !important;
 }
 
