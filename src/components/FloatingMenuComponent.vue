@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="enable_floating_menu" seamless position="bottom">
+    <q-dialog v-model="enable_floating_menu" position="bottom">
       <div class="floating-menu q-pa-sm">
         <div class="row q-col-gutter-sm q-pb-sm">
           <div class="col-6">
