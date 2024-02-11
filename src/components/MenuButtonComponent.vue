@@ -23,7 +23,6 @@
 <script setup>
 import { ref } from "vue";
 
-const fake_model = ref(false);
 const props = defineProps({
   active: Boolean,
   callback: Function,
@@ -31,10 +30,6 @@ const props = defineProps({
   icon: String,
   fancy: Boolean,
 });
-
-fake_model.value = props.active;
-console.log(fake_model.value);
-console.log(props.active);
 </script>
 
 <style lang="scss" scoped>
