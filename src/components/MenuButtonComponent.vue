@@ -1,12 +1,14 @@
 <template>
   <div
     v-ripple
-    class="container relative-position non-selectable flex items-center justify-start q-pa-md"
+    class="container relative-position non-selectable flex justify-start"
     :class="{ active: active }"
     @click="callback"
   >
-    <q-icon size="sm" :name="icon" />
-    {{ label }}
+    <div class="icon-box row items-center q-px-md">
+      <q-icon size="sm" :name="icon" />
+    </div>
+    <div class="row items-center q-pl-md">{{ label }}</div>
   </div>
 </template>
 
@@ -27,17 +29,26 @@ console.log(props.active);
 </script>
 
 <style lang="scss" scoped>
+$border-radius: 8px;
+$border-width: 3px;
+
+.icon-box {
+  object-fit: cover;
+  border-top-left-radius: $border-radius - $border-width;
+  border-bottom-left-radius: $border-radius - $border-width;
+}
+
+.container.active .icon-box {
+  background-color: $purple;
+}
 .container {
-  gap: 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 1.5s;
   height: 60px;
   width: 100%;
   font-weight: 400;
-  border-style: solid;
-  border-width: 3px;
-  border-color: $grey-10;
+  border: $border-width solid $grey-10;
   color: $grey-7;
   background-color: black;
 }
