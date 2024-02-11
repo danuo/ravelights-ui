@@ -1,7 +1,6 @@
 <template>
-  <FloatingMenuComponent></FloatingMenuComponent>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-primary text-white">
+    <q-header class="text-white">
       <q-tabs align="left" style="height: 60px">
         <q-btn
           icon="settings"
@@ -37,8 +36,8 @@
         <WebglVisualizerComponent
           :visualizerEnabled="enable_visualizer"
         ></WebglVisualizerComponent>
-        <!-- <ManualTimelineComponent></ManualTimelineComponent> -->
-        <ManualDeviceComponent></ManualDeviceComponent>
+        <ManualTimelineComponent></ManualTimelineComponent>
+        <!-- <ManualDeviceComponent></ManualDeviceComponent> -->
       </div>
     </q-header>
 
@@ -49,6 +48,14 @@
         </keep-alive>
       </router-view>
     </q-page-container>
+
+    <q-footer>
+      <q-slide-transition>
+        <FloatingMenuComponent
+          v-show="enable_floating_menu"
+        ></FloatingMenuComponent>
+      </q-slide-transition>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -74,6 +81,10 @@ header div.row.no-wrap button {
   flex: 1 1 auto;
   height: 100%;
   max-width: 100px;
+}
+
+footer {
+  background-color: transparent !important;
 }
 
 .black-bg {

@@ -1,65 +1,61 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="enable_floating_menu" seamless position="bottom">
-      <div class="floating-menu q-pa-md">
-        <div class="row q-col-gutter-md q-pb-md">
-          <div class="col-6">
-            <MenuButtonComponent
-              label="Visualizer"
-              icon="music_video"
-              :callback="toggleVisualizer"
-              :active="enable_visualizer"
-              fancy
-            ></MenuButtonComponent>
-          </div>
-          <div class="col-6">
-            <MenuButtonComponent
-              label="Autopilot"
-              icon="motion_photos_auto"
-              :callback="toggleAutopilot"
-              :active="settings.enable_autopilot"
-              fancy
-            ></MenuButtonComponent>
-          </div>
-          <div class="col-6">
-            <MenuButtonComponent
-              label="Audio Analysis"
-              icon="mic"
-              :callback="toggleAudioAnalysis"
-              :active="settings.enable_audio_analysis"
-              fancy
-            ></MenuButtonComponent>
-          </div>
-          <div class="col-6">
-            <MenuButtonComponent
-              label="Fullscreen"
-              icon="fullscreen"
-              :callback="toggleFullscreen"
-              :active="$q.fullscreen.isActive"
-              fancy
-            ></MenuButtonComponent>
-          </div>
-        </div>
-
-        <div class="column" id="device-selector">
-          <div
-            class="relative-position"
-            v-for="device_index in get_device_list_options"
-            :key="device_index"
-          >
-            <q-radio
-              v-model="settings.target_device_index"
-              @click="set_settings('target_device_index')"
-              :val="device_index"
-              v-ripple
-              class="non-selectable q-pa-sm"
-              :label="'Device ' + device_index + ' | ' + 'Device Name'"
-              color="secondary"
-            />
-          </div>
-        </div>
+  <div class="floating-menu q-pa-md">
+    <div class="row q-col-gutter-md q-pb-md">
+      <div class="col-6">
+        <MenuButtonComponent
+          label="Visualizer"
+          icon="music_video"
+          :callback="toggleVisualizer"
+          :active="enable_visualizer"
+          fancy
+        ></MenuButtonComponent>
       </div>
-    </q-dialog>
+      <div class="col-6">
+        <MenuButtonComponent
+          label="Autopilot"
+          icon="motion_photos_auto"
+          :callback="toggleAutopilot"
+          :active="settings.enable_autopilot"
+          fancy
+        ></MenuButtonComponent>
+      </div>
+      <div class="col-6">
+        <MenuButtonComponent
+          label="Audio Analysis"
+          icon="mic"
+          :callback="toggleAudioAnalysis"
+          :active="settings.enable_audio_analysis"
+          fancy
+        ></MenuButtonComponent>
+      </div>
+      <div class="col-6">
+        <MenuButtonComponent
+          label="Fullscreen"
+          icon="fullscreen"
+          :callback="toggleFullscreen"
+          :active="$q.fullscreen.isActive"
+          fancy
+        ></MenuButtonComponent>
+      </div>
+    </div>
+
+    <div class="column" id="device-selector">
+      <div
+        class="relative-position"
+        v-for="device_index in get_device_list_options"
+        :key="device_index"
+      >
+        <q-radio
+          v-model="settings.target_device_index"
+          @click="set_settings('target_device_index')"
+          :val="device_index"
+          v-ripple
+          class="non-selectable q-pa-sm"
+          :label="'Device ' + device_index + ' | ' + 'Device Name'"
+          color="secondary"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -127,12 +123,20 @@ $radius-menu: 15px;
 $radius-button: 8px;
 
 .floating-menu {
+  box-sizing: border-box;
   border-top-left-radius: $radius-menu !important;
   border-top-right-radius: $radius-menu !important;
   border-top: solid 3px $purple !important;
   border-left: solid 3px $purple !important;
   border-right: solid 3px $purple !important;
   background-color: black;
+  max-width: 700px;
+  margin: auto;
+  margin-bottom: -50px;
+}
+
+div#device-selector {
+  margin-bottom: 50px;
 }
 
 div#device-selector div.q-radio {
