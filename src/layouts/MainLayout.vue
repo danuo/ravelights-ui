@@ -33,9 +33,7 @@
         />
       </q-tabs>
       <div class="black-bg">
-        <WebglVisualizerComponent
-          :visualizerEnabled="enable_visualizer"
-        ></WebglVisualizerComponent>
+        <WebglVisualizerComponent></WebglVisualizerComponent>
         <ManualTimelineComponent></ManualTimelineComponent>
         <!-- <ManualDeviceComponent></ManualDeviceComponent> -->
       </div>

@@ -5,7 +5,7 @@
   </div> -->
 
   <div
-    v-show="props.visualizerEnabled"
+    v-show="enable_visualizer"
     ref="canvas"
     id="canvas"
     @mousedown="startDrag"
@@ -40,7 +40,11 @@
 </style>
 
 <script setup>
-const props = defineProps(["visualizerEnabled"]);
+import { storeToRefs } from "pinia";
+import { useAppStore } from "stores/app-store";
+const appStore = useAppStore();
+const { settings, enable_visualizer } = storeToRefs(appStore);
+
 import { ref, onMounted, watchEffect } from "vue";
 import {
   DataTexture,
@@ -64,18 +68,20 @@ let initialY = 0;
 let initialHeight = 0;
 
 let scene, camera, renderer;
+let HEIGHT;
 let NLEDS, NLIGHTS, SIZE, texture, data;
 const socket = io({ autoConnect: false });
 
+HEIGHT = 200;
 const minHeight = 50;
 const maxHeight = 500;
 
 onMounted(() => {
-  initThree();
+  initWebGl();
 });
 
 watchEffect(() => {
-  if (props.visualizerEnabled) {
+  if (enable_visualizer) {
     socket.connect();
   } else {
     socket.disconnect();
@@ -113,7 +119,6 @@ function startDrag(e) {
   isDragging = true;
   initialY = clientX;
   initialHeight = canvas.value.clientHeight;
-  // canvas.value.style["background-color"] = "red";
   canvas.value.style.cursor = "grabbing";
 }
 
@@ -129,8 +134,9 @@ function onDrag(e) {
   );
 
   // vis_control.value.style.height = newHeight + "px";
-  canvas.value.style.height = newHeight + "px";
-  renderer.setSize(window.innerWidth, newHeight);
+  HEIGHT = newHeight;
+  canvas.value.style.height = HEIGHT + "px";
+  renderer.setSize(window.innerWidth, HEIGHT);
 }
 
 function endDrag() {
@@ -165,7 +171,7 @@ function sum(array) {
   return sum;
 }
 
-function initWebGL() {
+function initScene() {
   renderer = new WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
@@ -176,7 +182,14 @@ function initWebGL() {
   scene = new Scene();
   camera = new Camera();
 
-  // Create two PlaneGeometries
+  clearScene();
+  buildScene();
+
+  window.addEventListener("resize", onWindowResize);
+  render();
+}
+
+function buildScene() {
   let spacings = [0];
   let pixelCounter = 0;
   for (let i = 0; i < NLIGHTS; i++) {
@@ -208,17 +221,21 @@ function initWebGL() {
     mesh.position.x = positions[i];
     scene.add(mesh);
   }
+}
 
-  window.addEventListener("resize", onWindowResize);
-  render();
+function clearScene() {
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0]);
+  }
 }
 
 function onWindowResize() {
-  renderer.setSize(window.innerWidth, 200);
+  renderer.setSize(window.innerWidth, HEIGHT);
 }
 
 function render() {
   renderer.render(scene, camera);
+  console.log("BBB");
 }
 
 function deviceConfigToNLEDS(deviceConfig) {
@@ -231,18 +248,24 @@ function deviceConfigToNLEDS(deviceConfig) {
   return n_lights;
 }
 
-async function initThree() {
-  const apiData = await axiosGet("/rest/settings");
-  const deviceConfig = apiData.device_config;
-  NLEDS = deviceConfigToNLEDS(deviceConfig);
+async function readDeviceConfig() {
+  // const apiData = await axiosGet("/rest/settings");
+  // const deviceConfig = apiData.device_config;
+  console.log(settings.value.device_config);
 
+  NLEDS = deviceConfigToNLEDS(settings.value.device_config);
   NLIGHTS = NLEDS.length;
   SIZE = sum(NLEDS);
+  console.log(NLIGHTS);
+}
+
+async function initWebGl() {
+  await readDeviceConfig();
 
   data = new Uint8Array(4 * SIZE);
-
   texture = initTexture(data, SIZE);
-  initWebGL(NLEDS, NLIGHTS, SIZE, texture);
+
+  initScene(NLEDS, NLIGHTS, SIZE, texture);
 
   socket.on("message", (in_data) => {
     let array = new Uint8Array(in_data);
