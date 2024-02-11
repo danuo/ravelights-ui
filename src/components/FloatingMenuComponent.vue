@@ -9,6 +9,7 @@
               icon="music_video"
               :callback="toggleVisualizer"
               :active="enable_visualizer"
+              fancy
             ></MenuButtonComponent>
           </div>
           <div class="col-6">
@@ -17,6 +18,7 @@
               icon="motion_photos_auto"
               :callback="toggleAutopilot"
               :active="settings.enable_autopilot"
+              fancy
             ></MenuButtonComponent>
           </div>
           <div class="col-6">
@@ -25,6 +27,7 @@
               icon="mic"
               :callback="toggleAudioAnalysis"
               :active="settings.enable_audio_analysis"
+              fancy
             ></MenuButtonComponent>
           </div>
         </div>

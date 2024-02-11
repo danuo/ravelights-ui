@@ -2,13 +2,21 @@
   <div
     v-ripple
     class="container relative-position non-selectable flex justify-start"
-    :class="{ active: active }"
+    :class="{ active: active, fancy: fancy }"
     @click="callback"
   >
-    <div class="icon-box row items-center q-px-md">
+    <div
+      class="icon-box row items-center q-pl-md"
+      :class="{ 'q-pr-md': fancy }"
+    >
       <q-icon size="sm" :name="icon" />
     </div>
-    <div class="row items-center q-pl-md">{{ label }}</div>
+    <div
+      class="row items-center"
+      :class="{ 'q-pl-md': fancy, 'q-pl-sm': !fancy }"
+    >
+      {{ label }}
+    </div>
   </div>
 </template>
 
@@ -21,6 +29,7 @@ const props = defineProps({
   callback: Function,
   label: String,
   icon: String,
+  fancy: Boolean,
 });
 
 fake_model.value = props.active;
@@ -33,12 +42,11 @@ $border-radius: 8px;
 $border-width: 3px;
 
 .icon-box {
-  object-fit: cover;
   border-top-left-radius: $border-radius - $border-width;
   border-bottom-left-radius: $border-radius - $border-width;
 }
 
-.container.active .icon-box {
+.container.active.fancy .icon-box {
   background-color: $purple;
 }
 .container {
