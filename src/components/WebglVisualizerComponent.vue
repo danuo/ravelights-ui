@@ -49,17 +49,12 @@ let initialY = 0;
 let initialHeight = 0;
 
 let scene, camera, renderer;
-let HEIGHT;
 let NLEDS, NLIGHTS, SIZE, texture, data;
 const socket = io({ autoConnect: false });
 
-HEIGHT = 200;
+let HEIGHT = 200;
 const minHeight = 50;
 const maxHeight = 500;
-
-onMounted(() => {
-  initWebGl();
-});
 
 watchEffect(() => {
   if (enable_visualizer) {
@@ -139,6 +134,12 @@ function initScene() {
   render();
 }
 
+function clearScene() {
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0]);
+  }
+}
+
 function buildScene() {
   let spacings = [0];
   let pixelCounter = 0;
@@ -173,49 +174,39 @@ function buildScene() {
   }
 }
 
-function clearScene() {
-  while (scene.children.length > 0) {
-    scene.remove(scene.children[0]);
-  }
-}
-
 function onWindowResize() {
   renderer.setSize(window.innerWidth, HEIGHT);
 }
 
 function render() {
   renderer.render(scene, camera);
-  console.log("BBB");
 }
 
 function deviceConfigToNLEDS(deviceConfig) {
   let n_lights = [];
-  deviceConfig.forEach((element) => {
-    for (let i = 0; i < element.n_lights; i++) {
-      n_lights.push(element.n_leds);
-    }
-  });
+  let device_index = settings.value.target_device_index;
+  if (device_index == null) {
+    device_index = 0;
+  }
+  let element = deviceConfig[device_index];
+  for (let i = 0; i < element.n_lights; i++) {
+    n_lights.push(element.n_leds);
+  }
   return n_lights;
 }
 
-async function readDeviceConfig() {
-  // const apiData = await axiosGet("/rest/settings");
-  // const deviceConfig = apiData.device_config;
-  console.log(settings.value.device_config);
-
-  NLEDS = deviceConfigToNLEDS(settings.value.device_config);
+function readDeviceConfig(device_config) {
+  NLEDS = deviceConfigToNLEDS(device_config);
   NLIGHTS = NLEDS.length;
   SIZE = sum(NLEDS);
-  console.log(NLIGHTS);
-}
-
-async function initWebGl() {
-  await readDeviceConfig();
 
   data = new Uint8Array(4 * SIZE);
   texture = initTexture(data, SIZE);
+}
 
-  initScene(NLEDS, NLIGHTS, SIZE, texture);
+function initWebGl() {
+  readDeviceConfig(settings.value.device_config);
+  initScene();
 
   socket.on("message", (in_data) => {
     let array = new Uint8Array(in_data);
@@ -224,4 +215,14 @@ async function initWebGl() {
     render();
   });
 }
+
+onMounted(() => {
+  initWebGl();
+
+  watchEffect(() => {
+    readDeviceConfig(settings.value.device_config);
+    clearScene();
+    buildScene();
+  });
+});
 </script>
