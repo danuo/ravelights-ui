@@ -1,9 +1,4 @@
 <template>
-  <!-- <div ref="vis_control" id="vis_control">
-    <div class="vis_button" @click="decrease"></div>
-    <div class="vis_button" @click="increase"></div>
-  </div> -->
-
   <div
     v-show="enable_visualizer"
     ref="canvas"
@@ -19,18 +14,6 @@
 </template>
 
 <style>
-/* .vis_button {
-  width: 50%;
-  height: 200px;
-  cursor: pointer;
-} */
-#vis_control {
-  width: 100%;
-  height: auto;
-  position: fixed;
-  z-index: 20;
-  display: flex;
-}
 #canvas {
   width: 100%;
   height: 200px;
@@ -59,9 +42,7 @@ import {
 } from "three";
 
 import { io } from "socket.io-client";
-import { axiosGet } from "stores/app-store";
 
-// const vis_control = ref(null);
 const canvas = ref(null);
 let isDragging = false;
 let initialY = 0;
@@ -88,32 +69,6 @@ watchEffect(() => {
   }
 });
 
-// function increase() {
-//   const initialHeight = canvas.value.clientHeight;
-//   const deltaY = 50;
-//   const newHeight = Math.min(
-//     maxHeight,
-//     Math.max(minHeight, initialHeight + deltaY)
-//   );
-//   // vis_control.value.style.height = newHeight + "px";
-//   canvas.value.style.height = newHeight + "px";
-//   spacer.value.style.height = newHeight + "px";
-//   renderer.setSize(window.innerWidth, newHeight);
-// }
-
-// function decrease() {
-//   const initialHeight = canvas.value.clientHeight;
-//   const deltaY = -50;
-//   const newHeight = Math.min(
-//     maxHeight,
-//     Math.max(minHeight, initialHeight + deltaY)
-//   );
-//   // vis_control.value.style.height = newHeight + "px";
-//   canvas.value.style.height = newHeight + "px";
-//   spacer.value.style.height = newHeight + "px";
-//   renderer.setSize(window.innerWidth, newHeight);
-// }
-
 function startDrag(e) {
   const clientX = e.clientX || e.changedTouches[0].clientX;
   isDragging = true;
@@ -126,14 +81,12 @@ function onDrag(e) {
   if (!isDragging) return;
   const clientX = e.clientX || e.changedTouches[0].clientX;
 
-  // const deltaY = e.clientY - initialY;
   const deltaY = (clientX - initialY) * 0.5;
   const newHeight = Math.min(
     maxHeight,
     Math.max(minHeight, initialHeight + deltaY)
   );
 
-  // vis_control.value.style.height = newHeight + "px";
   HEIGHT = newHeight;
   canvas.value.style.height = HEIGHT + "px";
   renderer.setSize(window.innerWidth, HEIGHT);
@@ -141,11 +94,8 @@ function onDrag(e) {
 
 function endDrag() {
   isDragging = false;
-  // canvas.value.style["background-color"] = "blue";
   canvas.value.style.cursor = "grab";
 }
-
-// three
 
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
