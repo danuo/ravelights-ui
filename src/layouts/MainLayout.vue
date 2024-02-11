@@ -14,7 +14,7 @@
           to="/effect"
           name="Effect"
           icon="stream"
-          v-if="advanced_mode"
+          v-if="enable_advanced_mode"
         />
         <q-route-tab to="/color" name="Color" icon="palette" />
         <q-route-tab to="/audio" name="Audio" icon="mic" />
@@ -29,7 +29,7 @@
           to="/trigger"
           name="Trigger"
           icon="pattern"
-          v-if="advanced_mode"
+          v-if="enable_advanced_mode"
         />
       </q-tabs>
       <div class="black-bg">
@@ -64,7 +64,7 @@ import { useAppStore } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { enable_floating_menu, enable_visualizer, advanced_mode } =
+const { enable_floating_menu, enable_visualizer, enable_advanced_mode } =
   storeToRefs(appStore);
 
 function toggleFloatingMenu() {

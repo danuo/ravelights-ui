@@ -24,7 +24,7 @@
             />
           </div>
           <div class="q-px-md q-py-md">
-            <template v-if="advanced_mode">
+            <template v-if="enable_advanced_mode">
               <q-item-label caption> device_triggerskip </q-item-label>
               <q-slider
                 @change="set_device_settings(idx, 'device_triggerskip')"
@@ -95,7 +95,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { devices, advanced_mode } = storeToRefs(appStore);
+const { devices, enable_advanced_mode } = storeToRefs(appStore);
 
 function set_device_settings(device_index, var_name) {
   let body = {

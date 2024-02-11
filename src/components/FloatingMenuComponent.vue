@@ -37,6 +37,15 @@
           fancy
         ></MenuButtonComponent>
       </div>
+      <div class="col-6">
+        <MenuButtonComponent
+          label="Advanced"
+          icon="science"
+          :callback="toggleAdvancedMode"
+          :active="enable_advanced_mode"
+          fancy
+        ></MenuButtonComponent>
+      </div>
     </div>
 
     <div class="column" id="device-selector">
@@ -68,7 +77,7 @@ import { storeToRefs } from "pinia";
 const $q = useQuasar();
 
 const appStore = useAppStore();
-const { settings, devices, enable_floating_menu, enable_visualizer } =
+const { settings, devices, enable_visualizer, enable_advanced_mode } =
   storeToRefs(appStore);
 
 import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
@@ -95,6 +104,10 @@ function toggleAutopilot() {
 
 function toggleFullscreen() {
   $q.fullscreen.toggle();
+}
+
+function toggleAdvancedMode() {
+  enable_advanced_mode.value = !enable_advanced_mode.value;
 }
 
 const get_device_list_options = computed(() => {
