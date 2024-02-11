@@ -29,9 +29,9 @@
           <div v-for="gen_index in 3" :key="gen_index">
             {{
               replace_underscores(
-                settings.selected[settings.target_device_index][
-                  typ[gen_type_idx]
-                ][gen_index]
+                settings.selected[effective_device_level][typ[gen_type_idx]][
+                  gen_index
+                ]
               )
             }}
           </div>
@@ -48,9 +48,7 @@
           <div v-for="gen_index in 3" :key="gen_index">
             {{
               replace_underscores(
-                settings.selected[settings.target_device_index][typ[4]][
-                  gen_index
-                ]
+                settings.selected[effective_device_level][typ[4]][gen_index]
               )
             }}
           </div>
@@ -103,7 +101,7 @@
           :square="true"
           :color="
             gen.generator_name ==
-            settings.selected[settings.target_device_index][selected_type][
+            settings.selected[effective_device_level][selected_type][
               effective_timeline_level
             ]
               ? 'secondary'
@@ -111,7 +109,7 @@
           "
           :text-color="
             gen['generator_name'] ==
-            settings.selected[settings.target_device_index][selected_type][
+            settings.selected[effective_device_level][selected_type][
               effective_timeline_level
             ]
               ? 'black'
@@ -152,6 +150,16 @@ const buttons = [
   { var_name: "renew_dimmer_from_manual", label: "renew_dimmer" },
   { var_name: "renew_trigger_from_manual", label: "renew_triggers" },
 ];
+
+const effective_device_level = computed({
+  get() {
+    let device_index = settings.value.target_device_index;
+    if (device_index == null) {
+      device_index = 0;
+    }
+    return device_index;
+  },
+});
 
 const effective_timeline_level = computed({
   get() {
