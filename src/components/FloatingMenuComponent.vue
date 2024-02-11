@@ -30,6 +30,15 @@
               fancy
             ></MenuButtonComponent>
           </div>
+          <div class="col-6">
+            <MenuButtonComponent
+              label="Fullscreen"
+              icon="fullscreen"
+              :callback="toggleFullscreen"
+              :active="$q.fullscreen.isActive"
+              fancy
+            ></MenuButtonComponent>
+          </div>
         </div>
 
         <div class="column" id="device-selector">
@@ -56,9 +65,11 @@
 
 <script setup>
 import { computed, watchEffect } from "vue";
-
+import { useQuasar } from "quasar";
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
+
+const $q = useQuasar();
 
 const appStore = useAppStore();
 const { settings, devices, enable_floating_menu, enable_visualizer } =
@@ -84,6 +95,10 @@ function toggleVisualizer() {
 function toggleAutopilot() {
   settings.value.enable_autopilot = !settings.value.enable_autopilot;
   set_settings("enable_autopilot");
+}
+
+function toggleFullscreen() {
+  $q.fullscreen.toggle();
 }
 
 const get_device_list_options = computed(() => {
