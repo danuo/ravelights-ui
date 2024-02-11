@@ -49,9 +49,10 @@
       </router-view>
     </q-page-container>
 
-    <q-footer>
+    <q-footer class="no-pointer-events">
       <q-slide-transition>
         <FloatingMenuComponent
+          class="all-pointer-events"
           v-show="enable_floating_menu"
         ></FloatingMenuComponent>
       </q-slide-transition>

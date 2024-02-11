@@ -48,7 +48,11 @@
       </div>
     </div>
 
-    <div class="column" id="device-selector">
+    <div
+      class="column"
+      id="device-selector"
+      v-if="get_device_list_options.length > 1"
+    >
       <div
         class="relative-position"
         v-for="device_index in get_device_list_options"
@@ -65,6 +69,7 @@
         />
       </div>
     </div>
+    <div id="spacer"></div>
   </div>
 </template>
 
@@ -145,11 +150,15 @@ $radius-button: 8px;
   background-color: black;
   max-width: 700px;
   margin: auto;
-  margin-bottom: -50px;
+  margin-bottom: -50px; // fixes slide animation
+}
+
+#spacer {
+  height: 35px; // fixes slide animation
 }
 
 div#device-selector {
-  margin-bottom: 50px;
+  margin-bottom: 15px; // fixes slide animation
 }
 
 div#device-selector div.q-radio {
