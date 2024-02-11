@@ -21,8 +21,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
 const props = defineProps({
   active: Boolean,
   callback: Function,
@@ -43,6 +41,7 @@ $border-width: 3px;
 
 .container.active.fancy .icon-box {
   background-color: $purple;
+  transition: background-color 0.3s ease;
 }
 .container {
   border-radius: 8px;
@@ -54,10 +53,19 @@ $border-width: 3px;
   border: $border-width solid $grey-10;
   color: $grey-7;
   background-color: black;
+  transition: background-color 0.3s ease;
 }
 
 .container.active {
   color: white;
   border-color: $purple;
+}
+.container.active:hover {
+  color: white;
+  border-color: $purple-hover;
+}
+.container:hover {
+  color: white;
+  border-color: $grey-8;
 }
 </style>
