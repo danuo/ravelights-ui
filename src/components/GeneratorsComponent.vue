@@ -62,7 +62,7 @@
         v-model="timeline_level"
         toggle-color="primary"
         :options="[
-          { label: 'auto', value: 0 },
+          { label: 'auto', value: null },
           { label: '1', value: 1 },
           { label: '2', value: 2 },
           { label: '3', value: 3 },
