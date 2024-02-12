@@ -73,6 +73,9 @@
               snap
             />
           </div>
+          <div>Disable Effects all level1 level2 level3</div>
+          <div>use autopilot</div>
+          <div>use timeline</div>
 
           <template v-if="idx != 0">
             <q-item-label caption> linked_to </q-item-label>
