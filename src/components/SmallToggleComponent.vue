@@ -5,7 +5,7 @@
     :class="{ active: active }"
     @click="callback"
   >
-    <div class="col-auto text-caption">
+    <div class="col-auto text-caption text-purple-light">
       {{ sublabel }}
     </div>
     <div class="col-auto text-h6">
@@ -26,6 +26,13 @@ const props = defineProps({
 <style lang="scss" scoped>
 $border-radius: 8px;
 $border-width: 3px;
+
+.text-purple-light {
+  color: $grey-9;
+}
+div.active > :deep(.text-purple-light) {
+  color: $purple-light;
+}
 
 .col-auto.text-h6 {
   margin-top: -7px;
