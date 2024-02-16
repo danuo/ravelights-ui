@@ -81,7 +81,8 @@
               <SmallToggleComponent
                 :active="devices[idx]['use_effect'][level]"
                 @click="toggleUseEffect(idx, level)"
-                :label="'use effect L' + level"
+                :label="'E' + level"
+                :sublabel="'use effect level ' + level"
               ></SmallToggleComponent>
             </div>
             <!-- further settings -->
@@ -89,21 +90,16 @@
               <SmallToggleComponent
                 :active="devices[idx]['refresh_from_timeline']"
                 @click="toggleValue(idx, 'refresh_from_timeline')"
-                label="refresh from timeline"
-              ></SmallToggleComponent>
-            </div>
-            <div class="col-4">
-              <SmallToggleComponent
-                :active="devices[idx]['refresh_from_timeline']"
-                @click="toggleValue(idx, 'refresh_from_timeline')"
-                label="refresh from timeline"
+                label="TIMELINE"
+                sublabel="refresh from timeline"
               ></SmallToggleComponent>
             </div>
             <div class="col-4">
               <SmallToggleComponent
                 :active="devices[idx]['use_autopilot']"
                 @click="toggleValue(idx, 'use_autopilot')"
-                label="use autopilot"
+                label="AUTOPILOT"
+                sublabel="use autopilot"
               ></SmallToggleComponent>
             </div>
           </div>
@@ -125,7 +121,7 @@
 </template>
 
 <script setup>
-import SmallToggleComponent from "src/components/Buttons/SmallToggleComponent.vue";
+import SmallToggleComponent from "src/components/SmallToggleComponent.vue";
 
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";

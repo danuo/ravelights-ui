@@ -1,11 +1,16 @@
 <template>
   <div
     v-ripple
-    class="container relative-position non-selectable flex"
+    class="container relative-position non-selectable column justify-center items-start q-px-md"
     :class="{ active: active }"
     @click="callback"
   >
-    <div class="row items-center justify-start q-pa-md">{{ label }}</div>
+    <div class="col-auto text-caption">
+      {{ sublabel }}
+    </div>
+    <div class="col-auto text-h6">
+      {{ label }}
+    </div>
   </div>
 </template>
 
@@ -14,12 +19,18 @@ const props = defineProps({
   active: Boolean,
   callback: Function,
   label: String,
+  sublabel: String,
 });
 </script>
 
 <style lang="scss" scoped>
 $border-radius: 8px;
 $border-width: 3px;
+
+.col-auto.text-h6 {
+  margin-top: -7px;
+  margin-bottom: -2px;
+}
 
 .container {
   border-radius: 8px;
