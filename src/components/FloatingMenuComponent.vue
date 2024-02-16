@@ -3,46 +3,46 @@
     <div class="row q-col-gutter-md q-pb-md">
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleVisualizer"
+          :active="enable_visualizer"
           label="Visualizer"
           icon="music_video"
-          :callback="toggleVisualizer"
-          :active="enable_visualizer"
           fancy
         ></MenuButtonComponent>
       </div>
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleAutopilot"
+          :active="settings.enable_autopilot"
           label="Autopilot"
           icon="motion_photos_auto"
-          :callback="toggleAutopilot"
-          :active="settings.enable_autopilot"
           fancy
         ></MenuButtonComponent>
       </div>
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleAudioAnalysis"
+          :active="settings.enable_audio_analysis"
           label="Audio Analysis"
           icon="mic"
-          :callback="toggleAudioAnalysis"
-          :active="settings.enable_audio_analysis"
           fancy
         ></MenuButtonComponent>
       </div>
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleFullscreen"
+          :active="$q.fullscreen.isActive"
           label="Fullscreen"
           icon="fullscreen"
-          :callback="toggleFullscreen"
-          :active="$q.fullscreen.isActive"
           fancy
         ></MenuButtonComponent>
       </div>
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleAdvancedMode"
+          :active="enable_advanced_mode"
           label="Advanced"
           icon="science"
-          :callback="toggleAdvancedMode"
-          :active="enable_advanced_mode"
           fancy
         ></MenuButtonComponent>
       </div>
@@ -74,6 +74,8 @@
 </template>
 
 <script setup>
+import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
+
 import { computed, watchEffect } from "vue";
 import { useQuasar } from "quasar";
 import { useAppStore, axiosPut } from "stores/app-store";
@@ -84,8 +86,6 @@ const $q = useQuasar();
 const appStore = useAppStore();
 const { settings, devices, enable_visualizer, enable_advanced_mode } =
   storeToRefs(appStore);
-
-import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
 
 function set_settings(var_name) {
   let body = { action: "set_settings" };

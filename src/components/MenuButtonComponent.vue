@@ -3,7 +3,6 @@
     v-ripple
     class="container relative-position non-selectable flex justify-start"
     :class="{ active: active, fancy: fancy }"
-    @click="callback"
   >
     <div
       class="icon-box row items-center q-pl-md"
@@ -23,7 +22,6 @@
 <script setup>
 const props = defineProps({
   active: Boolean,
-  callback: Function,
   label: String,
   icon: String,
   fancy: Boolean,
