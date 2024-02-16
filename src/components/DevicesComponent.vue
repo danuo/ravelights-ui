@@ -73,9 +73,40 @@
               snap
             />
           </div>
-          <div>Disable Effects all level1 level2 level3</div>
-          <div>use autopilot</div>
-          <div>use timeline</div>
+
+          <!-- buttons -->
+          <div class="row q-col-gutter-sm">
+            <!-- use effect -->
+            <div class="col-4" v-for="level in ['1', '2', '3']" :key="level">
+              <SmallToggleComponent
+                :active="devices[idx]['use_effect'][level]"
+                @click="toggleUseEffect(idx, level)"
+                :label="'use effect L' + level"
+              ></SmallToggleComponent>
+            </div>
+            <!-- further settings -->
+            <div class="col-4">
+              <SmallToggleComponent
+                :active="devices[idx]['refresh_from_timeline']"
+                @click="toggleValue(idx, 'refresh_from_timeline')"
+                label="refresh from timeline"
+              ></SmallToggleComponent>
+            </div>
+            <div class="col-4">
+              <SmallToggleComponent
+                :active="devices[idx]['refresh_from_timeline']"
+                @click="toggleValue(idx, 'refresh_from_timeline')"
+                label="refresh from timeline"
+              ></SmallToggleComponent>
+            </div>
+            <div class="col-4">
+              <SmallToggleComponent
+                :active="devices[idx]['use_autopilot']"
+                @click="toggleValue(idx, 'use_autopilot')"
+                label="use autopilot"
+              ></SmallToggleComponent>
+            </div>
+          </div>
 
           <template v-if="idx != 0">
             <q-item-label caption> linked_to </q-item-label>
@@ -94,11 +125,27 @@
 </template>
 
 <script setup>
+import SmallToggleComponent from "src/components/Buttons/SmallToggleComponent.vue";
+
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
 const { devices, enable_advanced_mode } = storeToRefs(appStore);
+
+function toggleUseEffect(device_index, level) {
+  console.log("use_effect");
+  devices.value[device_index]["use_effect"][level] =
+    !devices.value[device_index]["use_effect"][level];
+  set_device_settings(device_index, "use_effect");
+}
+
+function toggleValue(device_index, var_name) {
+  console.log("in toggle");
+  devices.value[device_index][var_name] =
+    !devices.value[device_index][var_name];
+  set_device_settings(device_index, var_name);
+}
 
 function set_device_settings(device_index, var_name) {
   let body = {
