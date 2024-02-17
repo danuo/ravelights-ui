@@ -7,12 +7,12 @@
       >
         <!-- is slider -->
         <q-item-section v-if="slider.type == 'slider'">
-          <q-item-label caption> {{ slider.var_name }} </q-item-label>
+          <q-item-label caption> {{ slider.name_slider }} </q-item-label>
           <div class="row q-pa-md">
             <div class="col-12">
               <q-slider
-                @change="set_settings(slider.var_name)"
-                v-model="settings[slider.var_name]"
+                @change="set_settings(slider.name_slider)"
+                v-model="settings[slider.name_slider]"
                 color="primary"
                 selection-color="secondary"
                 track-size="15px"
@@ -23,7 +23,7 @@
                 :step="slider.step"
                 snap
                 label-always
-                :label-value="settings[slider.var_name]"
+                :label-value="settings[slider.name_slider]"
               />
             </div>
           </div>
@@ -40,9 +40,9 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { settings } = storeToRefs(appStore);
 
-function set_settings(var_name) {
+function set_settings(name_slider) {
   let body = { action: "set_settings" };
-  body[var_name] = appStore.settings[var_name];
+  body[name_slider] = appStore.settings[name_slider];
   axiosPut("/rest/settings", body);
 }
 </script>
