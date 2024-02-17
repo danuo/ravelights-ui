@@ -18,7 +18,7 @@
       </div>
 
       <!-- select type -->
-      <div v-for="(e, gen_type_idx) in 4" :key="gen_type_idx" class="col-6">
+      <div v-for="(e, gen_type_idx) in 6" :key="gen_type_idx" class="col-6">
         <div
           @click="selected_type = typ[gen_type_idx]"
           :class="selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'"
@@ -32,23 +32,6 @@
                 settings.selected[effective_device_level][typ[gen_type_idx]][
                   gen_index
                 ]
-              )
-            }}
-          </div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div
-          @click="selected_type = typ[4]"
-          :class="selected_type == typ[4] ? 'green-box' : 'grey-box'"
-        >
-          <q-item-label caption style="color: #474747">
-            {{ typ[4] }}
-          </q-item-label>
-          <div v-for="gen_index in 3" :key="gen_index">
-            {{
-              replace_underscores(
-                settings.selected[effective_device_level][typ[4]][gen_index]
               )
             }}
           </div>
@@ -136,6 +119,7 @@ const timeline_level = ref(0);
 const typ = [
   "pattern",
   "pattern_sec",
+  "pattern_break",
   "vfilter",
   "dimmer",
   "thinner",
@@ -184,13 +168,24 @@ const filtered_generators = computed({
     if (appStore.meta == null) {
       return [];
     }
-    let effective_selected_type =
-      selected_type.value == "pattern_sec" ? "pattern" : selected_type.value;
-    return appStore.meta.available_generators[effective_selected_type].filter(
-      (generator) => {
-        return is_in_filters(generator["generator_keywords"]);
-      }
-    );
+    console.log(effective_selected_type.value);
+    return appStore.meta.available_generators[
+      effective_selected_type.value
+    ].filter((generator) => {
+      return is_in_filters(generator["generator_keywords"]);
+    });
+  },
+});
+
+const effective_selected_type = computed({
+  get() {
+    if (selected_type.value == "pattern_sec") {
+      return "pattern";
+    } else if (selected_type.value == "pattern_break") {
+      return "pattern";
+    } else {
+      return selected_type.value;
+    }
   },
 });
 
