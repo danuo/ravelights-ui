@@ -143,6 +143,8 @@ const typ = [
 ];
 
 const buttons = [
+  { var_name: "global_pattern_sec", label: "global_pattern_sec" },
+  { var_name: "global_pattern_break", label: "global_pattern_break" },
   { var_name: "global_vfilter", label: "global_vfilter" },
   { var_name: "global_dimmer", label: "global_dimmer" },
   { var_name: "global_thinner", label: "global_thinner" },
