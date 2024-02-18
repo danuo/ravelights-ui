@@ -62,15 +62,7 @@
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-3 q-pr-xs">
-                  <q-btn
-                    @click="modify_effect('change_draw', item.name)"
-                    label="draw"
-                    color="grey"
-                    class="full-width full-height"
-                  />
-                </div>
-                <div class="col-3 q-pr-xs">
+                <div class="col-4 q-pr-xs">
                   <q-btn
                     @click="modify_effect('renew_trigger', item.name)"
                     label="trigger"
@@ -78,7 +70,7 @@
                     class="full-width"
                   />
                 </div>
-                <div class="col-3 q-pr-xs">
+                <div class="col-4 q-pr-xs">
                   <q-btn
                     @click="modify_effect('alternate', item.name)"
                     label="altern."
@@ -86,7 +78,7 @@
                     class="full-width"
                   />
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                   <q-btn
                     @click="modify_effect('remove', item.name)"
                     label="remove"
