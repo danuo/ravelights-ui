@@ -24,7 +24,6 @@
     <div class="q-gutter-y-md">
       <q-card flat bordered style="background-color: rgb(25, 6, 30)">
         <q-tabs v-model="advanced_settings_mode" align="justify">
-          <q-tab name="draw_mode" label="draw_mode" />
           <q-tab name="frame_patterns" label="frame patterns" />
         </q-tabs>
 
@@ -35,41 +34,6 @@
           animated
           style="background-color: rgb(8, 2, 10)"
         >
-          <q-tab-panel name="draw_mode">
-            <div class="q-px-md row justify-between">
-              <div>
-                <q-item-label caption style="color: #474747">
-                  Global Effect Draw mode
-                </q-item-label>
-                <q-btn-toggle
-                  v-model="settings.global_effect_draw_mode"
-                  @click="set_settings('global_effect_draw_mode')"
-                  toggle-color="primary"
-                  :options="[
-                    { label: 'normal', value: 'normal' },
-                    { label: 'overlay', value: 'overlay' },
-                  ]"
-                  size="md"
-                />
-              </div>
-              <div>
-                <q-item-label caption style="color: #474747">
-                  Effect Draw mode
-                </q-item-label>
-                <q-btn-toggle
-                  v-model="settings.effect_draw_mode"
-                  @click="set_settings('effect_draw_mode')"
-                  toggle-color="primary"
-                  :options="[
-                    { label: 'normal', value: 'normal' },
-                    { label: 'overlay', value: 'overlay' },
-                  ]"
-                  size="md"
-                />
-              </div>
-            </div>
-          </q-tab-panel>
-
           <q-tab-panel name="frame_patterns">
             <div class="q-px-md q-pb-xs">
               <q-item-label caption style="color: #474747">
@@ -371,7 +335,6 @@ const limit_loop_options = {
 };
 
 const mode = ref("quarters");
-const advanced_settings_mode = ref("draw_mode");
 
 function replace_underscores(input_string) {
   return input_string.replace(/_/g, " ");

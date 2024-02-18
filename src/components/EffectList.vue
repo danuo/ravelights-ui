@@ -52,7 +52,6 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>draw_mode: {{ item.draw_mode }}</td>
                     <td>
                       trigger:
                       {{ item.trigger }}
