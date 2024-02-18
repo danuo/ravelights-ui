@@ -1,21 +1,5 @@
 <template>
   <div v-if="Object.keys(appStore.settings).length > 0">
-    <!--  ------------------------------- draw modes ------------------------------- -->
-    <div class="q-px-md q-pt-sm">
-      <q-item-label caption style="color: #474747"> Target level </q-item-label>
-      <q-btn-toggle
-        v-model="effect_target_level"
-        spread
-        toggle-color="primary"
-        :options="[
-          { label: 'all', value: 0 },
-          { label: '1', value: 1 },
-          { label: '2', value: 2 },
-          { label: '3', value: 3 },
-        ]"
-        size="md"
-      />
-    </div>
     <div class="q-px-md q-pt-sm q-pb-xs">
       <q-item-label caption style="color: #474747">
         Advanced Settings
@@ -257,7 +241,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, meta, effect_target_level } = storeToRefs(appStore);
+const { settings, meta } = storeToRefs(appStore);
 
 const frames_pattern = ref(0);
 const frames_pattern_options = [
@@ -344,7 +328,6 @@ function set_effect(effectName) {
   let body = {
     action: "set_effect",
     effect_name: effectName,
-    timeline_level: effect_target_level.value,
     mode: mode.value,
     limit_frames: limit_frames_options[limit_frames.value],
     limit_quarters: limit_frames_options[limit_quarters.value],

@@ -33,7 +33,6 @@ export const useAppStore = defineStore("app-store", {
       meta: {},
       devices: {},
       effect: {},
-      effect_target_level: 0,
       enable_advanced_mode: false,
       enable_floating_menu: false,
       enable_visualizer: true,

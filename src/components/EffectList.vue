@@ -24,7 +24,7 @@
   <q-list bordered>
     <q-scroll-area style="height: 40vh">
       <q-list padding>
-        <q-item v-for="item in effect_list" :key="item">
+        <q-item v-for="item in effect" :key="item">
           <div class="row full-width">
             <div class="col-12">
               <q-markup-table
@@ -101,30 +101,18 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, effect, effect_target_level } = storeToRefs(appStore);
-
-const effect_list = computed({
-  get() {
-    return effect.value[effect_target_level.value];
-  },
-  set(newValue) {
-    effect.value[effect_target_level.value] = newValue;
-  },
-});
+const { settings, effect } = storeToRefs(appStore);
 
 function modify_effect(operation, effect_name) {
   let body = {
     action: "modify_effect",
     operation: operation,
     effect_name: effect_name,
-    timeline_level: effect_target_level.value,
   };
   axiosPut("/rest/effect", body);
 
   if (operation == "remove") {
-    effect_list.value = effect_list.value.filter(
-      (item) => item.name !== effect_name
-    );
+    effect.value = effect.value.filter((item) => item.name !== effect_name);
   }
 }
 
