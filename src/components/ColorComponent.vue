@@ -35,7 +35,7 @@
       no-header-tabs
       size="huge"
       :no-footer="true"
-      :palette="meta.controls_color_palette"
+      :palette="meta.color_palette"
     />
 
     <div class="q-py-lg">
