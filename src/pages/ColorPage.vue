@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <ColorComponent />
+    <!-- <ColorComponent /> -->
     <GeneralSettingsComponent />
   </q-page>
 </template>
