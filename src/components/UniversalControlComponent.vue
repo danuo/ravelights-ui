@@ -1,27 +1,29 @@
 <template>
   <template v-if="props.button.type == 'slider'">
-    <q-item-section>
-      <q-item-label caption> {{ props.button.name_slider }} </q-item-label>
-      <div class="row q-pa-md">
-        <div class="col-12">
-          <q-slider
-            @change="set_settings(props.button.name_slider)"
-            v-model="settings[props.button.name_slider]"
-            color="primary"
-            selection-color="secondary"
-            track-size="15px"
-            thumb-size="30px"
-            :markers="props.button.markers"
-            :min="props.button.range_min"
-            :max="props.button.range_max"
-            :step="props.button.step"
-            snap
-            label-always
-            :label-value="settings[props.button.name_slider]"
-          />
+    <q-item>
+      <q-item-section>
+        <q-item-label caption> {{ props.button.name_slider }} </q-item-label>
+        <div class="row q-pa-md">
+          <div class="col-12">
+            <q-slider
+              @change="set_settings(props.button.name_slider)"
+              v-model="settings[props.button.name_slider]"
+              color="primary"
+              selection-color="secondary"
+              track-size="15px"
+              thumb-size="30px"
+              :markers="props.button.markers"
+              :min="props.button.range_min"
+              :max="props.button.range_max"
+              :step="props.button.step"
+              snap
+              label-always
+              :label-value="settings[props.button.name_slider]"
+            />
+          </div>
         </div>
-      </div>
-    </q-item-section>
+      </q-item-section>
+    </q-item>
   </template>
   <template v-if="props.button.type == 'dropdown'">
     <q-select
