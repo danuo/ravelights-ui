@@ -92,4 +92,15 @@ export const useAppStore = defineStore("app-store", {
       };
     },
   },
+  getters: {
+    device_list_options(state) {
+      let device_indices = [];
+      for (let i = 0; i < state.devices.length; i++) {
+        if (state.devices[i].linked_to == null) {
+          device_indices.push(i);
+        }
+      }
+      return device_indices;
+    },
+  },
 });

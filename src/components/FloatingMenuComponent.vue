@@ -60,11 +60,11 @@
     <div
       class="column"
       id="device-selector"
-      v-if="get_device_list_options.length > 1"
+      v-if="appStore.device_list_options.length > 1"
     >
       <div
         class="relative-position"
-        v-for="device_index in get_device_list_options"
+        v-for="device_index in appStore.device_list_options"
         :key="device_index"
       >
         <q-radio
@@ -85,7 +85,6 @@
 <script setup>
 import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
 
-import { computed, watchEffect } from "vue";
 import { useQuasar } from "quasar";
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
@@ -132,26 +131,6 @@ function toggleAdvancedMode() {
 function toggleQuickSelect() {
   enable_quick_select.value = !enable_quick_select.value;
 }
-
-const get_device_list_options = computed(() => {
-  let device_indices = [];
-  for (let i = 0; i < devices.value.length; i++) {
-    if (devices.value[i].linked_to == null) {
-      device_indices.push(i);
-    }
-  }
-  return device_indices;
-});
-
-watchEffect(() => {
-  // make sure the selected device can actually be controlled
-  if (
-    !get_device_list_options.value.includes(settings.value.target_device_index)
-  ) {
-    settings.value.target_device_index = 0;
-    set_settings("target_device_index");
-  }
-});
 </script>
 
 <style lang="scss" scoped>
