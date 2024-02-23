@@ -2,12 +2,12 @@
   <template v-if="props.button.type == 'slider'">
     <q-item>
       <q-item-section>
-        <q-item-label caption> {{ props.button.name_slider }} </q-item-label>
+        <q-item-label caption> {{ props.button.var_name }} </q-item-label>
         <div class="row q-pa-md">
           <div class="col-12">
             <q-slider
-              @change="set_settings(props.button.name_slider)"
-              v-model="settings[props.button.name_slider]"
+              @change="set_settings_wrapper"
+              v-model="settings[props.button.var_name]"
               color="primary"
               selection-color="secondary"
               track-size="15px"
@@ -18,7 +18,7 @@
               :step="props.button.step"
               snap
               label-always
-              :label-value="settings[props.button.name_slider]"
+              :label-value="settings[props.button.var_name]"
             />
           </div>
         </div>
