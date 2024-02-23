@@ -2,7 +2,7 @@
   <div class="q-pt-sm q-px-sm row justify-between bg-grey-10">
     <div class="text-caption text-grey-5">timeline level</div>
     <div
-      v-if="settings.target_device_index.length > 1"
+      v-if="appStore.device_list_options.length > 1"
       class="text-caption text-grey-5"
     >
       device index
@@ -24,7 +24,7 @@
       color="black"
     />
     <q-btn-toggle
-      v-if="settings.target_device_index.length > 1"
+      v-if="appStore.device_list_options.length > 1"
       v-model="settings.target_device_index"
       @click="appStore.set_settings('target_device_index')"
       :options="device_options"
