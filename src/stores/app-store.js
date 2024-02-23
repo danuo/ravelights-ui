@@ -91,6 +91,13 @@ export const useAppStore = defineStore("app-store", {
         this.updateData(event.data);
       };
     },
+    set_settings(var_name) {
+      let body = { action: "set_settings" };
+      body[var_name] = this.settings[var_name];
+      axiosPut("/rest/settings", body);
+      console.log("store-set-settings");
+      console.log(body);
+    },
   },
   getters: {
     device_list_options(state) {

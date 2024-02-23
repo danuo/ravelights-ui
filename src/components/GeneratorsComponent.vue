@@ -114,7 +114,7 @@ const { settings } = storeToRefs(appStore);
 
 const selected_type = ref("pattern");
 const activeFilters = ref([]);
-const timeline_level = ref(0);
+const timeline_level = ref(null);
 
 const typ = [
   "pattern",

@@ -94,7 +94,6 @@ const $q = useQuasar();
 const appStore = useAppStore();
 const {
   settings,
-  devices,
   enable_visualizer,
   enable_advanced_mode,
   enable_quick_select,

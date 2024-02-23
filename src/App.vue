@@ -48,6 +48,9 @@ function checkApiVersion() {
 
 watchEffect(() => {
   // make sure the selected device can actually be controlled
+  if (settings.value.target_device_index === null) {
+    return;
+  }
   if (
     !appStore.device_list_options.includes(settings.value.target_device_index)
   ) {

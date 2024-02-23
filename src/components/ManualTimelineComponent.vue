@@ -2,7 +2,7 @@
   <div class="q-mt-xs q-mx-xs" v-if="settings !== null">
     <q-btn-toggle
       v-model="settings.global_manual_timeline_level"
-      @click="set_manual_timeline_index()"
+      @click="appStore.set_settings('global_manual_timeline_level')"
       toggle-color="secondary"
       spread
       :options="[
@@ -18,19 +18,9 @@
 </template>
 
 <script setup>
-import { useAppStore, axiosPut } from "stores/app-store";
+import { useAppStore } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
 const { settings } = storeToRefs(appStore);
-
-function set_manual_timeline_index() {
-  settings.value.use_manual_timeline = true;
-  let body = {
-    action: "set_settings",
-    global_manual_timeline_level:
-      appStore.settings.global_manual_timeline_level,
-  };
-  axiosPut("/rest/settings", body);
-}
 </script>
