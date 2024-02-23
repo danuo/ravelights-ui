@@ -58,10 +58,21 @@
     </div>
 
     <div
+      v-if="appStore.device_list_options.length > 1"
       class="column"
       id="device-selector"
-      v-if="appStore.device_list_options.length > 1"
     >
+      <div class="relative-position">
+        <q-radio
+          v-model="settings.target_device_index"
+          @click="appStore.set_settings('target_device_index')"
+          :val="null"
+          v-ripple
+          class="non-selectable q-pa-sm"
+          label="All Devices"
+          color="secondary"
+        />
+      </div>
       <div
         class="relative-position"
         v-for="device_index in appStore.device_list_options"
@@ -69,7 +80,7 @@
       >
         <q-radio
           v-model="settings.target_device_index"
-          @click="set_settings('target_device_index')"
+          @click="appStore.set_settings('target_device_index')"
           :val="device_index"
           v-ripple
           class="non-selectable q-pa-sm"
