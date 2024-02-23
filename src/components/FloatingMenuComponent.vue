@@ -12,6 +12,15 @@
       </div>
       <div class="col-6">
         <MenuButtonComponent
+          @click="toggleQuickSelect"
+          :active="enable_quick_select"
+          label="Quick Select"
+          icon="offline_bolt"
+          fancy
+        ></MenuButtonComponent>
+      </div>
+      <div class="col-6">
+        <MenuButtonComponent
           @click="toggleAutopilot"
           :active="settings.enable_autopilot"
           label="Autopilot"
@@ -84,8 +93,13 @@ import { storeToRefs } from "pinia";
 const $q = useQuasar();
 
 const appStore = useAppStore();
-const { settings, devices, enable_visualizer, enable_advanced_mode } =
-  storeToRefs(appStore);
+const {
+  settings,
+  devices,
+  enable_visualizer,
+  enable_advanced_mode,
+  enable_quick_select,
+} = storeToRefs(appStore);
 
 function set_settings(var_name) {
   let body = { action: "set_settings" };
@@ -113,6 +127,10 @@ function toggleFullscreen() {
 
 function toggleAdvancedMode() {
   enable_advanced_mode.value = !enable_advanced_mode.value;
+}
+
+function toggleQuickSelect() {
+  enable_quick_select.value = !enable_quick_select.value;
 }
 
 const get_device_list_options = computed(() => {

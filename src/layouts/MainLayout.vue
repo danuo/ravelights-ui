@@ -33,9 +33,8 @@
         />
       </q-tabs>
       <div class="black-bg">
-        <WebglVisualizerComponent></WebglVisualizerComponent>
-        <ManualTimelineComponent></ManualTimelineComponent>
-        <!-- <ManualDeviceComponent></ManualDeviceComponent> -->
+        <WebglVisualizerComponent />
+        <QuickSelectComponent v-if="enable_quick_select" />
       </div>
     </q-header>
 
@@ -63,7 +62,7 @@ import { useAppStore } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { enable_floating_menu, enable_visualizer, enable_advanced_mode } =
+const { enable_floating_menu, enable_quick_select, enable_advanced_mode } =
   storeToRefs(appStore);
 
 function toggleFloatingMenu() {
@@ -71,6 +70,7 @@ function toggleFloatingMenu() {
 }
 import ManualDeviceComponent from "src/components/ManualDeviceComponent.vue";
 import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
+import QuickSelectComponent from "src/components/QuickSelectComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
 import FloatingMenuComponent from "src/components/FloatingMenuComponent.vue";
 </script>
