@@ -68,8 +68,6 @@ const { enable_floating_menu, enable_quick_select, enable_advanced_mode } =
 function toggleFloatingMenu() {
   enable_floating_menu.value = !enable_floating_menu.value;
 }
-import ManualDeviceComponent from "src/components/ManualDeviceComponent.vue";
-import ManualTimelineComponent from "src/components/ManualTimelineComponent.vue";
 import QuickSelectComponent from "src/components/QuickSelectComponent.vue";
 import WebglVisualizerComponent from "src/components/WebglVisualizerComponent.vue";
 import FloatingMenuComponent from "src/components/FloatingMenuComponent.vue";
