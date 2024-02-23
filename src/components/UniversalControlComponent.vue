@@ -120,7 +120,9 @@
     <q-select
       square
       outlined
-      @update:model-value="set_settings_wrapper"
+      @update:model-value="
+        (value) => set_settings_wrapper(props.button['var_name'], value)
+      "
       v-model="settingsTarget.value[props.button['var_name']]"
       :options="props.button['options']"
       :label="props.button['var_name']"
