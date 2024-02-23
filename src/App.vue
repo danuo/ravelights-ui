@@ -9,7 +9,7 @@
 
 <script setup>
 import { ref, watchEffect } from "vue";
-import { useAppStore, axiosPut } from "stores/app-store";
+import { useAppStore } from "stores/app-store";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 
@@ -55,13 +55,7 @@ watchEffect(() => {
     !appStore.device_list_options.includes(settings.value.target_device_index)
   ) {
     settings.value.target_device_index = 0;
-    set_settings("target_device_index");
+    appStore.set_settings("target_device_index");
   }
 });
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = appStore.settings[var_name];
-  axiosPut("/rest/settings", body);
-}
 </script>

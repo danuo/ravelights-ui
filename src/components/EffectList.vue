@@ -7,7 +7,7 @@
   <div class="row justify-between">
     <q-btn-toggle
       v-model="settings.global_effects_enabled"
-      @click="set_settings('global_effects_enabled')"
+      @click="appStore.set_settings('global_effects_enabled')"
       style="height: 3em"
       :options="[
         { label: 'enabled', value: true },
@@ -96,7 +96,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
@@ -118,12 +117,6 @@ function modify_effect(operation, effect_name) {
 
 function clear_effect_queue() {
   let body = { action: "clear_effect_queue" };
-  axiosPut("/rest/settings", body);
-}
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = settings.value[var_name];
   axiosPut("/rest/settings", body);
 }
 </script>

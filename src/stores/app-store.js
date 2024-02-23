@@ -95,8 +95,11 @@ export const useAppStore = defineStore("app-store", {
       let body = { action: "set_settings" };
       body[var_name] = this.settings[var_name];
       axiosPut("/rest/settings", body);
-      console.log("store-set-settings");
-      console.log(body);
+    },
+    set_settings_value(var_name, value) {
+      let body = { action: "set_settings" };
+      body[var_name] = value;
+      axiosPut("/rest/settings", body);
     },
   },
   getters: {

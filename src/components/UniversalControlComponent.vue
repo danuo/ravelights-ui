@@ -157,9 +157,7 @@ function set_settings_wrapper(key, value) {
     // todo set device settings
     return;
   }
-  // let var_name = props.button["var_name"];
-  let body = { action: "set_settings" };
-  body[key] = value;
-  axiosPut("/rest/settings", body);
+  // is app
+  appStore.set_settings_value(key, value);
 }
 </script>

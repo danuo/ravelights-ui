@@ -9,7 +9,7 @@
               >{{ button.label }}
             </q-item-label>
             <q-toggle
-              @click="set_settings(button.var_name)"
+              @click="appStore.set_settings(button.var_name)"
               v-model="settings[button.var_name]"
               color="secondary"
             />
@@ -149,7 +149,7 @@ const effective_device_level = computed({
 
 const effective_timeline_level = computed({
   get() {
-    if (timeline_level.value == 0) {
+    if (timeline_level.value == null) {
       return appStore.settings.global_manual_timeline_level;
     } else {
       return timeline_level.value;
@@ -220,12 +220,6 @@ function set_generator(generatorName) {
     gen_name: generatorName,
     timeline_level: effective_timeline_level.value,
   };
-  axiosPut("/rest/settings", body);
-}
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = appStore.settings[var_name];
   axiosPut("/rest/settings", body);
 }
 

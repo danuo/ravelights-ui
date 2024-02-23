@@ -340,10 +340,4 @@ function set_effect(effectName) {
   };
   axiosPut("/rest/settings", body);
 }
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = settings[var_name];
-  axiosPut("/rest/settings", body);
-}
 </script>

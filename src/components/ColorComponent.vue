@@ -46,7 +46,7 @@
             @update:model-value="
               (val) => {
                 color_sec_mode[item] = val;
-                set_settings('color_sec_mode');
+                appStore.set_settings('color_sec_mode');
               }
             "
             dense
@@ -66,7 +66,7 @@
             v-model="settings.color_mapping[item[0]][item[1]]"
             :options="color_mapping_options"
             size="lg"
-            @click="set_settings('color_mapping')"
+            @click="appStore.set_settings('color_mapping')"
           />
         </div>
       </div>
@@ -80,7 +80,7 @@
         </q-item-label>
         <q-btn-toggle
           v-model="settings.color_transition_speed"
-          @click="set_settings('color_transition_speed')"
+          @click="appStore.set_settings('color_transition_speed')"
           toggle-color="primary"
           :options="gen_speed_options()"
         />
@@ -127,12 +127,6 @@ const color_str = computed({
 
 function reset_color_mappings() {
   let body = { action: "reset_color_mappings" };
-  axiosPut("/rest/settings", body);
-}
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = appStore.settings[var_name];
   axiosPut("/rest/settings", body);
 }
 

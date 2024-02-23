@@ -110,15 +110,9 @@ const {
   enable_quick_select,
 } = storeToRefs(appStore);
 
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = settings.value[var_name];
-  axiosPut("/rest/settings", body);
-}
-
 function toggleAudioAnalysis() {
   settings.value.enable_audio_analysis = !settings.value.enable_audio_analysis;
-  set_settings("enable_audio_analysis");
+  appStore.set_settings("enable_audio_analysis");
 }
 
 function toggleVisualizer() {
@@ -127,7 +121,7 @@ function toggleVisualizer() {
 
 function toggleAutopilot() {
   settings.value.enable_autopilot = !settings.value.enable_autopilot;
-  set_settings("enable_autopilot");
+  appStore.set_settings("enable_autopilot");
 }
 
 function toggleFullscreen() {
