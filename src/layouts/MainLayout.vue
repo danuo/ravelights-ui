@@ -39,6 +39,18 @@
     </q-header>
 
     <q-page-container>
+      <div
+        class="q-pb-sm q-px-sm row justify-between bg-grey-10"
+        v-if="!enable_advanced_mode"
+      >
+        <div class="text-caption text-grey-5">timeline level</div>
+        <div
+          v-if="appStore.device_list_options.length > 1"
+          class="text-caption text-grey-5"
+        >
+          device index
+        </div>
+      </div>
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />

@@ -1,14 +1,5 @@
 <template v-if="settings !== null">
-  <div class="q-pt-sm q-px-sm row justify-between bg-grey-10">
-    <div class="text-caption text-grey-5">timeline level</div>
-    <div
-      v-if="appStore.device_list_options.length > 1"
-      class="text-caption text-grey-5"
-    >
-      device index
-    </div>
-  </div>
-  <div class="q-pb-sm row justify-between bg-grey-10 no-wrap scroll-container">
+  <div class="q-py-xs row justify-between bg-grey-10 no-wrap scroll-container">
     <q-btn-toggle
       v-model="settings.global_manual_timeline_level"
       @click="appStore.set_settings('global_manual_timeline_level')"
@@ -22,6 +13,7 @@
       size="lg"
       toggle-color="primary"
       color="black"
+      padding="5px 20px"
     />
     <q-btn-toggle
       v-if="appStore.device_list_options.length > 1"
@@ -31,6 +23,7 @@
       size="lg"
       toggle-color="primary"
       color="black"
+      padding="2px 15px"
     />
   </div>
 </template>
