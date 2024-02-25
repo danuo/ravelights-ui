@@ -8,7 +8,7 @@
               devices[idx].n_leds
             }}
           </q-item-label>
-          <div class="q-gutter-y-md">
+          <div>
             <q-btn-toggle
               v-model="devices[idx]['device_manual_timeline_level']"
               @click="set_device_settings(idx, 'device_manual_timeline_level')"
@@ -23,7 +23,7 @@
               size="lg"
             />
           </div>
-          <div class="q-px-md q-py-md">
+          <div class="q-px-sm q-py-md">
             <template v-if="enable_advanced_mode">
               <q-item-label caption> device_triggerskip </q-item-label>
               <q-slider
@@ -75,14 +75,13 @@
           </div>
 
           <!-- buttons -->
-          <div class="row q-col-gutter-sm">
+          <div class="row q-col-gutter-xs">
             <!-- use effect -->
             <div class="col-4" v-for="level in ['1', '2', '3']" :key="level">
               <SmallToggleComponent
                 :active="devices[idx]['use_effect'][level]"
                 @click="toggleUseEffect(idx, level)"
-                :label="'E' + level"
-                :sublabel="'use effect level ' + level"
+                :label="'use effect level ' + level"
               ></SmallToggleComponent>
             </div>
             <!-- further settings -->
@@ -90,16 +89,14 @@
               <SmallToggleComponent
                 :active="devices[idx]['refresh_from_timeline']"
                 @click="toggleValue(idx, 'refresh_from_timeline')"
-                label="TIMELINE"
-                sublabel="refresh from timeline"
+                label="refresh from timeline"
               ></SmallToggleComponent>
             </div>
             <div class="col-4">
               <SmallToggleComponent
                 :active="devices[idx]['use_autopilot']"
                 @click="toggleValue(idx, 'use_autopilot')"
-                label="AUTOPILOT"
-                sublabel="use autopilot"
+                label="use autopilot"
               ></SmallToggleComponent>
             </div>
           </div>

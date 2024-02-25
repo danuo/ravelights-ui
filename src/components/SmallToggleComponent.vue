@@ -1,14 +1,11 @@
 <template>
   <div
     v-ripple
-    class="container relative-position non-selectable column justify-center items-start q-px-md"
+    class="container relative-position non-selectable column justify-center items-start q-px-sm"
     :class="{ active: active }"
     @click="callback"
   >
     <div class="col-auto text-caption text-purple-light">
-      {{ sublabel }}
-    </div>
-    <div class="col-auto text-h6">
       {{ label }}
     </div>
   </div>
@@ -19,7 +16,6 @@ const props = defineProps({
   active: Boolean,
   callback: Function,
   label: String,
-  sublabel: String,
 });
 </script>
 
@@ -31,7 +27,7 @@ $border-width: 3px;
   color: $grey-9;
 }
 div.active > :deep(.text-purple-light) {
-  color: $purple-light;
+  color: $grey-4;
 }
 
 .col-auto.text-h6 {
@@ -53,8 +49,8 @@ div.active > :deep(.text-purple-light) {
 }
 .container.active {
   color: white;
-  border-color: $purple;
-  background-color: $primary;
+  border-color: $primary;
+  background-color: black;
   transition: background-color 0.3s ease;
 }
 .container.active:hover {
