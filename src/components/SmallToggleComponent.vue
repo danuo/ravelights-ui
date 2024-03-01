@@ -5,7 +5,7 @@
     :class="{ active: active }"
     @click="callback"
   >
-    <div class="col-auto text-caption text-purple-light">
+    <div class="col-auto text-purple-light">
       {{ label }}
     </div>
   </div>
@@ -20,11 +20,16 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-$border-radius: 8px;
-$border-width: 3px;
+$border-radius: 6px;
+$border-width: 2px;
 
 .text-purple-light {
   color: $grey-9;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 0.75rem;
+  letter-spacing: 0.03333em;
+  // line-break: anywhere;
 }
 div.active > :deep(.text-purple-light) {
   color: $grey-4;
@@ -36,12 +41,11 @@ div.active > :deep(.text-purple-light) {
 }
 
 .container {
-  border-radius: 8px;
+  border-radius: $border-radius;
   cursor: pointer;
   transition: background 1.5s;
-  height: 60px;
+  height: 40px;
   width: 100%;
-  font-weight: 400;
   border: $border-width solid $grey-10;
   color: $grey-7;
   background-color: black;

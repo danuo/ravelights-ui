@@ -1,110 +1,105 @@
-<template>
+<template v-if="settings.length > 0">
   <!-- setting toggles -->
-  <div v-if="Object.keys(appStore.settings).length > 0">
-    <div class="row q-col-gutter-xs">
-      <div class="col-12">
-        <div class="grey-box row">
-          <div class="col-4" v-for="button in buttons" :key="button">
-            <q-item-label caption style="color: #474747"
-              >{{ button.label }}
-            </q-item-label>
-            <q-toggle
-              @click="appStore.set_settings(button.var_name)"
-              v-model="settings[button.var_name]"
-              color="secondary"
-            />
-          </div>
-        </div>
-      </div>
+  <div class="row q-col-gutter-xs q-mb-sm">
+    <div class="col-4" v-for="button in buttons" :key="button.label">
+      <SmallToggleComponent
+        :active="settings[button.var_name]"
+        @click="toggleSetting(button.var_name)"
+        :label="button.label"
+      ></SmallToggleComponent>
+    </div>
+  </div>
 
-      <!-- select type -->
-      <div v-for="(e, gen_type_idx) in 6" :key="gen_type_idx" class="col-6">
-        <div
-          @click="selected_type = typ[gen_type_idx]"
-          :class="selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'"
-        >
-          <q-item-label caption style="color: #474747">
-            {{ typ[gen_type_idx] }}
-          </q-item-label>
-          <div v-for="gen_index in 3" :key="gen_index">
-            {{
-              replace_underscores(
-                settings.selected[effective_device_level][typ[gen_type_idx]][
-                  gen_index
-                ]
-              )
-            }}
-          </div>
+  <div class="row q-col-gutter-xs">
+    <!-- select type -->
+    <div v-for="(e, gen_type_idx) in 6" :key="gen_type_idx" class="col-6">
+      <div
+        @click="selected_type = typ[gen_type_idx]"
+        :class="selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'"
+      >
+        <q-item-label caption style="color: #474747">
+          {{ typ[gen_type_idx] }}
+        </q-item-label>
+        <div v-for="gen_index in 3" :key="gen_index">
+          {{
+            replace_underscores(
+              settings.selected[effective_device_level][typ[gen_type_idx]][
+                gen_index
+              ]
+            )
+          }}
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- select generator level -->
-    <div class="q-my-sm row justify-between">
-      <q-btn-toggle
-        v-model="timeline_level"
-        toggle-color="primary"
-        :options="[
-          { label: 'auto', value: null },
-          { label: '1', value: 1 },
-          { label: '2', value: 2 },
-          { label: '3', value: 3 },
-        ]"
-        size="lg"
+  <!-- select generator level -->
+  <div class="q-my-sm row justify-between">
+    <q-btn-toggle
+      v-model="timeline_level"
+      toggle-color="primary"
+      :options="[
+        { label: 'auto', value: null },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+      ]"
+      size="lg"
+    />
+
+    <q-btn-group>
+      <q-btn
+        label="alternate"
+        icon="update"
+        @click="send_gen_command('alternate')"
       />
+    </q-btn-group>
+  </div>
 
-      <q-btn-group>
-        <q-btn
-          label="alternate"
-          icon="update"
-          @click="send_gen_command('alternate')"
-        />
-      </q-btn-group>
-    </div>
+  <!-- select keywords -->
+  <div class="q-my-sm">
+    <q-option-group
+      v-model="activeFilters"
+      :options="available_keywords"
+      type="checkbox"
+      inline
+      dense
+    />
+  </div>
 
-    <!-- select keywords -->
-    <div class="q-my-sm">
-      <q-option-group
-        v-model="activeFilters"
-        :options="available_keywords"
-        type="checkbox"
-        inline
-        dense
+  <!-- generator list -->
+  <div class="row q-col-gutter-xs">
+    <div class="col-4" v-for="gen in filtered_generators" :key="gen">
+      <q-btn
+        @click="set_generator(gen.generator_name)"
+        :label="replace_underscores(gen['generator_name'])"
+        style="width: 100%; height: 80px"
+        class="q-pa-sm"
+        :square="true"
+        :color="
+          gen.generator_name ==
+          settings.selected[effective_device_level][selected_type][
+            effective_timeline_level
+          ]
+            ? 'secondary'
+            : 'primary'
+        "
+        :text-color="
+          gen['generator_name'] ==
+          settings.selected[effective_device_level][selected_type][
+            effective_timeline_level
+          ]
+            ? 'black'
+            : 'white'
+        "
       />
-    </div>
-
-    <!-- generator list -->
-    <div class="row q-col-gutter-xs">
-      <div class="col-4" v-for="gen in filtered_generators" :key="gen">
-        <q-btn
-          @click="set_generator(gen.generator_name)"
-          :label="replace_underscores(gen['generator_name'])"
-          style="width: 100%; height: 80px"
-          class="q-pa-sm"
-          :square="true"
-          :color="
-            gen.generator_name ==
-            settings.selected[effective_device_level][selected_type][
-              effective_timeline_level
-            ]
-              ? 'secondary'
-              : 'primary'
-          "
-          :text-color="
-            gen['generator_name'] ==
-            settings.selected[effective_device_level][selected_type][
-              effective_timeline_level
-            ]
-              ? 'black'
-              : 'white'
-          "
-        />
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import SmallToggleComponent from "src/components/SmallToggleComponent.vue";
+
 import { ref, computed } from "vue";
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
@@ -233,4 +228,23 @@ function send_gen_command(command) {
   };
   axiosPut("/rest/settings", body);
 }
+
+function toggleSetting(var_name) {
+  settings.value[var_name] = !settings.value[var_name];
+  appStore.set_settings(var_name);
+}
 </script>
+
+<style scoped>
+.grey-box {
+  padding: 10px 15px;
+  background: rgba(86, 61, 124, 0.15);
+  border: 1px solid rgba(86, 61, 124, 0.2);
+}
+
+.green-box {
+  padding: 10px 15px;
+  background: rgba(12, 119, 28, 0.367);
+  border: 1px solid rgb(13, 255, 0);
+}
+</style>
