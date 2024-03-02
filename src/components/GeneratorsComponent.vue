@@ -1,4 +1,4 @@
-<template v-if="settings.length > 0">
+<template>
   <!-- setting toggles -->
   <div class="row q-col-gutter-xs q-mb-sm">
     <div class="col-4" v-for="button in buttons" :key="button.label">
@@ -23,7 +23,7 @@
         <div v-for="gen_index in 3" :key="gen_index">
           {{
             replace_underscores(
-              settings.selected[effective_device_level][typ[gen_type_idx]][
+              settings.selected[effective_device_index][typ[gen_type_idx]][
                 gen_index
               ]
             )
@@ -78,7 +78,7 @@
         :square="true"
         :color="
           gen.generator_name ==
-          settings.selected[effective_device_level][selected_type][
+          settings.selected[effective_device_index][selected_type][
             effective_timeline_level
           ]
             ? 'secondary'
@@ -86,7 +86,7 @@
         "
         :text-color="
           gen['generator_name'] ==
-          settings.selected[effective_device_level][selected_type][
+          settings.selected[effective_device_index][selected_type][
             effective_timeline_level
           ]
             ? 'black'
@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import SmallToggleComponent from "src/components/SmallToggleComponent.vue";
+import SmallToggleComponent from "src/components/buttons/SmallToggleComponent.vue";
 
 import { ref, computed } from "vue";
 import { useAppStore, axiosPut } from "stores/app-store";
@@ -132,7 +132,7 @@ const buttons = [
   { var_name: "renew_trigger_from_manual", label: "renew_triggers" },
 ];
 
-const effective_device_level = computed({
+const effective_device_index = computed({
   get() {
     let device_index = settings.value.target_device_index;
     if (device_index == null) {
@@ -163,7 +163,6 @@ const filtered_generators = computed({
     if (appStore.meta == null) {
       return [];
     }
-    console.log(effective_selected_type.value);
     return appStore.meta.available_generators[
       effective_selected_type.value
     ].filter((generator) => {

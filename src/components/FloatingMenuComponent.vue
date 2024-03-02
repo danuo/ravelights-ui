@@ -94,10 +94,10 @@
 </template>
 
 <script setup>
-import MenuButtonComponent from "src/components/MenuButtonComponent.vue";
+import MenuButtonComponent from "src/components/buttons/MenuButtonComponent.vue";
 
 import { useQuasar } from "quasar";
-import { useAppStore, axiosPut } from "stores/app-store";
+import { useAppStore } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const $q = useQuasar();

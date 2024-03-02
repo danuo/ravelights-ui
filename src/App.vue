@@ -4,7 +4,7 @@
     :ui-ver="UI_API_VERSION"
     :server-ver="SERVER_API_VERSION"
   ></ApiWarningComponent>
-  <router-view v-if="dataReceived" />
+  <router-view v-if="appStore.is_initialized" />
 </template>
 
 <script setup>
@@ -23,20 +23,20 @@ const dataReceived = ref(false);
 
 const router = useRouter();
 const appStore = useAppStore();
-initAppStore();
-const { settings } = storeToRefs(appStore);
+init_app_store();
+const { settings, is_initialized } = storeToRefs(appStore);
 
-async function initAppStore() {
-  await appStore.initAllData();
-  if (Object.keys(appStore.settings).length === 0) {
-    console.warn("cannot connect to REST-API");
-    router.push("/");
-    showPopup.value = true;
-  } else {
-    appStore.initSSE();
+async function init_app_store() {
+  await appStore.init_store_data();
+  if (is_initialized.value) {
+    appStore.init_sse();
     SERVER_API_VERSION.value = appStore.meta["API_VERSION"];
     checkApiVersion();
     dataReceived.value = true;
+  } else {
+    console.warn("cannot connect to REST-API");
+    router.push("/");
+    showPopup.value = true;
   }
 }
 

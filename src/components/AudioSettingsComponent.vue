@@ -1,4 +1,4 @@
-<template v-if="appStore.meta.length > 0">
+<template>
   <UniversalControlComponent
     v-for="button in appStore.meta.controls_audio"
     :key="button.label"
@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import UniversalControlComponent from "src/components/UniversalControlComponent.vue";
+import UniversalControlComponent from "src/components/buttons/UniversalControlComponent.vue";
 
 import { useAppStore } from "stores/app-store";
 

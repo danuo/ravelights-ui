@@ -118,7 +118,7 @@
 </template>
 
 <script setup>
-import SmallToggleComponent from "src/components/SmallToggleComponent.vue";
+import SmallToggleComponent from "src/components/buttons/SmallToggleComponent.vue";
 
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
@@ -127,14 +127,12 @@ const appStore = useAppStore();
 const { devices, enable_advanced_mode } = storeToRefs(appStore);
 
 function toggleUseEffect(device_index, level) {
-  console.log("use_effect");
   devices.value[device_index]["use_effect"][level] =
     !devices.value[device_index]["use_effect"][level];
   set_device_settings(device_index, "use_effect");
 }
 
 function toggleValue(device_index, var_name) {
-  console.log("in toggle");
   devices.value[device_index][var_name] =
     !devices.value[device_index][var_name];
   set_device_settings(device_index, var_name);

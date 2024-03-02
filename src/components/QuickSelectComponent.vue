@@ -1,4 +1,4 @@
-<template v-if="settings !== null">
+<template>
   <div class="q-py-xs row justify-between bg-grey-10 no-wrap scroll-container">
     <q-btn-toggle
       v-model="settings.global_manual_timeline_level"

@@ -1,4 +1,4 @@
-<template v-if="Object.keys(appStore.settings).length > 0">
+<template>
   <q-list bordered separator>
     <UniversalControlComponent
       v-for="button in appStore.meta.controls_global_sliders"
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import UniversalControlComponent from "src/components/UniversalControlComponent.vue";
+import UniversalControlComponent from "src/components/buttons/UniversalControlComponent.vue";
 
 import { useAppStore } from "stores/app-store";
 

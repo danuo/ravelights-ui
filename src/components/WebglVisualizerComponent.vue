@@ -26,7 +26,7 @@
 import { storeToRefs } from "pinia";
 import { useAppStore } from "stores/app-store";
 const appStore = useAppStore();
-const { settings, enable_visualizer } = storeToRefs(appStore);
+const { settings, enable_visualizer, is_initialized } = storeToRefs(appStore);
 
 import { ref, onMounted, watchEffect } from "vue";
 import {
@@ -217,12 +217,13 @@ function initWebGl() {
 }
 
 onMounted(() => {
-  initWebGl();
-
-  watchEffect(() => {
-    readDeviceConfig(settings.value.device_config);
-    clearScene();
-    buildScene();
-  });
+  if (is_initialized.value) {
+    initWebGl();
+    watchEffect(() => {
+      readDeviceConfig(settings.value.device_config);
+      clearScene();
+      buildScene();
+    });
+  }
 });
 </script>

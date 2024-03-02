@@ -1,4 +1,4 @@
-<template v-if="appStore.meta.length > 0">
+<template>
   <div class="q-pa-xs">
     <q-space />
   </div>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import UniversalControlComponent from "src/components/UniversalControlComponent.vue";
+import UniversalControlComponent from "src/components/buttons/UniversalControlComponent.vue";
 
 import { useAppStore } from "stores/app-store";
 
