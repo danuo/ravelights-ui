@@ -1,145 +1,145 @@
 <template>
-  <div v-if="Object.keys(appStore.triggers).length > 0">
-    <div class="row q-col-gutter-xs">
-      <div v-for="idx in 2" :key="idx" class="col-6">
-        <div class="grey-box">
+  <div class="row q-col-gutter-xs">
+    <div v-for="idx in 2" :key="idx" class="col-6">
+      <div class="grey-box">
+        <div class="row justify-between">
+          <div
+            v-for="string in ['beats', 'quarters', 'length', 'p']"
+            :key="string"
+          >
+            {{ string }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      v-for="(e, gen_type_idx) in typ.length"
+      :key="gen_type_idx"
+      class="col-6"
+    >
+      <div
+        @click="selected_type = typ[gen_type_idx]"
+        :class="selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'"
+      >
+        <q-item-label caption style="color: #474747">
+          {{ typ[gen_type_idx] }}
+        </q-item-label>
+        <div v-for="timeline_level in 3" :key="timeline_level">
           <div class="row justify-between">
             <div
-              v-for="string in ['beats', 'quarters', 'length', 'p']"
-              :key="string"
+              v-for="it in repr_ui(
+                get_trigger(
+                  effective_device_index,
+                  typ[gen_type_idx],
+                  timeline_level
+                )
+              )"
+              :key="it"
             >
-              {{ string }}
+              {{ it }}
             </div>
           </div>
         </div>
       </div>
-      <div
-        v-for="(e, gen_type_idx) in typ.length"
-        :key="gen_type_idx"
-        class="col-6"
-      >
-        <div
-          @click="selected_type = typ[gen_type_idx]"
-          :class="selected_type == typ[gen_type_idx] ? 'green-box' : 'grey-box'"
-        >
-          <q-item-label caption style="color: #474747">
-            {{ typ[gen_type_idx] }}
-          </q-item-label>
-          <div v-for="timeline_level in 3" :key="timeline_level">
-            <div class="row justify-between">
-              <div
-                v-for="it in repr_ui(
-                  get_trigger(typ[gen_type_idx], timeline_level)
-                )"
-                :key="it"
-              >
-                {{ it }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <q-space />
     </div>
+    <q-space />
+  </div>
 
-    <div class="q-my-sm row justify-between">
-      <q-btn-toggle
-        v-model="timeline_level"
-        toggle-color="primary"
-        :options="[
-          { label: 'a', value: null },
-          { label: '1', value: 1 },
-          { label: '2', value: 2 },
-          { label: '3', value: 3 },
-        ]"
-        size="lg"
+  <div class="q-my-sm row justify-between">
+    <q-btn-toggle
+      v-model="timeline_level"
+      toggle-color="primary"
+      :options="[
+        { label: 'a', value: null },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+      ]"
+      size="lg"
+    />
+
+    <q-btn-group>
+      <q-btn
+        label="renew_T"
+        icon="update"
+        @click="send_gen_command('renew_trigger')"
       />
+      <q-btn
+        label="on_t"
+        icon="visibility"
+        @click="send_gen_command('on_trigger')"
+      />
+    </q-btn-group>
+  </div>
 
-      <q-btn-group>
-        <q-btn
-          label="renew_T"
-          icon="update"
-          @click="send_gen_command('renew_trigger')"
-        />
-        <q-btn
-          label="on_t"
-          icon="visibility"
-          @click="send_gen_command('on_trigger')"
-        />
-      </q-btn-group>
-    </div>
-
-    <!-- slider p -->
-    <div class="q-px-md q-by-md" v-if="triggers !== null">
-      <q-list>
-        <div class="q-px-md q-py-md">
-          <q-item-label caption> p </q-item-label>
-          <q-slider
-            @change="set_trigger()"
-            v-model="p"
-            color="primary"
-            selection-color="secondary"
-            track-size="15px"
-            thumb-size="30px"
-            snap
-            :min="0"
-            :max="1"
-            :step="0.1"
-            :marker-labels="[0, 0.25, 0.5, 0.75, 1]"
-          />
-        </div>
-        <div class="q-px-md q-py-md">
-          <!-- slider loop length -->
-          <q-item-label caption> loop_length </q-item-label>
-          <q-slider
-            @change="set_trigger()"
-            v-model="loop_length_selection"
-            color="primary"
-            selection-color="secondary"
-            track-size="15px"
-            thumb-size="30px"
-            :min="0"
-            :max="Object.keys(marker_arange_to_value).length - 2"
-            :marker-labels="marker_arange_to_value"
-            snap
-          />
-        </div>
-      </q-list>
-    </div>
-
-    <!-- beat selector -->
-    <div class="row q-col-gutter-xs q-py-xl" v-if="triggers !== null">
-      <div class="col-3" v-for="(e, idx) in 4" :key="idx">
-        <q-btn
-          @click="
-            quarters_array[idx] = !quarters_array[idx];
-            set_trigger();
-          "
-          :label="quarters_letters[idx]"
-          class="col"
-          :color="quarters_array[idx] ? 'secondary' : 'primary'"
-          style="width: 100%; height: 100px"
+  <!-- slider p -->
+  <div class="q-px-md q-by-md" v-if="triggers !== null">
+    <q-list>
+      <div class="q-px-md q-py-md">
+        <q-item-label caption> p </q-item-label>
+        <q-slider
+          @change="set_trigger()"
+          v-model="p"
+          color="primary"
+          selection-color="secondary"
+          track-size="15px"
+          thumb-size="30px"
+          snap
+          :min="0"
+          :max="1"
+          :step="0.1"
+          :marker-labels="[0, 0.25, 0.5, 0.75, 1]"
         />
       </div>
-    </div>
-    <div class="row q-col-gutter-xs" v-if="triggers !== null">
-      <div class="col-3" v-for="(e, idx) in 16" :key="idx">
-        <q-btn
-          @click="
-            beats_array[idx] = !beats_array[idx];
-            set_trigger();
-          "
-          :label="idx"
-          style="width: 100%; height: 100px"
-          class="q-pa-sm"
-          :square="true"
-          :color="
-            idx < loop_length && beats_array[idx] ? 'secondary' : 'primary'
-          "
-          :text-color="beats_array[idx] ? 'black' : 'white'"
-          :disable="idx < loop_length ? false : true"
+      <div class="q-px-md q-py-md">
+        <!-- slider loop length -->
+        <q-item-label caption> loop_length </q-item-label>
+        <q-slider
+          @change="set_trigger()"
+          v-model="loop_length_selection"
+          color="primary"
+          selection-color="secondary"
+          track-size="15px"
+          thumb-size="30px"
+          :min="0"
+          :max="Object.keys(marker_arange_to_value).length - 2"
+          :marker-labels="marker_arange_to_value"
+          snap
         />
       </div>
+    </q-list>
+  </div>
+
+  <!-- beat selector -->
+  <div class="row q-col-gutter-xs q-py-xl" v-if="triggers !== null">
+    <div class="col-3" v-for="(e, idx) in 4" :key="idx">
+      <q-btn
+        @click="
+          quarters_array[idx] = !quarters_array[idx];
+          set_trigger();
+        "
+        :label="quarters_letters[idx]"
+        class="col"
+        :color="quarters_array[idx] ? 'secondary' : 'primary'"
+        style="width: 100%; height: 100px"
+      />
+    </div>
+  </div>
+  <div class="row q-col-gutter-xs" v-if="triggers !== null">
+    <div class="col-3" v-for="(e, idx) in 16" :key="idx">
+      <q-btn
+        @click="
+          beats_array[idx] = !beats_array[idx];
+          set_trigger();
+        "
+        :label="idx"
+        style="width: 100%; height: 100px"
+        class="q-pa-sm"
+        :square="true"
+        :color="idx < loop_length && beats_array[idx] ? 'secondary' : 'primary'"
+        :text-color="beats_array[idx] ? 'black' : 'white'"
+        :disable="idx < loop_length ? false : true"
+      />
     </div>
   </div>
 </template>
@@ -150,7 +150,7 @@ import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { triggers } = storeToRefs(appStore);
+const { triggers, settings } = storeToRefs(appStore);
 
 const selected_type = ref("pattern");
 const timeline_level = ref(0);
@@ -165,6 +165,16 @@ const marker_arange_to_value = {
 const marker_value_to_arange = invert_dict(marker_arange_to_value);
 const quarters_letters = ["A", "B", "C", "D"];
 const typ = ["pattern", "pattern_sec", "vfilter", "dimmer", "thinner"];
+
+const effective_device_index = computed({
+  get() {
+    let device_index = settings.value.target_device_index;
+    if (device_index == null) {
+      device_index = 0;
+    }
+    return device_index;
+  },
+});
 
 const effective_timeline_level = computed({
   get() {
@@ -195,8 +205,9 @@ const beats_array = computed({
 const quarters_array = computed({
   get() {
     if (triggers !== null) {
-      return triggers.value[selected_type.value][effective_timeline_level.value]
-        .quarters_array;
+      return triggers.value[effective_device_index][selected_type.value][
+        effective_timeline_level.value
+      ].quarters_array;
     } else {
       return [true];
     }
@@ -277,8 +288,8 @@ function repr_ui(trigger) {
   ];
 }
 
-function get_trigger(a, b) {
-  return triggers.value[a][b];
+function get_trigger(device_index, gen_type, level) {
+  return triggers.value[device_index][gen_type][level];
 }
 
 function invert_dict(dict) {
