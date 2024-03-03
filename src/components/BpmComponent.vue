@@ -62,7 +62,7 @@
     <div style="padding-left: 16px" class="text-caption">bpm multiplier</div>
     <div class="row flex-center" style="width: 100%">
       <q-slider
-        @change="set_settings('bpm_multiplier')"
+        @change="appStore.set_settings('bpm_multiplier')"
         v-model="bpm_multiplier_sliderval"
         color="secondary"
         selection-color="secondary"
@@ -125,16 +125,10 @@ function adjust_sync(value) {
   axiosPut("/rest/settings", body);
 }
 
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = appStore.settings[var_name];
-  axiosPut("/rest/settings", body);
-}
-
 function set_bpm(value) {
   settings.value.bpm_base = parseFloat(
     (appStore.settings.bpm_base + value).toFixed(2)
   );
-  set_settings("bpm_base");
+  appStore.set_settings("bpm_base");
 }
 </script>

@@ -1,60 +1,39 @@
 <template>
-  <!-- <div ref="vis_control" id="vis_control">
-    <div class="vis_button" @click="decrease"></div>
-    <div class="vis_button" @click="increase"></div>
-  </div> -->
-
   <div
-    v-show="props.visualizerEnabled"
+    v-show="enable_visualizer"
     ref="canvas"
     id="canvas"
     @mousedown="startDrag"
-    @touchstart="startDrag"
+    @touchstart.passive="startDrag"
     @mousemove="onDrag"
-    @touchmove="onDrag"
+    @touchmove.passive="onDrag"
     @mouseleave="endDrag"
     @mouseup="endDrag"
     @touchend="endDrag"
   ></div>
-  <div ref="spacer" id="spacer" v-if="props.visualizerEnabled"></div>
 </template>
 
 <style>
-/* .vis_button {
-  width: 50%;
-  height: 200px;
-  cursor: pointer;
-} */
-#vis_control {
-  width: 100%;
-  height: auto;
-  position: fixed;
-  z-index: 20;
-  display: flex;
-}
 #canvas {
   width: 100%;
   height: 200px;
   background-color: black;
   cursor: grab;
-  position: fixed;
-  z-index: 10;
-}
-#spacer {
-  width: 100%;
-  height: 200px;
-  position: relative;
 }
 </style>
 
 <script setup>
-const props = defineProps(["visualizerEnabled"]);
+import { storeToRefs } from "pinia";
+import { useAppStore } from "stores/app-store";
+const appStore = useAppStore();
+const { settings, enable_visualizer, is_initialized } = storeToRefs(appStore);
+
 import { ref, onMounted, watchEffect } from "vue";
 import {
   DataTexture,
   PlaneGeometry,
   RGBAFormat,
-  sRGBEncoding,
+  SRGBColorSpace,
   Scene,
   Camera,
   WebGLRenderer,
@@ -63,11 +42,8 @@ import {
 } from "three";
 
 import { io } from "socket.io-client";
-import { axiosGet } from "stores/app-store";
 
-// const vis_control = ref(null);
 const canvas = ref(null);
-const spacer = ref(null);
 let isDragging = false;
 let initialY = 0;
 let initialHeight = 0;
@@ -76,53 +52,23 @@ let scene, camera, renderer;
 let NLEDS, NLIGHTS, SIZE, texture, data;
 const socket = io({ autoConnect: false });
 
+let HEIGHT = 200;
 const minHeight = 50;
 const maxHeight = 500;
 
-onMounted(() => {
-  initThree();
-});
-
 watchEffect(() => {
-  if (props.visualizerEnabled) {
+  if (enable_visualizer) {
     socket.connect();
   } else {
     socket.disconnect();
   }
 });
 
-// function increase() {
-//   const initialHeight = canvas.value.clientHeight;
-//   const deltaY = 50;
-//   const newHeight = Math.min(
-//     maxHeight,
-//     Math.max(minHeight, initialHeight + deltaY)
-//   );
-//   // vis_control.value.style.height = newHeight + "px";
-//   canvas.value.style.height = newHeight + "px";
-//   spacer.value.style.height = newHeight + "px";
-//   renderer.setSize(window.innerWidth, newHeight);
-// }
-
-// function decrease() {
-//   const initialHeight = canvas.value.clientHeight;
-//   const deltaY = -50;
-//   const newHeight = Math.min(
-//     maxHeight,
-//     Math.max(minHeight, initialHeight + deltaY)
-//   );
-//   // vis_control.value.style.height = newHeight + "px";
-//   canvas.value.style.height = newHeight + "px";
-//   spacer.value.style.height = newHeight + "px";
-//   renderer.setSize(window.innerWidth, newHeight);
-// }
-
 function startDrag(e) {
   const clientX = e.clientX || e.changedTouches[0].clientX;
   isDragging = true;
   initialY = clientX;
   initialHeight = canvas.value.clientHeight;
-  // canvas.value.style["background-color"] = "red";
   canvas.value.style.cursor = "grabbing";
 }
 
@@ -130,30 +76,25 @@ function onDrag(e) {
   if (!isDragging) return;
   const clientX = e.clientX || e.changedTouches[0].clientX;
 
-  // const deltaY = e.clientY - initialY;
   const deltaY = (clientX - initialY) * 0.5;
   const newHeight = Math.min(
     maxHeight,
     Math.max(minHeight, initialHeight + deltaY)
   );
 
-  // vis_control.value.style.height = newHeight + "px";
-  canvas.value.style.height = newHeight + "px";
-  spacer.value.style.height = newHeight + "px";
-  renderer.setSize(window.innerWidth, newHeight);
+  HEIGHT = newHeight;
+  canvas.value.style.height = HEIGHT + "px";
+  renderer.setSize(window.innerWidth, HEIGHT);
 }
 
 function endDrag() {
   isDragging = false;
-  // canvas.value.style["background-color"] = "blue";
   canvas.value.style.cursor = "grab";
 }
 
-// three
-
 function initTexture(data, SIZE) {
   const texture = new DataTexture(data, 1, SIZE, RGBAFormat);
-  texture.encoding = sRGBEncoding;
+  texture.colorSpace = SRGBColorSpace;
   texture.needsUpdate = true;
   return texture;
 }
@@ -175,7 +116,7 @@ function sum(array) {
   return sum;
 }
 
-function initWebGL() {
+function initScene() {
   renderer = new WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, 200);
@@ -186,7 +127,20 @@ function initWebGL() {
   scene = new Scene();
   camera = new Camera();
 
-  // Create two PlaneGeometries
+  clearScene();
+  buildScene();
+
+  window.addEventListener("resize", onWindowResize);
+  render();
+}
+
+function clearScene() {
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0]);
+  }
+}
+
+function buildScene() {
   let spacings = [0];
   let pixelCounter = 0;
   for (let i = 0; i < NLIGHTS; i++) {
@@ -218,13 +172,10 @@ function initWebGL() {
     mesh.position.x = positions[i];
     scene.add(mesh);
   }
-
-  window.addEventListener("resize", onWindowResize);
-  render();
 }
 
 function onWindowResize() {
-  renderer.setSize(window.innerWidth, 200);
+  renderer.setSize(window.innerWidth, HEIGHT);
 }
 
 function render() {
@@ -233,26 +184,29 @@ function render() {
 
 function deviceConfigToNLEDS(deviceConfig) {
   let n_lights = [];
-  deviceConfig.forEach((element) => {
-    for (let i = 0; i < element.n_lights; i++) {
-      n_lights.push(element.n_leds);
-    }
-  });
+  let device_index = settings.value.target_device_index;
+  if (device_index == null) {
+    device_index = 0;
+  }
+  let element = deviceConfig[device_index];
+  for (let i = 0; i < element.n_lights; i++) {
+    n_lights.push(element.n_leds);
+  }
   return n_lights;
 }
 
-async function initThree() {
-  const apiData = await axiosGet("/rest/settings");
-  const deviceConfig = apiData.device_config;
-  NLEDS = deviceConfigToNLEDS(deviceConfig);
-
+function readDeviceConfig(device_config) {
+  NLEDS = deviceConfigToNLEDS(device_config);
   NLIGHTS = NLEDS.length;
   SIZE = sum(NLEDS);
 
   data = new Uint8Array(4 * SIZE);
-
   texture = initTexture(data, SIZE);
-  initWebGL(NLEDS, NLIGHTS, SIZE, texture);
+}
+
+function initWebGl() {
+  readDeviceConfig(settings.value.device_config);
+  initScene();
 
   socket.on("message", (in_data) => {
     let array = new Uint8Array(in_data);
@@ -261,4 +215,15 @@ async function initThree() {
     render();
   });
 }
+
+onMounted(() => {
+  if (is_initialized.value) {
+    initWebGl();
+    watchEffect(() => {
+      readDeviceConfig(settings.value.device_config);
+      clearScene();
+      buildScene();
+    });
+  }
+});
 </script>

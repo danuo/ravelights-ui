@@ -75,7 +75,7 @@
             <div class="column">
               <div class="col">
                 <q-btn
-                  @click="set_timeline(idx, true)"
+                  @click="set_timeline(idx, true, true)"
                   label="load full"
                   style="width: 100%; height: 50px"
                   :color="
@@ -88,7 +88,7 @@
               </div>
               <div class="col">
                 <q-btn
-                  @click="set_timeline(idx, false)"
+                  @click="set_timeline(idx, true, false)"
                   label="load placements"
                   style="width: 100%; height: 50px"
                   color="black"
@@ -109,12 +109,13 @@ import { storeToRefs } from "pinia";
 const appStore = useAppStore();
 const { settings, meta } = storeToRefs(appStore);
 
-function set_timeline(timeline_index, set_full) {
+function set_timeline(timeline_index, placements, selectors) {
   settings.value.active_timeline_index = timeline_index;
   let body = {
     action: "set_timeline",
     timeline_index: appStore.settings.active_timeline_index,
-    set_full: set_full,
+    placements: placements,
+    selectors: selectors,
   };
   axiosPut("/rest/settings", body);
 }

@@ -7,7 +7,7 @@
   <div class="row justify-between">
     <q-btn-toggle
       v-model="settings.global_effects_enabled"
-      @click="set_settings('global_effects_enabled')"
+      @click="appStore.set_settings('global_effects_enabled')"
       style="height: 3em"
       :options="[
         { label: 'enabled', value: true },
@@ -24,7 +24,7 @@
   <q-list bordered>
     <q-scroll-area style="height: 40vh">
       <q-list padding>
-        <q-item v-for="item in effect_list" :key="item">
+        <q-item v-for="item in effect" :key="item">
           <div class="row full-width">
             <div class="col-12">
               <q-markup-table
@@ -52,7 +52,6 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>draw_mode: {{ item.draw_mode }}</td>
                     <td>
                       trigger:
                       {{ item.trigger }}
@@ -63,15 +62,7 @@
             </div>
             <div class="col-12">
               <div class="row">
-                <div class="col-3 q-pr-xs">
-                  <q-btn
-                    @click="modify_effect('change_draw', item.name)"
-                    label="draw"
-                    color="grey"
-                    class="full-width full-height"
-                  />
-                </div>
-                <div class="col-3 q-pr-xs">
+                <div class="col-4 q-pr-xs">
                   <q-btn
                     @click="modify_effect('renew_trigger', item.name)"
                     label="trigger"
@@ -79,7 +70,7 @@
                     class="full-width"
                   />
                 </div>
-                <div class="col-3 q-pr-xs">
+                <div class="col-4 q-pr-xs">
                   <q-btn
                     @click="modify_effect('alternate', item.name)"
                     label="altern."
@@ -87,7 +78,7 @@
                     class="full-width"
                   />
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                   <q-btn
                     @click="modify_effect('remove', item.name)"
                     label="remove"
@@ -105,46 +96,27 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { useAppStore, axiosPut } from "stores/app-store";
 import { storeToRefs } from "pinia";
 
 const appStore = useAppStore();
-const { settings, effect, effect_target_level } = storeToRefs(appStore);
-
-const effect_list = computed({
-  get() {
-    return effect.value[effect_target_level.value];
-  },
-  set(newValue) {
-    effect.value[effect_target_level.value] = newValue;
-  },
-});
+const { settings, effect } = storeToRefs(appStore);
 
 function modify_effect(operation, effect_name) {
   let body = {
     action: "modify_effect",
     operation: operation,
     effect_name: effect_name,
-    timeline_level: effect_target_level.value,
   };
   axiosPut("/rest/effect", body);
 
   if (operation == "remove") {
-    effect_list.value = effect_list.value.filter(
-      (item) => item.name !== effect_name
-    );
+    effect.value = effect.value.filter((item) => item.name !== effect_name);
   }
 }
 
 function clear_effect_queue() {
   let body = { action: "clear_effect_queue" };
-  axiosPut("/rest/settings", body);
-}
-
-function set_settings(var_name) {
-  let body = { action: "set_settings" };
-  body[var_name] = settings.value[var_name];
   axiosPut("/rest/settings", body);
 }
 </script>
