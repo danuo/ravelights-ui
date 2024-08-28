@@ -19,6 +19,7 @@ To use with RaveLights, the RaveLights-UI does not have to be installed manually
 Install dependencies
 
 ```bash
+npm i -g @quasar/cli
 npm install
 ```
 
