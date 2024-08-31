@@ -192,6 +192,11 @@ function deviceConfigToNLEDS(deviceConfig) {
   for (let i = 0; i < element.n_lights; i++) {
     n_lights.push(element.n_leds);
   }
+
+  // limit to 6
+  if (n_lights.length > 6) {
+    n_lights = n_lights.slice(0, 6);
+  }
   return n_lights;
 }
 
