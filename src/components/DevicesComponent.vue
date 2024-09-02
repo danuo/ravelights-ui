@@ -154,7 +154,7 @@ function getLinkedOptions(current_index) {
     linked_to_index < current_index;
     linked_to_index++
   ) {
-    if (this.devices[linked_to_index].linked_to == null) {
+    if (devices.value[linked_to_index].linked_to == null) {
       result.push({
         label: "D" + linked_to_index.toString(),
         value: linked_to_index,
