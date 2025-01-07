@@ -204,9 +204,19 @@ function replace_underscores(input_string) {
 }
 
 function set_generator(generatorName) {
-  settings.value.selected[settings.value.target_device_index][
-    selected_type.value
-  ][effective_timeline_level.value] = generatorName;
+  // set locally
+  if (settings.value.target_device_index == null) {
+    for (let i = 0; i < settings.value.selected.length; i++) {
+      settings.value.selected[i][selected_type.value][
+        effective_timeline_level.value
+      ] = generatorName;
+    }
+  } else {
+    settings.value.selected[settings.value.target_device_index][
+      selected_type.value
+    ][effective_timeline_level.value] = generatorName;
+  }
+
   let body = {
     action: "set_generator",
     device_index: settings.value.target_device_index,
