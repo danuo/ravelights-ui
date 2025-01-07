@@ -15,7 +15,7 @@ import { storeToRefs } from "pinia";
 
 import ApiWarningComponent from "src/components/ApiWarningComponent.vue";
 
-const UI_API_VERSION = "1"; // set required version here
+const UI_API_VERSION = "2"; // set required version here
 
 const SERVER_API_VERSION = ref(null);
 const showPopup = ref(false);
